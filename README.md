@@ -39,20 +39,25 @@
     ```
     $ sudo yum install httpd
     ```
+
 2. Configure to start on boot
     ```
     $ systemctl enable httpd
     ```
+
 3. Start the service and check its status
+
     ```
     $ systemctl start httpd
     $ systemctl status httpd
     ```
     You will see `active (running)` when the service is running
+
 4. Open `80` and `443` ports
     ```
     $ sudo firewall-cmd --permanent --add-port=80/tcp
     $ sudo firewall-cmd --permanent --add-port=433/tcp
+
 5. Browse `yourdomain.com` (assuming that the dns record has alredy been set up), you should see the apache default page
 
 ## Configure SSL
@@ -89,10 +94,12 @@
     ```
     $ sudo yum install docker-ce docker-ce-cli containerd.io
     ```
+
 5. Configure Docker to start on boot
     ```
     $ sudo systemctl enable docker
     ```    
+
 6. Start Docker
     ```
     $ sudo systemctl start docker
