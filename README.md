@@ -63,6 +63,16 @@
 
 ## Configure SSL
 
+1. Browse to [Apache on CentOS/RHEL 7](https://certbot.eff.org/lets-encrypt/centosrhel7-apache)
+2. Follow the *default*
+    2.1. On *step 2* running `yum install epel-release` should be just enough
+    2.2. On *step 3* [EC2 region](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html)
+    2.3.  Follow the instructions until *step 5*
+3. You will need the certificate only as the virtual host configuration files already contain the ssl setup. 
+    ```
+    sudo certbot certonly --apache
+    ```
+
 ## Install Docker
 
 1. Uninstall old versions
