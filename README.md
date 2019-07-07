@@ -1,8 +1,8 @@
-# Shoebox - minimalistic dev environment for runnig on a cheap vps
+# Shoebox - minimalistic dev environment on CentOS 7
 
-## Disable SELinux on CentOS 7
+## Disable SELinux
 
-1. Check SELinux status. If SELinux is enabled it is recommended to disable it for the ease of use Docker
+1. Check SELinux status. It is recommended to disable SELinux for ease of using Docker, and installing and setting up other axilary services.
 
     ```
     $ sestatus
@@ -32,6 +32,26 @@
     Output
     SELinux status:                 disabled
     ```
+    
+## Install Apache
+
+1. Run
+    ```
+    $ sudo yum install httpd
+    ```
+2. Configure to start on boot
+    ```
+    $ systemctl enable httpd
+    ```
+3. Start the service and check its status
+    ```
+    $ systemctl start httpd
+    $ systemctl status httpd
+    ```
+    You will see `active (running)` when the service is running
+4. Browse `yourdomain.com` (assuming the the dns record has alredy been set up), you should see the apache default page
+
+## Configure SSL
 
 ## Install Docker
 
@@ -47,7 +67,7 @@
                       docker-engine
     ```
 
-2.  Install required packages.
+2.  Install required packages
     ```
     $ sudo yum install -y yum-utils \
       device-mapper-persistent-data \
@@ -77,18 +97,4 @@
 7. Verify that Docker CE is installed correctly by running
     ```
     $ sudo docker run hello-world
-    ```
-
-## Prepare to bootstrap
-1. Install git
-    ```
-    $ sudo yum install git
-    ```
-3. Create a work directory
-    ```
-    mkdir /var/dev
-    ```
-2. Shallow clone this repository
-    ```
-    $ git clone --depth 1 https://github.com/shrideio/shoebox.git /var/dev/shoebox
     ```
