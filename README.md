@@ -57,7 +57,7 @@
     ```
     $ sudo firewall-cmd --permanent --add-port=80/tcp
     $ sudo firewall-cmd --permanent --add-port=433/tcp
-
+    ```
 5. Browse `yourdomain.com` (assuming that the dns record has alredy been set up), you should see the apache default page
 
 ## Configure SSL
