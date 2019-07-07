@@ -49,7 +49,11 @@
     $ systemctl status httpd
     ```
     You will see `active (running)` when the service is running
-4. Browse `yourdomain.com` (assuming the the dns record has alredy been set up), you should see the apache default page
+4. Open `80` and `443` ports
+    ```
+    $ sudo firewall-cmd --permanent --add-port=80/tcp
+    $ sudo firewall-cmd --permanent --add-port=433/tcp
+5. Browse `yourdomain.com` (assuming the the dns record has alredy been set up), you should see the apache default page
 
 ## Configure SSL
 
