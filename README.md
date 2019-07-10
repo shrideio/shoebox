@@ -1,5 +1,16 @@
 # Shoebox - minimalistic dev environment on CentOS 7
 
+## Prerequisites
+
+- Install Nano (smple concole based text editor)
+    ```
+    $ sudo yum install nano
+    ```
+    Shortcuts:
+    - Save changes: `ctrl` + `x`, `y`
+    - Discard changes: `ctrl` + `x`, `n`
+    - Cancel: `ctrl` + `x`, `ctrl` + `c`
+
 ## Disable SELinux
 
 1. Check SELinux status. It is recommended to disable SELinux for ease of using Docker, and installing and setting up other axilary services.
@@ -67,10 +78,30 @@
 2. Follow the *default*
     2.1. On *step 2* running `yum install epel-release` should be just enough
     2.2. On *step 3* [EC2 region](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html)
-    2.3.  Follow the instructions until *step 5*
-3. You will need the certificate only as the virtual host configuration files already contain the ssl setup. 
+    2.3. Follow the instructions up to *step 4*
+3. You will need to create cretificate [pre and post validation hooks](https://certbot.eff.org/docs/using.html?highlight=renew#pre-and-post-validation-hooks) for certificate renewal
+    3.1. authenticator.sh
+    
+        ```
+        $ sudo mkdir /etc/letsencrypt/renewal-hooks/pre/http
+        $ sudo nano /etc/letsencrypt/renewal-hooks/pre/http/authenticator.sh
+        ```
+       
+    Copy-paste
+    
+        ```
+        #!/bin/bash
+        echo $CERTBOT_VALIDATION > /var/www/htdocs/.well-known/acme-challenge/$CERTBOT_TOKEN
+        ```
+    3.2. cleanup.sh
     ```
-    sudo certbot certonly --apache
+    $ sudo mkdir /etc/letsencrypt/renewal-hooks/post/http
+    $ sudo nano /etc/letsencrypt/renewal-hooks/post/http/cleanup.sh
+    ```
+        Copy-paste
+    ```
+    #!/bin/bash
+    rm -f /var/www/htdocs/.well-known/acme-challenge/$CERTBOT_TOKEN
     ```
 
 ## Install Docker
