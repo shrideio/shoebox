@@ -3,9 +3,11 @@
 ## Prerequisites
 
 - Install Nano (smple concole based text editor)
+    
     ```
     $ sudo yum install nano
     ```
+    
     Shortcuts:
     - Save changes: `ctrl` + `x`, `y`
     - Discard changes: `ctrl` + `x`, `n`
@@ -13,7 +15,7 @@
 
 ## Disable SELinux
 
-1. Check SELinux status. It is recommended to disable SELinux for ease of using Docker, and installing and setting up other axilary services.
+1. Check SELinux status. It is recommended to disable SELinux for the ease of use of Docker, and for installing and setting up other axilary services
 
     ```
     $ sestatus
@@ -70,39 +72,90 @@
     $ sudo firewall-cmd --permanent --add-port=433/tcp
     $ sudo firewall-cmd --reload
     ```
+
 5. Browse `yourdomain.com` (assuming that the dns record has alredy been set up), you should see the apache default page
 
 ## Configure SSL
 
 1. Browse to [Apache on CentOS/RHEL 7](https://certbot.eff.org/lets-encrypt/centosrhel7-apache)
-2. Follow the *default*
-    2.1. On *step 2* running `yum install epel-release` should be just enough
-    2.2. On *step 3* [EC2 region](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html)
-    2.3. Follow the instructions up to *step 4*
-3. You will need to create cretificate [pre and post validation hooks](https://certbot.eff.org/docs/using.html?highlight=renew#pre-and-post-validation-hooks) for certificate renewal
-    3.1. authenticator.sh
+
+2. Follow the *default* instruction
+    - On *step 2* running `yum install epel-release` should be just enough
+    - On *step 3* [EC2 region](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html)
+    - Follow the instruction up to *step 4*
+
+3. You will need to create cretificate [pre and post validation hooks](https://certbot.eff.org/docs/using.html?#pre-and-post-validation-hooks) for certificate renewal
     
+    - Create a directory for token verification
+        ```
+        $ sudo mkdir -p /var/www/letsencrypt/.well-known/acme-challenge
+        ```
+    
+    - Create a virtual host configuration for the verification link alias
+        ```
+        $ nano /etc/httpd/conf.d/letsencrypt.conf
+        ```
+        Copy-paste
+        ```
+        Alias /.well-known/acme-challenge/ "/var/www/letsencrypt/.well-known/acme-challenge/"
+        <Directory "/var/www/letsencrypt/.well-known/acme-challenge/">
+            AllowOverride None
+            Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec
+            Require method GET POST OPTIONS
+        </Directory>
+        ```
+
+    - Create authenticator.sh
         ```
         $ sudo mkdir /etc/letsencrypt/renewal-hooks/pre/http
         $ sudo nano /etc/letsencrypt/renewal-hooks/pre/http/authenticator.sh
+        $ sudo chmod +x /etc/letsencrypt/renewal-hooks/pre/http/authenticator.sh
         ```
-       
-    Copy-paste
-    
+        Copy-paste
         ```
         #!/bin/bash
-        echo $CERTBOT_VALIDATION > /var/www/htdocs/.well-known/acme-challenge/$CERTBOT_TOKEN
+        echo $CERTBOT_VALIDATION > /var/www/letsencrypt/.well-known/acme-challenge/$CERTBOT_TOKEN
         ```
-    3.2. cleanup.sh
-    ```
-    $ sudo mkdir /etc/letsencrypt/renewal-hooks/post/http
-    $ sudo nano /etc/letsencrypt/renewal-hooks/post/http/cleanup.sh
-    ```
+    
+    - Create cleanup.sh
+        ```
+        $ sudo mkdir /etc/letsencrypt/renewal-hooks/post/http
+        $ sudo nano /etc/letsencrypt/renewal-hooks/post/http/cleanup.sh
+        $ sudo chmod +x /etc/letsencrypt/renewal-hooks/post/http/cleanup.sh
+        ```
         Copy-paste
+        ```
+        #!/bin/bash
+        rm -f /var/www/letsencrypt/.well-known/acme-challenge/$CERTBOT_TOKEN
+        ```
+
+4. Run `certbot` with the following parameters to acquire a certificate
     ```
-    #!/bin/bash
-    rm -f /var/www/htdocs/.well-known/acme-challenge/$CERTBOT_TOKEN
+    $ sudo certbot certonly --manual --preferred-challenges=http \
+        --manual-auth-hook /etc/letsencrypt/renewal-hooks/pre/http/authenticator.sh \
+        --manual-cleanup-hook /etc/letsencrypt/renewal-hooks/post/http/cleanup.sh \
+        -d example.com
     ```
+    In case of success the output should contain the path to the newly created certificate
+
+    ```
+    - Congratulations! Your certificate and chain have been saved at:
+      /etc/letsencrypt/live/yourdomain.com/fullchain.pem
+      Your key file has been saved at:
+      /etc/letsencrypt/live/yourdomain.com/privkey.pem
+    ```
+
+5. Letsencrypt certificates are issued for a preiod of 90 days. In order to keep your certificate up to date you need to configure auto renewal
+    
+    - Test the renewal process
+        ```
+        $ sudo certbot renew --dry-run
+        ```
+    
+    - If the dry run complted successfully create a cron job 
+        ```
+        $ echo "0 0,12 * * * root python -c 'import random; import time; time.sleep(random.random() * 3600)' && certbot renew" | sudo tee -a /etc/crontab > /dev/null
+        ```
 
 ## Install Docker
 
