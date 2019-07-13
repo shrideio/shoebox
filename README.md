@@ -134,7 +134,7 @@
     $ sudo certbot certonly --manual --preferred-challenges=http \
         --manual-auth-hook /etc/letsencrypt/renewal-hooks/pre/http/authenticator.sh \
         --manual-cleanup-hook /etc/letsencrypt/renewal-hooks/post/http/cleanup.sh \
-        -d example.com
+        -d yourdomain.com
     ```
     In case of success the output should contain the path to the newly created certificate
 
