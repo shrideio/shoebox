@@ -13,6 +13,13 @@
     - Discard changes: `ctrl` + `x`, `n`
     - Cancel: `ctrl` + `x`, `ctrl` + `c`
 
+- Export your domain name as an environment varaible
+    > Dont foget to replace `yourdomain.com` with the actual domain name
+    ```
+    $ export YOUR_DOMAIN_COM=yourdomain.com
+    ```
+    Run `echo $YOUR_DOMAIN_COM`, it should display the actual domain name
+
 ## Disable SELinux
 
 1. Check SELinux status. It is recommended to disable SELinux for the ease of use of Docker, and for installing and setting up other axilary services
@@ -55,14 +62,14 @@
 
 2. Configure to start on boot
     ```
-    $ systemctl enable httpd
+    $ sudo systemctl enable httpd
     ```
 
 3. Start the service and check its status
 
     ```
-    $ systemctl start httpd
-    $ systemctl status httpd
+    $ sudo systemctl start httpd
+    $ sudo systemctl status httpd
     ```
     You will see `active (running)` when the service is running
 
@@ -75,13 +82,13 @@
 
 5. Browse `yourdomain.com` (assuming that the dns record has alredy been set up), you should see the apache default page
 
-## Configure SSL
+## Receive an SSL certificate and configure auto renewal
 
 1. Browse to [Apache on CentOS/RHEL 7](https://certbot.eff.org/lets-encrypt/centosrhel7-apache)
 
 2. Follow the *default* instruction
     - On *step 2* running `yum install epel-release` should be just enough
-    - On *step 3* [EC2 region](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html)
+    - On *step 3* [EC2 region](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html). You may want to add more than one region in case one of the servers is down.
     - Follow the instruction up to *step 4*
 
 3. You will need to create cretificate [pre and post validation hooks](https://certbot.eff.org/docs/using.html?#pre-and-post-validation-hooks) for certificate renewal
@@ -95,8 +102,13 @@
         ```
         $ nano /etc/httpd/conf.d/letsencrypt.conf
         ```
-        Copy-paste
+        Copy-paste & save
         ```
+        <VirtualHost *:80>
+        ServerName yourdomain.com
+        DocumentRoot /var/www/letsencrypt/.well-known/acme-challenge
+        </VirtualHost>
+
         Alias /.well-known/acme-challenge/ "/var/www/letsencrypt/.well-known/acme-challenge/"
         <Directory "/var/www/letsencrypt/.well-known/acme-challenge/">
             AllowOverride None
@@ -104,39 +116,54 @@
             Require method GET POST OPTIONS
         </Directory>
         ```
+    - Repalce `yourdomain.com` with the actual domain name in `letsencrypt.conf` 
+        ```
+        $ sudo sed -i -e 's/yourdomain.com/'"$YOUR_DOMAIN_COM"'/g' /etc/httpd/conf.d/letsencrypt.conf
+        ```
+    - Restart Apache
+        ```
+        systemctl restart httpd
+        ```
 
     - Create authenticator.sh
         ```
-        $ sudo mkdir /etc/letsencrypt/renewal-hooks/pre/http
-        $ sudo nano /etc/letsencrypt/renewal-hooks/pre/http/authenticator.sh
-        $ sudo chmod +x /etc/letsencrypt/renewal-hooks/pre/http/authenticator.sh
+        $ sudo mkdir -p /etc/letsencrypt/renewal-hooks/pre/http 
+        $ sudo nano /etc/letsencrypt/renewal-hooks/pre/http/authenticator.sh        
         ```
-        Copy-paste
+        Copy-paste & save
         ```
         #!/bin/bash
         echo $CERTBOT_VALIDATION > /var/www/letsencrypt/.well-known/acme-challenge/$CERTBOT_TOKEN
         ```
+        Run
+        ```
+        $ sudo chmod +x /etc/letsencrypt/renewal-hooks/pre/http/authenticator.sh
+        ```
     
     - Create cleanup.sh
         ```
-        $ sudo mkdir /etc/letsencrypt/renewal-hooks/post/http
+        $ sudo mkdir -p /etc/letsencrypt/renewal-hooks/post/http
         $ sudo nano /etc/letsencrypt/renewal-hooks/post/http/cleanup.sh
-        $ sudo chmod +x /etc/letsencrypt/renewal-hooks/post/http/cleanup.sh
         ```
-        Copy-paste
+        Copy-paste & save
         ```
         #!/bin/bash
         rm -f /var/www/letsencrypt/.well-known/acme-challenge/$CERTBOT_TOKEN
         ```
+        Run
+        ```
+        $ sudo chmod +x /etc/letsencrypt/renewal-hooks/post/http/cleanup.sh
+        ```
 
 4. Run `certbot` with the following parameters to acquire a certificate
+    
     ```
-    $ sudo certbot certonly --manual --preferred-challenges=http \
+    $ sudo certbot certonly --apache --preferred-challenges=http \
         --manual-auth-hook /etc/letsencrypt/renewal-hooks/pre/http/authenticator.sh \
         --manual-cleanup-hook /etc/letsencrypt/renewal-hooks/post/http/cleanup.sh \
-        -d yourdomain.com
+        -d $YOUR_DOMAIN_COM
     ```
-    In case of success the output should contain the path to the newly created certificate
+    In case of success the output should contain the path to the newly created certificate files
 
     ```
     - Congratulations! Your certificate and chain have been saved at:
@@ -156,6 +183,55 @@
         ```
         $ echo "0 0,12 * * * root python -c 'import random; import time; time.sleep(random.random() * 3600)' && certbot renew" | sudo tee -a /etc/crontab > /dev/null
         ```
+
+6. Create a single unified cofiguration for enabling ssl on virtual hosts
+
+    - Check if `options-ssl-apache.conf` was successfully created. This file is required for enabling ssl on virtual hosts and referenced by the virtual host configuration files
+        ```
+        $ sudo ls /etc/letsencrypt
+        ```
+        The output shoud contain the file name
+    
+    - Append the file with certificate references
+        ```
+        $ sudo nano /etc/letsencrypt/options-ssl-apache.conf
+        ```
+    - Copy-paste to the end of the file & save
+        ```
+        SSLCertificateFile /etc/letsencrypt/live/yourdomain.com/cert.pem
+        SSLCertificateKeyFile /etc/letsencrypt/live/yourdomain.com/privkey.pem
+        SSLCertificateChainFile /etc/letsencrypt/live/yourdomain.com/chain.pem
+        ```
+
+    - Repalce `yourdomain.com` with the actual domain name in `letsencrypt.conf`
+        ```
+        $ sudo sed -i -e 's/yourdomain.com/'"$YOUR_DOMAIN_COM"'/g' /etc/letsencrypt/options-ssl-apache.conf
+        ```
+
+## Configure virtual hosts
+
+1. Install `git`
+    ```
+    $ sudo yum install git
+    ```
+    Run `git --version` to confirm that `git` was successfully installed
+
+2. Clone this repository into a local directory
+    ```
+    $ git clone --depth=1 https://github.com/shrideio/shoebox /tmp/shoebox
+    ```
+3. Rerplace `yourdomain.com` with the actual domain name in the virtual host files
+    ```
+    $ sudo find /tmp/shoebox/src/apache/conf.d/ -type f -exec sed -i -e 's/yourdomain.com/'"$YOUR_DOMAIN_COM"'/g' {} \;
+    ```
+    -  Copy the modified virtual host files into the working `conf.d` directory
+    ```
+    $ sudo cp /tmp/shoebox/src/apache/conf.d/*  /etc/httpd/conf.d
+    ```
+    - Restart Apache
+    ```
+    $ sudo systemctl restart httpd
+    ```
 
 ## Install Docker
 
@@ -203,4 +279,4 @@
 7. Verify that Docker CE is installed correctly by running
     ```
     $ sudo docker run hello-world
-    ```
+    ```   
