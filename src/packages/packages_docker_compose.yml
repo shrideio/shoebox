@@ -1,0 +1,56 @@
+version: "3.3"
+
+
+services:
+
+    packages-db:
+      image: postgres:latest
+      container_name: packages-db
+      hostname: packages-db.local
+      restart: always
+      volumes:
+        - proget-postgresql-data:/var/lib/postgresql/data
+      environment:
+        - POSTGRES_DB=${PROGET_POSTGRES_DATABASE}
+        - POSTGRES_USER=${PROGET_POSTGRES_USER}
+        - POSTGRES_PASSWORD=${PROGET_POSTGRES_PASSWORD}
+      ports:
+        - ${PROGET_POSTGRES_PORT}:5432
+      networks: 
+        - packages-network
+
+    packages:
+      image: inedo/proget:latest
+      container_name: packages
+      hostname: packages.local
+      restart: always
+      environment:
+        - PROGET_DATABASE=Host=packages-db.local; Database=${PROGET_POSTGRES_DATABASE}; Username=${PROGET_POSTGRES_USER}; Password=${PROGET_POSTGRES_PASSWORD};
+      volumes:
+        - proget-packages:/var/proget/packages
+      ports:
+        - ${PROGET_HTTP_PORT}:80
+      networks:
+        - packages-network
+      depends_on:
+        - packages-db
+
+
+networks:
+  packages-network:
+    driver: bridge
+
+
+volumes:
+
+    proget-packages:
+      driver_opts:
+        type: none
+        device: ${PROGET_ROOT}/packages
+        o: bind
+
+    proget-postgresql-data:
+      driver_opts:
+        type: none
+        device: ${PROGET_ROOT}/postgresql/data
+        o: bind
