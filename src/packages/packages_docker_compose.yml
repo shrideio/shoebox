@@ -46,11 +46,11 @@ volumes:
     proget-packages:
       driver_opts:
         type: none
-        device: ${PROGET_ROOT}/packages
+        device: ${PROGET_PACKAGES}
         o: bind
 
     proget-postgresql-data:
       driver_opts:
         type: none
-        device: ${PROGET_ROOT}/postgresql/data
+        device: ${PROGET_POSTGRES_DATA}
         o: bind

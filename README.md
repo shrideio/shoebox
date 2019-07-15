@@ -279,4 +279,9 @@
 7. Verify that Docker CE is installed correctly by running
     ```
     $ sudo docker run hello-world
-    ```   
+    ```
+8. Install `docker-compose`
+    ```
+    $ sudo yum install docker-compose
+    ````
+    Run `docker-compose --version` to confirm that `docker-compose` was successfully installed
