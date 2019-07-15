@@ -60,12 +60,17 @@
     $ sudo yum install httpd
     ```
 
-2. Configure to start on boot
+2. Install Apache mod_ssl module
+    ```
+    $ sudo yum install mod_ssl
+    ```
+
+3. Configure to start on boot
     ```
     $ sudo systemctl enable httpd
     ```
 
-3. Start the service and check its status
+4. Start the service and check its status
 
     ```
     $ sudo systemctl start httpd
@@ -73,7 +78,7 @@
     ```
     You will see `active (running)` when the service is running
 
-4. Open `80` and `443` ports
+5. Open `80` and `443` ports
     ```
     $ sudo firewall-cmd --permanent --add-port=80/tcp
     $ sudo firewall-cmd --permanent --add-port=433/tcp
@@ -161,7 +166,8 @@
     $ sudo certbot certonly --apache --preferred-challenges=http \
         --manual-auth-hook /etc/letsencrypt/renewal-hooks/pre/http/authenticator.sh \
         --manual-cleanup-hook /etc/letsencrypt/renewal-hooks/post/http/cleanup.sh \
-        -d $YOUR_DOMAIN_COM
+        -d $YOUR_DOMAIN_COM \
+        -d *.$YOUR_DOMAIN_COM
     ```
     In case of success the output should contain the path to the newly created certificate files
 
