@@ -6,7 +6,7 @@ services:
     packages-db:
       image: postgres:latest
       container_name: packages-db
-      hostname: packages-db.local
+      hostname: packages-db
       restart: always
       volumes:
         - proget-postgresql-data:/var/lib/postgresql/data
@@ -22,7 +22,7 @@ services:
     packages:
       image: inedo/proget:latest
       container_name: packages
-      hostname: packages.local
+      hostname: packages
       restart: always
       environment:
         - PROGET_DATABASE=Host=packages-db.local; Database=${PROGET_POSTGRES_DATABASE}; Username=${PROGET_POSTGRES_USER}; Password=${PROGET_POSTGRES_PASSWORD};
