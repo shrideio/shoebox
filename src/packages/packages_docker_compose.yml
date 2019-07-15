@@ -38,6 +38,7 @@ services:
 
 networks:
   packages-network:
+    name: packages-network
     driver: bridge
 
 
