@@ -1,15 +1,20 @@
 #!/bin/bash
 
 # STORAGE
-export GOGS_ROOT=/var/gogs
+export GOGS_ROOT=/var/dev/gogs
+export GOGS_DATA=$GOGS_ROOT/data
+export GOGS_MYSQL_DATA=$GOGS_ROOT/mysql/data
+
+mkdir -p $GOGS_DATA
+mkdir -p $GOGS_MYSQL_DATA
 
 # NETWORK
 export GOGS_HTTP_PORT=10080
 export GOGS_SSH_PORT=10022
 
 # DB-MYSQL
-# export GOGS_MYSQL_PORT=10306
-# export GOGS_MYSQL_DATABASE=gogs
-# export GOGS_MYSQL_PASSWORD=r00t
+export GOGS_MYSQL_PORT=10306
+export GOGS_MYSQL_DATABASE=gogs
+export GOGS_MYSQL_PASSWORD=r00t
 
-docker-compose up -d -f packages_docker_compose.yml
+docker-compose up -d -f git_docker_compose.yml
