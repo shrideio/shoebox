@@ -31,7 +31,9 @@ services:
         - git-network
       ports:
         - ${GOGS_SSH_PORT}:22
-        - ${GOGS_HTTP_PORT}:80          
+        - ${GOGS_HTTP_PORT}:80
+      depends_on:
+        - git-db
 
 
 networks:
