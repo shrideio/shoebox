@@ -3,6 +3,7 @@
 # STORAGE
 export PROGET_ROOT=/var/dev/proget
 export PROGET_PACKAGES=$PROGET_ROOT/packages
+export PROGET_EXTENSIONS=$PROGET_ROOT/extensions
 export PROGET_POSTGRES_DATA=$PROGET_ROOT/postgresql/data
 
 mkdir -p $PROGET_PACKAGES
