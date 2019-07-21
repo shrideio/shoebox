@@ -78,10 +78,10 @@
     ```
     You will see `active (running)` when the service is running
 
-5. Open `80` and `443` ports
-    ```
-    $ sudo firewall-cmd --permanent --zone=public --add-service=https
+5. Enable `http` and `https` on the firewall
+    ```    
     $ sudo firewall-cmd --permanent --zone=public --add-service=http    
+    $ sudo firewall-cmd --permanent --zone=public --add-service=https
     $ sudo firewall-cmd --reload
     ```
 
