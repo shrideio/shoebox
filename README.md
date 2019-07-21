@@ -78,7 +78,7 @@
     ```
     You will see `active (running)` when the service is running
 
-5. Enable `http` and `https` on the firewall
+5. Enable `http` and `https` traffic on the firewall
     ```    
     $ sudo firewall-cmd --permanent --zone=public --add-service=http    
     $ sudo firewall-cmd --permanent --zone=public --add-service=https
