@@ -11,6 +11,8 @@ services:
       environment:
           - MYSQL_DATABASE=${GOGS_MYSQL_DATABASE}
           - MYSQL_ROOT_PASSWORD=${GOGS_MYSQL_ROOT_PASSWORD}
+          - MYSQL_PASSWORD=${GOGS_MYSQL_USER_PASSWORD}
+          - MYSQL_USER=gogs
       ports:
         - ${GOGS_MYSQL_PORT}:3306
       networks:
