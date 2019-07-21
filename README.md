@@ -80,8 +80,8 @@
 
 5. Open `80` and `443` ports
     ```
-    $ sudo firewall-cmd --permanent --add-port=80/tcp
-    $ sudo firewall-cmd --permanent --add-port=433/tcp
+    $ sudo firewall-cmd --permanent --zone=public --add-service=https
+    $ sudo firewall-cmd --permanent --zone=public --add-service=http    
     $ sudo firewall-cmd --reload
     ```
 
