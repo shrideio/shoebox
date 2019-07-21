@@ -17,4 +17,4 @@ export GOGS_MYSQL_PORT=10306
 export GOGS_MYSQL_DATABASE=gogs
 export GOGS_MYSQL_PASSWORD=r00t
 
-docker-compose up -d -f git_docker_compose.yml
+docker-compose -f git_docker_compose.yml up -d
