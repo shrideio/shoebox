@@ -28,6 +28,7 @@ services:
         - PROGET_DATABASE=Host=packages-db.local; Database=${PROGET_POSTGRES_DATABASE}; Username=${PROGET_POSTGRES_USER}; Password=${PROGET_POSTGRES_PASSWORD};
       volumes:
         - proget-packages:/var/proget/packages
+        - proget-extensions:/var/proget/extensions
       ports:
         - ${PROGET_HTTP_PORT}:80
       networks:
@@ -49,6 +50,12 @@ volumes:
         type: none
         device: ${PROGET_PACKAGES}
         o: bind
+        
+    proget-extensions:
+      driver_opts:
+        type: none
+        device: ${PROGET_EXTENSIONS}
+        o: bind        
 
     proget-postgresql-data:
       driver_opts:
