@@ -11,9 +11,9 @@ services:
       volumes:
         - proget-postgresql-data:/var/lib/postgresql/data
       environment:
-        - POSTGRES_DB=${PROGET_POSTGRES_DATABASE}
-        - POSTGRES_USER=${PROGET_POSTGRES_USER}
-        - POSTGRES_PASSWORD=${PROGET_POSTGRES_PASSWORD}
+        - POSTGRES_DB=${PROGET_POSTGRESQL_DATABASE}
+        - POSTGRES_USER=${PROGET_POSTGRESQL_USER}
+        - POSTGRES_PASSWORD=${PROGET_POSTGRESQL_PASSWORD}
       ports:
         - ${PROGET_POSTGRES_PORT}:5432
       networks: 
@@ -60,5 +60,5 @@ volumes:
     proget-postgresql-data:
       driver_opts:
         type: none
-        device: ${PROGET_POSTGRES_DATA}
+        device: ${PROGET_POSTGRESQL_DATA}
         o: bind
