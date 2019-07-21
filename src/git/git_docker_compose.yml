@@ -1,27 +1,12 @@
-version: "3.3"
+version: "3.5"
 
 
 services:
 
-    git:
-      image: gogs/gogs:latest
-      container_name: git
-      hostname: git.local
-      restart: always
-      environment:
-        - RUN_CROND=true
-      volumes:
-        - gogs-data:/data
-      networks:
-        - git-network
-      ports:
-        - ${GOGS_SSH_PORT}:22
-        - ${GOGS_HTTP_PORT}:80
-
     git-db:
       image: mysql:latest
       container_name: git-db
-      hostname: git-db.local
+      hostname: git-db
       restart: always
       environment:
           - MYSQL_DATABASE=${GOGS_MYSQL_DATABASE}
@@ -32,10 +17,26 @@ services:
         - git-network
       volumes:
           - gogs-mysql-data:/var/lib/mysql
+          
+    git:
+      image: gogs/gogs:latest
+      container_name: git
+      hostname: git
+      restart: always
+      environment:
+        - RUN_CROND=true
+      volumes:
+        - gogs-data:/data
+      networks:
+        - git-network
+      ports:
+        - ${GOGS_SSH_PORT}:22
+        - ${GOGS_HTTP_PORT}:80          
 
 
 networks:
     git-network:
+      name: git-network
       driver: bridge
 
 
@@ -44,11 +45,11 @@ volumes:
     gogs-data:
       driver_opts:
         type: none
-        device: ${GOGS_ROOT}/data
+        device: ${GOGS_DATA}
         o: bind
 
     gogs-mysql-data:
       driver_opts:
         type: none
-        device: ${GOGS_ROOT}/mysql/data
+        device: ${GOGS_MYSQL_DATA}
         o: bind        
