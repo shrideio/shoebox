@@ -87,85 +87,35 @@
 
 5. Browse `yourdomain.com` (assuming that the dns record has alredy been set up), you should see the apache default page
 
-## Receive an SSL certificate and configure auto renewal
+## Receive a wilecard SSL certificate and configure auto renewal
 
 1. Browse to [Apache on CentOS/RHEL 7](https://certbot.eff.org/lets-encrypt/centosrhel7-apache)
 
-2. Follow the *default* instruction
+2. Follow the *wildcard* instruction
     - On *step 2* running `yum install epel-release` should be just enough
     - On *step 3* [EC2 region](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html). You may want to add more than one region in case one of the servers is down.
-    - Follow the instruction up to *step 4*
+    - On *step 6* **Cloudfalre** is choosen as a default dns provider for the dns challenge. Please consult with the [DNS providers](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438) list supporting *Let's Encrypt* and *Certbot* [DNS Plugins](https://certbot.eff.org/docs/using.html#dns-plugins) integation. 
 
-3. You will need to create cretificate [pre and post validation hooks](https://certbot.eff.org/docs/using.html?#pre-and-post-validation-hooks) for certificate renewal
-    
-    - Create a directory for token verification
+3. Setup *Cloudflare* credentials
+    - Create a [Cloudflare account](https://dash.cloudflare.com/sign-up), the basic plan is free of charge, and get the api key
+    - Create Cloudflare INI file.
         ```
-        $ sudo mkdir -p /var/www/letsencrypt/.well-known/acme-challenge
+        $ sudo mkdir -p /etc/letsencrypt/renewal/dns
+        $ sudo nano /etc/letsencrypt/renewal/dns/cloudflare.ini
+        ```    
+    - Replace **email** and **api key** with the actual values and save the file    
         ```
-    
-    - Create a virtual host configuration for the verification link alias
-        ```
-        $ nano /etc/httpd/conf.d/letsencrypt.conf
-        ```
-        Copy-paste & save
-        ```
-        <VirtualHost *:80>
-        ServerName yourdomain.com
-        DocumentRoot /var/www/letsencrypt/.well-known/acme-challenge
-        </VirtualHost>
-
-        Alias /.well-known/acme-challenge/ "/var/www/letsencrypt/.well-known/acme-challenge/"
-        <Directory "/var/www/letsencrypt/.well-known/acme-challenge/">
-            AllowOverride None
-            Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec
-            Require method GET POST OPTIONS
-        </Directory>
-        ```
-    - Repalce `yourdomain.com` with the actual domain name in `letsencrypt.conf` 
-        ```
-        $ sudo sed -i -e 's/yourdomain.com/'"$YOUR_DOMAIN_COM"'/g' /etc/httpd/conf.d/letsencrypt.conf
-        ```
-    - Restart Apache
-        ```
-        systemctl restart httpd
-        ```
-
-    - Create authenticator.sh
-        ```
-        $ sudo mkdir -p /etc/letsencrypt/renewal-hooks/pre/http 
-        $ sudo nano /etc/letsencrypt/renewal-hooks/pre/http/authenticator.sh        
-        ```
-        Copy-paste & save
-        ```
-        #!/bin/bash
-        echo $CERTBOT_VALIDATION > /var/www/letsencrypt/.well-known/acme-challenge/$CERTBOT_TOKEN
-        ```
-        Run
-        ```
-        $ sudo chmod +x /etc/letsencrypt/renewal-hooks/pre/http/authenticator.sh
-        ```
-    
-    - Create cleanup.sh
-        ```
-        $ sudo mkdir -p /etc/letsencrypt/renewal-hooks/post/http
-        $ sudo nano /etc/letsencrypt/renewal-hooks/post/http/cleanup.sh
-        ```
-        Copy-paste & save
-        ```
-        #!/bin/bash
-        rm -f /var/www/letsencrypt/.well-known/acme-challenge/$CERTBOT_TOKEN
-        ```
-        Run
-        ```
-        $ sudo chmod +x /etc/letsencrypt/renewal-hooks/post/http/cleanup.sh
+        # Cloudflare API credentials used by Certbot
+        dns_cloudflare_email = cloudflare@example.com
+        dns_cloudflare_api_key = 0123456789abcdef0123456789abcdef01234567
         ```
 
 4. Run `certbot` with the following parameters to acquire a certificate
     
     ```
-    $ sudo certbot certonly --apache --preferred-challenges=http \
-        --manual-auth-hook /etc/letsencrypt/renewal-hooks/pre/http/authenticator.sh \
-        --manual-cleanup-hook /etc/letsencrypt/renewal-hooks/post/http/cleanup.sh \
+    $ sudo certbot certonly --apache \
+        --dns-cloudflare \
+        --dns-cloudflare-credentials /etc/letsencrypt/renewal/dns/cloudflare.ini \
         -d $YOUR_DOMAIN_COM \
         -d *.$YOUR_DOMAIN_COM
     ```
