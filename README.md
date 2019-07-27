@@ -99,7 +99,7 @@
 3. Setup *Cloudflare* credentials
     - Create a [Cloudflare account](https://dash.cloudflare.com/sign-up), the basic plan is free of charge, and get the api key
     - Change the nameservers at your domain name provider controil panel to the Cloudflare's name servers
-    - Turn off the HTTP proxy for all for the main and subdomain names. Click on the cloud icon  next to each domain/subdomain name to gray it out.     
+    - Turn off the HTTP proxy for all for the main and subdomain names. Click on the cloud icon ![Alt text](/resources/readme/http_proxy_on.PNG?raw=true "HTTP proxy - ON") next to each domain/subdomain name to gray it out ![Alt text](/resources/readme/http_proxy_off.PNG?raw=true "HTTP proxy - OFF").
     - Create Cloudflare INI file.
         ```
         $ sudo mkdir -p /etc/letsencrypt/renewal/dns
