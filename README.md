@@ -239,11 +239,11 @@
         - **dregistryui**.yourdomain.com (ui for the docker registry)
         - **vault**.yourdomain.com (secret/key vault server)
         > Do not forget to disable the http proxy for all of the subdomains as it is discribed [here](#turn-off-http-proxy)
-    
+
     - Verify that the http server is serving https traffic by browsing to any of the created sudomains. Follow the check list:
         - [x] Redirected from `http` to `https`
         - [x] Response is `503 Service Unavailable`
-        
+
         Proceed if checks are passed, otherwise check `error_log` and `access_log` for troubleshooting
 
 ## Install Docker
