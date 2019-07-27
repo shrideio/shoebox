@@ -237,7 +237,7 @@
     - **dregistry**.yourdomain.com (private docker registry)
     - **dregistryui**.yourdomain.com (ui for the docker registry)
     - **vault**.yourdomain.com (secret/key vault server)
-    > Do not forget to disable the http proxy for all of the subdomains as it is discribed [here](#turn-off-http-proxy)
+    > Do not forget to disable the http proxy for all of the subdomains as it is described [here](#turn-off-http-proxy)
 
 ## Install Docker
 
