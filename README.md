@@ -76,7 +76,7 @@
     $ sudo systemctl start httpd
     $ sudo systemctl status httpd
     ```
-    You will see `active (running)` when the service is running
+    If the service was started successfuly you will see `active (running)` in the log messages. Otherwise check `error_log` and `access_log` at `/var/log/httpd` for troubleshooting
 
 5. Enable `http` and `https` traffic on the firewall
     ```    
@@ -163,7 +163,7 @@
         ```
         $ sudo mv /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf_
         ```
-    - Restart Apache and proceed if no error is reported
+    - Restart Apache and proceed if no error is reported, otherwise check `error_log` and `access_log` for troubleshooting
         ```
         $ sudo systemctl restart httpd
         ```
@@ -225,19 +225,26 @@
         $ sudo cp /tmp/shoebox/src/apache/conf.d/* /etc/httpd/conf.d
         ```
 
-    - Restart Apache and proceed if no error is reported
+    - Restart Apache and proceed if no error is reported, otherwise check `error_log` and `access_log` for troubleshooting
         ```
         $ sudo systemctl restart httpd
         ```
 
-4. Configure subdomain records (using _CNAME_ aliases) matching the following names
-    - **git**.yourdomain.com (git server)
-    - **project**.yourdomain.com (project management tool)
-    - **ci**.yourdomain.com (build server)
-    - **dregistry**.yourdomain.com (private docker registry)
-    - **dregistryui**.yourdomain.com (ui for the docker registry)
-    - **vault**.yourdomain.com (secret/key vault server)
-    > Do not forget to disable the http proxy for all of the subdomains as it is discribed [here](#turn-off-http-proxy)
+4. Configure subdomain records
+    - Create _CNAME_ aliases (bolded) matching the following names
+        - **git**.yourdomain.com (git server)
+        - **project**.yourdomain.com (project management tool)
+        - **ci**.yourdomain.com (build server)
+        - **dregistry**.yourdomain.com (private docker registry)
+        - **dregistryui**.yourdomain.com (ui for the docker registry)
+        - **vault**.yourdomain.com (secret/key vault server)
+        > Do not forget to disable the http proxy for all of the subdomains as it is discribed [here](#turn-off-http-proxy)
+    
+    - Verify that the http server is serving https traffic by browsing to any of the created sudomains. Follow the check list:
+        - [x] Redirected from `http` to `https`
+        - [x] Response is `503 Service Unavailable`
+        
+        Proceed if checks are passed, otherwise check `error_log` and `access_log` for troubleshooting
 
 ## Install Docker
 
