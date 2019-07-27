@@ -91,37 +91,40 @@
 
 1. Browse to [Apache on CentOS/RHEL 7](https://certbot.eff.org/lets-encrypt/centosrhel7-apache)
 
-2. Follow the *wildcard* instruction
+2. Follow the *wildcard* instruction up to the *step 6* inclusively.
     - On *step 2* running `yum install epel-release` should be just enough
     - On *step 3* [EC2 region](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html). You may want to add more than one region in case one of the servers is down.
-    - On *step 6* **Cloudfalre** is choosen as a default dns provider for the dns challenge. Please consult with the [DNS providers](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438) list supporting *Let's Encrypt* and *Certbot* [DNS Plugins](https://certbot.eff.org/docs/using.html#dns-plugins) integation. 
+    - On *step 6* **Cloudfalre** is choosen as a dns provider for the dns challenge. Please consult with the [DNS providers](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438) list supporting *Let's Encrypt* and *Certbot* [DNS Plugins](https://certbot.eff.org/docs/using.html#dns-plugins) integation. 
 
 3. Setup *Cloudflare* credentials
     - Create a [Cloudflare account](https://dash.cloudflare.com/sign-up), the basic plan is free of charge, and get the api key
     - Change the nameservers at your domain name provider controil panel to the Cloudflare's name servers
-    - Turn off the HTTP proxy for all for the main and subdomain names. Click on the cloud icon ![Alt text](/resources/readme/http_proxy_on.PNG?raw=true "HTTP proxy - ON") next to each domain/subdomain name to gray it out ![Alt text](/resources/readme/http_proxy_off.PNG?raw=true "HTTP proxy - OFF").
-    - Create Cloudflare INI file.
+    - <a name="turn-off-http-proxy"></a>Turn off the HTTP proxy for main and subdomain names. Click on the cloud icon ![Alt text](/resources/readme/http_proxy_on.PNG?raw=true "HTTP proxy - ON") next to each domain/subdomain name to gray it out ![Alt text](/resources/readme/http_proxy_off.PNG?raw=true "HTTP proxy - OFF").
+        > If you forget to disable the http proxy you may receive an obscure error such as `ERR_TOO_MANY_REDIRECTS`
+    - Create an ini file for the Cloudflare dns API client.
         ```
         $ sudo mkdir -p /etc/letsencrypt/renewal/dns
         $ sudo nano /etc/letsencrypt/renewal/dns/cloudflare.ini
-        ```    
-    - Replace **email** and **api key** with the actual values and save the file    
+        ```
+    - Get the API key. Browse `Get your API key -> API Tokens -> Global API Key [View]`
+    - Replace **email** and **API key** with the actual values and save the file    
         ```
         # Cloudflare API credentials used by Certbot
         dns_cloudflare_email = cloudflare@example.com
         dns_cloudflare_api_key = 0123456789abcdef0123456789abcdef01234567
         ```
 
-4. Run `certbot` with the following parameters to acquire a certificate
+4. Run `certbot` with the following parameters to acquire a certificate. The default awaiting time for the `NAME` record to update is 10 seconds. You may want to increase the delay using the `--dns-cloudflare-propagation-seconds` flag
     
     ```
-    $ sudo certbot certonly --apache \
+    $ sudo certbot certonly -i apache \
         --dns-cloudflare \
         --dns-cloudflare-credentials /etc/letsencrypt/renewal/dns/cloudflare.ini \
+        --dns-cloudflare-propagation-seconds 30 \
         -d $YOUR_DOMAIN_COM \
         -d *.$YOUR_DOMAIN_COM
     ```
-    In case of success the output should contain the path to the newly created certificate files
+    If the certificate is acquired successfuly a similar message to the shown bellow will be displayed by `certbot`
 
     ```
     - Congratulations! Your certificate and chain have been saved at:
@@ -130,7 +133,7 @@
       /etc/letsencrypt/live/yourdomain.com/privkey.pem
     ```
 
-5. Letsencrypt certificates are issued for a preiod of 90 days. In order to keep your certificate up to date you need to configure auto renewal
+5. Letsencrypt certificates are issued for 90 days. In order to keep your certificate up to date you need to configure auto-renewal
     
     - Test the renewal process
         ```
@@ -142,7 +145,30 @@
         $ echo "0 0,12 * * * root python -c 'import random; import time; time.sleep(random.random() * 3600)' && certbot renew" | sudo tee -a /etc/crontab > /dev/null
         ```
 
-6. Create a single unified cofiguration for enabling ssl on virtual hosts
+6. Enable https traffic on port _443_
+
+    - Configure Apache to listen port 443
+        ```
+        $ sudo nano /etc/httpd/conf/httpd.conf
+        
+        ```
+        Copy-paste the following piece of configuration to the end of the configuration file and save
+        ```        
+        # Enable https trafic on port 443
+        <IfModule mod_ssl.c>
+        Listen 443
+        </IfModule>
+        ```
+    - Disable the default ssl configuration
+        ```
+        $ sudo mv /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf_
+        ```
+    - Restart Apache and proceed if no error is reported
+        ```
+        $ sudo systemctl restart httpd
+        ```
+
+7. Create a unified cofiguration file for enabling ssl on virtual hosts
 
     - Check if `options-ssl-apache.conf` was successfully created. This file is required for enabling ssl on virtual hosts and referenced by the virtual host configuration files
         ```
@@ -154,8 +180,9 @@
         ```
         $ sudo nano /etc/letsencrypt/options-ssl-apache.conf
         ```
-    - Copy-paste to the end of the file & save
+    - Copy-paste to the end of the file and save changes
         ```
+        # SSL certificate files references
         SSLCertificateFile /etc/letsencrypt/live/yourdomain.com/cert.pem
         SSLCertificateKeyFile /etc/letsencrypt/live/yourdomain.com/privkey.pem
         SSLCertificateChainFile /etc/letsencrypt/live/yourdomain.com/chain.pem
@@ -164,6 +191,10 @@
     - Repalce `yourdomain.com` with the actual domain name in `letsencrypt.conf`
         ```
         $ sudo sed -i -e 's/yourdomain.com/'"$YOUR_DOMAIN_COM"'/g' /etc/letsencrypt/options-ssl-apache.conf
+        ```
+        Verify the result
+        ```
+        $ sudo cat /etc/letsencrypt/options-ssl-apache.conf
         ```
 
 ## Configure virtual hosts
@@ -178,18 +209,35 @@
     ```
     $ git clone --depth=1 https://github.com/shrideio/shoebox /tmp/shoebox
     ```
-3. Rerplace `yourdomain.com` with the actual domain name in the virtual host files
-    ```
-    $ sudo find /tmp/shoebox/src/apache/conf.d/ -type f -exec sed -i -e 's/yourdomain.com/'"$YOUR_DOMAIN_COM"'/g' {} \;
-    ```
+
+3. Set up subdomains configuration
+    - Replace `yourdomain.com` with the actual domain name in the virtual host files
+        ```
+        $ sudo find /tmp/shoebox/src/apache/conf.d/ -type f -exec sed -i -e 's/yourdomain.com/'"$YOUR_DOMAIN_COM"'/g' {} \;
+        ```
+         Verify the result on a sample file (i.e. git.ssl.conf)
+        ```
+        $ sudo cat /tmp/shoebox/src/apache/conf.d/git.ssl.conf
+        ```
+
     -  Copy the modified virtual host files into the working `conf.d` directory
-    ```
-    $ sudo cp /tmp/shoebox/src/apache/conf.d/*  /etc/httpd/conf.d
-    ```
-    - Restart Apache
-    ```
-    $ sudo systemctl restart httpd
-    ```
+        ```
+        $ sudo cp /tmp/shoebox/src/apache/conf.d/* /etc/httpd/conf.d
+        ```
+
+    - Restart Apache and proceed if no error is reported
+        ```
+        $ sudo systemctl restart httpd
+        ```
+
+4. Configure subdomain records (using _CNAME_ aliases) matching the following names
+    - **git**.yourdomain.com (git server)
+    - **project**.yourdomain.com (project management tool)
+    - **ci**.yourdomain.com (build server)
+    - **dregistry**.yourdomain.com (private docker registry)
+    - **dregistryui**.yourdomain.com (ui for the docker registry)
+    - **vault**.yourdomain.com (secret/key vault server)
+    > Do not forget to disable the http proxy for all of the subdomains as it is discribed [here](#turn-off-http-proxy)
 
 ## Install Docker
 
