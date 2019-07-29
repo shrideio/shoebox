@@ -22,7 +22,7 @@
 
 ## Disable SELinux
 
-1. Check SELinux status. It is recommended to disable SELinux for the ease of use of Docker, and for installing and setting up other axilary services
+1. Check SELinux status. It is recommended to disable SELinux for the ease of use of Docker, and the ease of setting up other axilary services
 
     ```
     $ sestatus
