@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- Install Nano (smple concole based text editor)
+- Install Nano (smple console based text editor)
     
     ```
     $ sudo yum install nano
