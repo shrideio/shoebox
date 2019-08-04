@@ -213,7 +213,7 @@
 3. Set up subdomains configuration
     - Replace `yourdomain.com` with the actual domain name in the virtual host files
         ```
-        $ sudo find /tmp/shoebox/src/apache/conf.d/ -type f -exec sed -i -e 's/yourdomain.com/'"$YOUR_DOMAIN_COM"'/g' {} \;
+        $ sudo find /tmp/shoebox/src/apache/conf.d/ -type f -exec sed -i -e 's|yourdomain.com|'"$YOUR_DOMAIN_COM"'|g' {} \;
         ```
          Verify the result on a sample file (i.e. git.ssl.conf)
         ```
@@ -298,3 +298,14 @@
     $ sudo yum install docker-compose
     ````
     Run `docker-compose --version` to confirm that `docker-compose` was successfully installed
+
+## Set up docker volumes storage root
+`/var/dev` is choosen as a default directory for containing directories mounted to docker volumes for persiting data externaly.
+It may be changed to any other arbitrary directory if necessary.
+
+Run the following commad to replace `@DEV_ROOT` in `*.evn` files
+```
+$ export DEV_ROOT=/var/dev
+$ sudo find /tmp/shoebox/src -type f -name '*.env' -exec sed -i -e 's|@DEV_ROOT|'"$DEV_ROOT"'|g' {} \;
+```
+
