@@ -243,7 +243,7 @@
         - [x] Redirected from `http` to `https`
         - [x] Response is `503 Service Unavailable`
 
-        Proceed if checks are passed, otherwise, check `error_log` and `access_log` for troubleshooting
+        Proceed if the checks are passed, otherwise, check `error_log` and `access_log` for troubleshooting
 
 ## VI. Install Docker and Docker Compose
 
