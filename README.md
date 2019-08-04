@@ -300,11 +300,11 @@
     Run `docker-compose --version` to confirm that `docker-compose` was successfully installed
 
 ## Set up docker volumes storage directories
-`src/setup_volumes_storage.sh` not only creates the directories it also replaces placeholders in the `.evn` files with matching path values.
-`/var/dev` is choosen as a root for directories mounted to docker volumes for persiting data externaly, if necessary it can be chnage by editing `setup_volumes_storage.sh`.
+`src/setup_volumes_storage.sh` creates the directories and replaces placeholders in the `.evn` files with matching path values.
+`/var/dev` is choosen as a root for the directories mounted to docker volumes for persiting data externaly, if necessary it can be chnage by editing `setup_volumes_storage.sh`.
 Please check the content of `setup_volumes_storage.sh` for more information.
 
-Run the following commad to create teh directories
+Run the following commad to create the volume storage directories
 ```
 $ sudo chmod +x /tmp/shoebox/src/setup_volumes_storage.sh
 $ sudo /tmp/shoebox/src/setup_volumes_storage.sh
