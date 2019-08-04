@@ -25,7 +25,7 @@ services:
       hostname: packages
       restart: always
       environment:
-        - PROGET_DATABASE=Host=packages-db.local; Database=${PROGET_POSTGRES_DATABASE}; Username=${PROGET_POSTGRES_USER}; Password=${PROGET_POSTGRES_PASSWORD};
+        - PROGET_DATABASE=Host=packages-db.local; Database=${PROGET_POSTGRESQL_DATABASE}; Username=${PROGET_POSTGRESQL_USER}; Password=${PROGET_POSTGRESQL_PASSWORD};
       volumes:
         - proget-packages:/var/proget/packages
         - proget-extensions:/var/proget/extensions
@@ -50,12 +50,12 @@ volumes:
         type: none
         device: ${PROGET_PACKAGES}
         o: bind
-        
+
     proget-extensions:
       driver_opts:
         type: none
         device: ${PROGET_EXTENSIONS}
-        o: bind        
+        o: bind
 
     proget-postgresql-data:
       driver_opts:
