@@ -304,7 +304,7 @@
 `/var/dev` is choosen as a root for the directories mounted to docker volumes for persiting data externaly, if necessary it can be changed by editing `setup_volumes_storage.sh`.
 Please check the content of `setup_volumes_storage.sh` for more information.
 
-Run the following commad to create the volume storage directories
+Run the following commad to create directories for volume mounts
 ```
 $ sudo chmod +x /tmp/shoebox/src/setup_volumes_storage.sh
 $ sudo /tmp/shoebox/src/setup_volumes_storage.sh
