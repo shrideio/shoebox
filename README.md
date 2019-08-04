@@ -1,6 +1,6 @@
 # Shoebox - minimalistic dev environment on CentOS 7
 
-## Prerequisites
+## I. Prerequisites
 
 - Install Nano (simple console-based text editor)
     
@@ -18,9 +18,9 @@
     ```
     $ export YOUR_DOMAIN_COM=yourdomain.com
     ```
-    Run `echo $YOUR_DOMAIN_COM`, it should display the actual domain name
+    Run `echo $YOUR_DOMAIN_COM`, it should output the actual domain name
 
-## Disable SELinux
+## II. Disable SELinux
 
 1. Check SELinux status. It is recommended to disable SELinux for the ease of use of Docker, and the ease of setting up other auxiliary services
 
@@ -53,7 +53,7 @@
     SELinux status:                 disabled
     ```
     
-## Install Apache
+## III. Install Apache
 
 1. Run
     ```
@@ -87,7 +87,7 @@
 
 5. Browse `yourdomain.com` (assuming that the DNS record has already been set up), you should see the apache default page
 
-## Receive a wildcard SSL certificate and configure auto-renewal
+## IV. Receive a wildcard SSL certificate and configure auto-renewal
 
 1. Browse to [Apache on CentOS/RHEL 7](https://certbot.eff.org/lets-encrypt/centosrhel7-apache)
 
@@ -197,7 +197,7 @@
         $ sudo cat /etc/letsencrypt/options-ssl-apache.conf
         ```
 
-## Configure virtual hosts
+## V. Configure virtual hosts
 
 1. Install `git`
     ```
@@ -233,12 +233,11 @@
 4. Configure subdomain records
     - Create _CNAME_ aliases (bolded) matching the following names
         - **git**.yourdomain.com (git server)
+        - **registry**.yourdomain.com (package and container registry)
+        - **ci**.yourdomain.com (continues integration/build server)
         - **project**.yourdomain.com (project management tool)
-        - **ci**.yourdomain.com (build server)
-        - **dregistry**.yourdomain.com (private docker registry)
-        - **dregistryui**.yourdomain.com (ui for the docker registry)
         - **vault**.yourdomain.com (secret/key vault server)
-        > Do not forget to disable the http proxy for all of the subdomains as it is discribed [here](#turn-off-http-proxy)
+        > Do not forget to disable the http proxy for all of the subdomains as it is described [here](#turn-off-http-proxy)
 
     - Verify that the http server is serving https traffic by browsing to any of the created subdomains. Follow the check list:
         - [x] Redirected from `http` to `https`
@@ -246,7 +245,7 @@
 
         Proceed if checks are passed, otherwise, check `error_log` and `access_log` for troubleshooting
 
-## Install Docker
+## VI. Install Docker and Docker Compose
 
 1. Uninstall old versions
     ```
@@ -299,9 +298,9 @@
     ````
     Run `docker-compose --version` to confirm that `docker-compose` was successfully installed
 
-## Set up docker directories for container volume mounts
-`src/setup_volumes_storage.sh` creates the directories and replaces placeholders in the `.evn` files with matching path values.
-`/var/dev` is chosen as a root for the directories mounted to docker volumes for persisting data externally, if necessary it can be changed by editing `setup_volumes_storage.sh`.
+## VII. Set up directories for container volume mounts
+
+`setup_volumes_storage.sh` (can be found in `/src`) creates directories for container volume mounts and replaces placeholders in the `.evn` files with matching path values. `/var/dev` is chosen as a root directory and can be changed by editing `setup_volumes_storage.sh` if necessary.
 Please check the content of `setup_volumes_storage.sh` for more information.
 
 Run the following commad to create directories for volume mounts
@@ -315,3 +314,20 @@ Verify if the placeholders were replaced on a sample file (i.e. git/.env)
 ```
 $ sudo cat /tmp/shoebox/src/git/.env
 ```
+
+## VII. Set up SMTP relay
+
+The majority of key servises of the dev environment setup requre an SMTP relay for sending email notifications.
+If your domain name service includes a free email address you may want to use the provider's SMTP service, otherwise, 
+there are a few email services providing free accounts with the limited number of sent message per day/month (at least 100 emails a day)
+- [SendPulse](https://sendpulse.com/prices/smtp) (12,000/month)
+- [Mailgun](https://www.mailgun.com/pricing-options) (10,000/month)
+- [Mailjet](https://www.mailjet.com/pricing/) (6,000/month, 200/day)
+- [SendGrid](https://sendgrid.com/marketing/sendgrid-services-cro/#pricing-app) (100/day)
+
+## VIII. Set up dev environment services
+1. [Git (Gogs)](/src/git/README.md)
+2. [Packages and Docker registry (Proget)](/src/registry/README.md)
+3. [Continuous Integration (Drone)](/src/ci/README.md)
+4. [Key/Secret Vault (Vault)](/src/vault/README.md)
+5. [Project Managment (Taiga)](/src/project/README.md)
