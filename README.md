@@ -318,7 +318,7 @@ $ sudo cat /tmp/shoebox/src/git/.env
 ## VII. Set up SMTP relay
 
 The majority of key servises of the dev environment setup requre an SMTP relay for sending email notifications.
-If your domain name service includes a free email address you may want to use the provider's SMTP service, otherwise, 
+If your domain name service includes a free email address you may want to use the provider's SMTP server, otherwise, 
 there are a few email services providing free accounts with the limited number of sent message per day/month (at least 100 emails a day)
 - [SendPulse](https://sendpulse.com/prices/smtp) (12,000/month)
 - [Mailgun](https://www.mailgun.com/pricing-options) (10,000/month)
