@@ -25,7 +25,7 @@ services:
       hostname: packages
       restart: always
       environment:
-        - PROGET_DATABASE=Host=packages-db.local; Database=${PROGET_POSTGRESQL_DATABASE}; Username=${PROGET_POSTGRESQL_USER}; Password=${PROGET_POSTGRESQL_PASSWORD};
+        - PROGET_DATABASE=Host=packages-db; Database=${PROGET_POSTGRESQL_DATABASE}; Username=${PROGET_POSTGRESQL_USER}; Password=${PROGET_POSTGRESQL_PASSWORD};
       volumes:
         - proget-packages:/var/proget/packages
         - proget-extensions:/var/proget/extensions
