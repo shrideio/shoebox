@@ -56,4 +56,4 @@ volumes:
       driver_opts:
         type: none
         device: ${GOGS_MYSQL_DATA}
-        o: bind        
+        o: bind

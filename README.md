@@ -299,13 +299,19 @@
     ````
     Run `docker-compose --version` to confirm that `docker-compose` was successfully installed
 
-## Set up docker volumes storage root
-`/var/dev` is choosen as a default directory for containing directories mounted to docker volumes for persiting data externaly.
-It may be changed to any other arbitrary directory if necessary.
+## Set up docker volumes storage directories
+`src/setup_volumes_storage.sh` not only creates the directories it also replaces placeholders in the `.evn` files with matching path values.
+`/var/dev` is choosen as a root for directories mounted to docker volumes for persiting data externaly, if necessary it can be chnage by editing `setup_volumes_storage.sh`.
+Please check the content of `setup_volumes_storage.sh` for more information.
 
-Run the following commad to replace `@DEV_ROOT` in `*.evn` files
+Run the following commad to create teh directories
 ```
-$ export DEV_ROOT=/var/dev
-$ sudo find /tmp/shoebox/src -type f -name '*.env' -exec sed -i -e 's|@DEV_ROOT|'"$DEV_ROOT"'|g' {} \;
+$ sudo chmod +x /tmp/shoebox/src/setup_volumes_storage.sh
+$ sudo /tmp/shoebox/src/setup_volumes_storage.sh
 ```
+Run `sudo ls -R /var/dev` for verifying the created directories structure
 
+Verify if the placeholders were repalced on a sample file (i.e. git/.env)
+```
+$ sudo cat /tmp/shoebox/src/git/.env
+```
