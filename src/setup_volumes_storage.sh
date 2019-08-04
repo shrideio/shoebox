@@ -23,6 +23,6 @@ mkdir -p $PROGET_PACKAGES
 mkdir -p $PROGET_EXTENSIONS
 mkdir -p $PROGET_POSTGRESQL_DATA
 
-find /tmp/shoebox/src/git -type f -name '*.env' -exec sed -i -e 's|@PROGET_PACKAGES|'"$PROGET_PACKAGES"'|g' {} \;
-find /tmp/shoebox/src/git -type f -name '*.env' -exec sed -i -e 's|@PROGET_EXTENSIONS|'"$PROGET_EXTENSIONS"'|g' {} \;
-find /tmp/shoebox/src/git -type f -name '*.env' -exec sed -i -e 's|@PROGET_POSTGRESQL_DATA|'"$PROGET_POSTGRESQL_DATA"'|g' {} \;
+find /tmp/shoebox/src/packages -type f -name '*.env' -exec sed -i -e 's|@PROGET_PACKAGES|'"$PROGET_PACKAGES"'|g' {} \;
+find /tmp/shoebox/src/packages -type f -name '*.env' -exec sed -i -e 's|@PROGET_EXTENSIONS|'"$PROGET_EXTENSIONS"'|g' {} \;
+find /tmp/shoebox/src/packages -type f -name '*.env' -exec sed -i -e 's|@PROGET_POSTGRESQL_DATA|'"$PROGET_POSTGRESQL_DATA"'|g' {} \;
