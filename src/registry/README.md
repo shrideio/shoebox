@@ -1,5 +1,5 @@
 ## ProGet Setup
-Check [ProGet Linux Installation Guide](https://docs.inedo.com/docs/proget/installation/installation-guide/linux-docker) for more detail.
+Check [ProGet Documentation](https://docs.inedo.com/docs/proget/overview) and [ProGet Linux Installation Guide](https://docs.inedo.com/docs/proget/installation/installation-guide/linux-docker) for more detail.
 
 1. Stage ProGet (registry) and PostgreSQL (registry-db) containers
     > This setup uses PostgreSQL instead of Microsoft SQL Server what is different from the official ProGet guide.
@@ -43,10 +43,21 @@ Check [ProGet Linux Installation Guide](https://docs.inedo.com/docs/proget/insta
         | Publish Packages         | all feeds | PackagePublisher               |
         | View & Download Packages | all feeds | FeedConsumer, PackagePublisher |
 
-3. Create API keys
+4. Create API keys
 
     API keys are used for accessing ProGet feeds without exposing user credentials.
 
     - Browse to the administration console, then navigate to `Integrations & Extensibility -> API Keys`. 
 
-    - Create exclusive API keys for the _FeedConsumer_ and _PackagePublisher_ users. Click on **Create API Key** to open the _Create API Key_ dialog. Fill in the _Impersonate user_ and _Description_ fields with matching user names (the API user is not shown in the API Keys table, that is why seeting the _Description_ filed is important). Click on **Save API Key** to save changes and proceed.
+    - Create exclusive API keys for the _FeedConsumer_ and _PackagePublisher_ users. Click on **Create API Key** to open the _Create API Key_ dialog. Fill in the _Impersonate user_ and _Description_ fields with matching user names (the API user is not shown in the API Keys table, that is why setting _Description_ is important). Click on **Save API Key** to save changes and proceed.
+
+5. Create NuGet feed and Docker registry
+
+    NuGet feed and Docker registry are needed for testing the continues integration setup.
+    > This setup is focused on .NET Core projects. If it does not suit the case a different feed type can be created and used further. Check the Third-Party Packages & Feed Types section in the ProGet documentation for more detail.
+
+    - Browse to `Feeds` and click on **Create New Feed** to open the _Create Feed_ dialog. Set _Feed name_ to `v2` (NuGet feeds already have `/nuget` endpoint root; v2 stands for the NuGet protocol version, v3 is not supported by the free licence). Choose _Third-party package format_ and select _NuGet_ from the dropdown. Click on **Create Feed** to save changes. 
+
+    - ProGet supports feed connectors allowing to unify package feeds from different sources. Click on **add connector** to open the _Select Connector_ dialog, select `nuget.org` from the _Connector_ dropdown and click on *Save* to create a new feed. When _v2_ viewed in the feed viewer page (`Feed -> v2`) it is expected to display packages derived from _nuget.org_.
+
+    - Browse to `Container` and click on **Create New Docker Registry** to open the _Create Docker Registry_ dialog. Enter the registry name, `docker.default` will be used further, and click on **Create Docker Registry** to save changes. Add a _hub.docker.com_ connector to the newly created registry similarly to what is described above.
