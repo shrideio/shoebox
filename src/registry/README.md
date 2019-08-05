@@ -49,4 +49,4 @@ Check [ProGet Linux Installation Guide](https://docs.inedo.com/docs/proget/insta
 
     - Browse to the administration console, then navigate to `Integrations & Extensibility -> API Keys`. 
 
-    - Create an exclusive API key for _FeedConsumer_ and _PackagePublisher_ users. Click on **Create API Key** to open the _Create API Key_ dialog. Fill in _Impersonate user_ and _Description_ fields with the matching user name (the API user is not shown in the API Keys table, that is why adding a user description is important). Click on **Save API Key** to save changes and proceed.
+    - Create exclusive API keys for the _FeedConsumer_ and _PackagePublisher_ users. Click on **Create API Key** to open the _Create API Key_ dialog. Fill in the _Impersonate user_ and _Description_ fields with matching user names (the API user is not shown in the API Keys table, that is why seeting the _Description_ filed is important). Click on **Save API Key** to save changes and proceed.
