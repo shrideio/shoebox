@@ -6,14 +6,14 @@ Check [ProGet Linux Installation Guide](https://docs.inedo.com/docs/proget/insta
     
     The following commands will navigate to the directory containing `registry_docker_compose.yml` and run the containers in the background.
 
-    > The `.env` file in `/src/registry` directory contains environment variable values for the containers, review and modify if necessary.
+    > The `.env` file in `/src/registry` contains environment variable values for the containers, review and modify if necessary.
 
     ```
     $ sudo cd /tmp/shoebox/src/registry
     $ sudo docker-compose up -d
     ```
 
-    <a name="docker-logs"></a>Run `sudo docker ps` to verify that `registry` and `registry-db` containers are up and running. Proceed if no error is detected, otherwise check the contain logs using the following command `sudo docker logs [container name]` for troubleshooting.
+    <a name="docker-logs"></a>Run `sudo docker ps` to verify that `registry` and `registry-db` containers are up and running. Proceed if no error is detected, otherwise check the container logs for troubleshooting using the following command `sudo docker logs [container name]`.
 
 2. Configure ProGet
 
