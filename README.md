@@ -14,7 +14,7 @@
     - Cancel: `ctrl` + `x`, `ctrl` + `c`
 
 - Export your domain name as an environment variable
-    > Dont foget to replace `yourdomain.com` with the actual domain name
+    > Do not forget to replace `yourdomain.com` with the actual domain name
     ```
     $ export YOUR_DOMAIN_COM=yourdomain.com
     ```
@@ -76,7 +76,7 @@
     $ sudo systemctl start httpd
     $ sudo systemctl status httpd
     ```
-    If the service was started successfuly you will see `active (running)` in the log messages. Otherwise check `error_log` and `access_log` at `/var/log/httpd` for troubleshooting
+    If the service was started successfully you will see `active (running)` in the log messages. Otherwise check `error_log` and `access_log` at `/var/log/httpd` for troubleshooting
 
 5. Enable `http` and `https` traffic on the firewall
     ```    
@@ -99,7 +99,7 @@
 3. Setup *Cloudflare* credentials
     - Create a [Cloudflare account](https://dash.cloudflare.com/sign-up), the basic plan is free of charge, and get the api key
     - Change the nameservers at your domain name provider controil panel to the Cloudflare's name servers
-    - <a name="turn-off-http-proxy"></a>Turn off the HTTP proxy for main and subdomain names. Click on the cloud icon ![Alt text](/resources/readme/http_proxy_on.PNG?raw=true "HTTP proxy - ON") next to each domain/subdomain name to gray it out ![Alt text](/resources/readme/http_proxy_off.PNG?raw=true "HTTP proxy - OFF").
+    - <a name="turn-off-http-proxy"></a>Turn off the HTTP proxy for main and subdomain names. Click on the cloud icon ![Alt text](/resources/img/http_proxy_on.png?raw=true "HTTP proxy - ON") next to each domain/subdomain name to gray it out ![Alt text](/resources/img/http_proxy_off.png?raw=true "HTTP proxy - OFF").
         > If you forget to disable the http proxy you may receive an obscure error such as `ERR_TOO_MANY_REDIRECTS`
     - Create an ini file for the Cloudflare DNS API client.
         ```
@@ -233,7 +233,7 @@
 4. Configure subdomain records
     - Create _CNAME_ aliases (bolded) matching the following names
         - **git**.yourdomain.com (git server)
-        - **registry**.yourdomain.com (package and container registry)
+        - **registry**.yourdomain.com (packages and containers registry)
         - **ci**.yourdomain.com (continues integration/build server)
         - **project**.yourdomain.com (project management tool)
         - **vault**.yourdomain.com (secret/key vault server)
@@ -288,26 +288,28 @@
     $ sudo systemctl start docker
     ```
 
-7. Verify that Docker CE is installed correctly by running
+7. Verify that Docker CE is installed correctly
     ```
     $ sudo docker run hello-world
     ```
+
 8. Install `docker-compose`
     ```
     $ sudo yum install docker-compose
     ````
-    Run `docker-compose --version` to confirm that `docker-compose` was successfully installed
+    Run `docker-compose --version` to confirm that `docker-compose` is installed successfully
 
 ## VII. Set up directories for container volume mounts
 
 `setup_volumes_storage.sh` (can be found in `/src`) creates directories for container volume mounts and replaces placeholders in the `.evn` files with matching path values. `/var/dev` is chosen as a root directory and can be changed by editing `setup_volumes_storage.sh` if necessary.
 Please check the content of `setup_volumes_storage.sh` for more information.
 
-Run the following commad to create directories for volume mounts
+Run the following commads to create directories for volume mounts
 ```
 $ sudo chmod +x /tmp/shoebox/src/setup_volumes_storage.sh
 $ sudo /tmp/shoebox/src/setup_volumes_storage.sh
 ```
+
 Run `sudo ls -R /var/dev` for verifying the created directories structure
 
 Verify if the placeholders were replaced on a sample file (i.e. git/.env)
@@ -319,7 +321,7 @@ $ sudo cat /tmp/shoebox/src/git/.env
 
 The majority of key servises of the dev environment setup requre an SMTP relay for sending email notifications.
 If your domain name service includes a free email address you may want to use the provider's SMTP server, otherwise, 
-there are a few email services providing free accounts with the limited number of sent message per day/month (at least 100 emails a day)
+there are a few email services providing free accounts with the limited number of message sent per day/month (at least 100 emails a day)
 - [SendPulse](https://sendpulse.com/prices/smtp) (12,000/month)
 - [Mailgun](https://www.mailgun.com/pricing-options) (10,000/month)
 - [Mailjet](https://www.mailjet.com/pricing/) (6,000/month, 200/day)
@@ -330,4 +332,4 @@ there are a few email services providing free accounts with the limited number o
 2. [Packages and Docker registry (Proget)](/src/registry/README.md)
 3. [Continuous Integration (Drone)](/src/ci/README.md)
 4. [Key/Secret Vault (Vault)](/src/vault/README.md)
-5. [Project Managment (Taiga)](/src/project/README.md)
+5. [Project Management (Taiga)](/src/project/README.md)

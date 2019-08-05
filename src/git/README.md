@@ -1,24 +1,24 @@
-## Gogs setup
-> Please consult with [Gogs on Docker Hub](https://hub.docker.com/r/gogs/gogs/) and [Gogs Documentation](https://gogs.io/docs) for more detail.
+## Gogs Setup
+Check [Gogs on Docker Hub](https://hub.docker.com/r/gogs/gogs/) and [Gogs Documentation](https://gogs.io/docs) for more detail.
 
-1. Stage Gogs (git) and MySQL (git-db) containers
+1. Stage Gogs (git) and MySQL (git-db) containers.
 
-    The following comands will navigate to the directory containing `git_docker_compose.yml` and run the containers in the background.  
+    The following commands will navigate to the directory containing `git_docker_compose.yml` and run the containers in the background.
 
-    > The `.env` file in `/src/git` directory contains environment variable values for the containsers, review and modify if necessary.
+    > The `.env` file in `/src/git` directory contains environment variable values for the containers, review and modify if necessary.
 
     ```
     $ sudo cd /tmp/shoebox/src/git
     $ sudo docker-compose up -d
     ```
 
-    <a name="docker-logs"></a>Run `sudo docker ps` to verify that `git` and `git-db` are up and runnig. Procced if no error detected, otherwise run `sudo docker logs [container name]` to check the logs for troubleshooting.
+    <a name="docker-logs"></a>Run `sudo docker ps` to verify that `git` and `git-db` containers are up and running. Proceed if no error is detected, otherwise run `sudo docker logs [container name]` to check the logs for troubleshooting.
 
 2. Configure Gogs
 
     - Navigate to git.yourdomain.com to open the Gogs installer page
     - Set configuration option as follows
-      > Despite creating an admin user being optional it is recommended to creat one as a failover option in case the SMTP relay is unreachable.
+      > Despite creating an admin user being optional it is recommended to create one as a failover option in case the SMTP relay is unreachable.
       
       > Do not forget to replace `yourdomain.com` with the actual domain name and use real email addresses.
 
@@ -37,10 +37,10 @@
       | Optional Settings                        |                                      |
       | :--------------------------------------- | :----------------------------------- |
       | ***Email Service Settings***             |                                      |
-      | SMTP Host                                | Accorgin to the SMTP relay settings  |
+      | SMTP Host                                | According to the SMTP relay settings  |
       | From                                     | i.e. git@yourdomain.com              |
-      | Sender Email                             | Accorgin to the SMTP relay settings  |
-      | Sender Password                          | Accorgin to the SMTP relay settings  |
+      | Sender Email                             | According to the SMTP relay settings  |
+      | Sender Password                          | According to the SMTP relay settings  |
       | Enable Register Confirmation             | [x] _Optional_                       |
       | Enable Mail Notification                 | [x]                                  |
       | ***Server and Other Services Settings*** |                                      |
@@ -58,4 +58,4 @@
     - [x] A new user can be created and receives an email notification upon registration
     - [x] A new repository can be created
     
-    If the checks are passed Gogs is successfuly configured and ready for use. Otherwise, check the container logs (as mentioned [here](#docker-logs)) or Gogs logs at `$GOGS_ROOT/data/gogs/log`.
+    If the checks are passed Gogs is successfully configured and ready for use. Otherwise, check the container logs (as mentioned [here](#docker-logs)) or Gogs logs at `$GOGS_ROOT/data/gogs/log`.
