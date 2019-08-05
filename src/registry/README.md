@@ -29,14 +29,14 @@ Check [ProGet Linux Installation Guide](https://docs.inedo.com/docs/proget/insta
 
     - Browse to the administration console, then navigate to `Security & Authentication -> Users & Tasks`
 
-    - Create two users, one for consuming feeds `FeedConsumer` and another for publishing packages `PackagePublisher`. Click on **Create User** top open the create user dialog.
+    - Create two users, one for consuming feeds `FeedConsumer` and another for publishing packages `PackagePublisher`. Click on **Create User** to open the _Create User_ dialog.
         > Leave the _Group membership_ field blank.
 
     - Open the _Tasks_ tab after the users have been created.
 
-    - Deprive the `Anonymous` user from the `View & Download Packages` task by removing the record from the mentioned task's row.
+    - Deprive `Anonymous` from `View & Download Packages` by removing the record from the task's row.
 
-    - Assign `View & Download Packages` to `FeedConsumer`, and `View & Download Packages` and `Publish Packages` to `PackagePublisher`. Click on **Add Permission** to open the _Add Privilege_ dialog. The access grid for the aforementioned users and tasks is expected to look as follows:
+    - Assign `View & Download Packages` to `FeedConsumer`, and `View & Download Packages` and `Publish Packages` to `PackagePublisher`. Click on **Add Permission** to open the _Add Privilege_ dialog and create the aforementioned associations. The users and tasks grid is expected to look as follows:
 
         | Task                     | Scope     | Users & Groups                 |
         | :----------------------- |:--------- | :----------------------------- |
