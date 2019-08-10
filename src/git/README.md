@@ -50,7 +50,7 @@ Check [Gogs on Docker Hub](https://hub.docker.com/r/gogs/gogs/) and [Gogs Docume
       | Username                                 | i.e. gitadmin                        |
       | Admin Email                              | i.e. git@yourdomain.com              |
 
-3. Press **Install Gogs**. If Gogs is installed successfuly it will create an `app.ini` configuration file at `$GOGS_ROOT/data/gogs/conf` (see `setup_volumes_storage.sh` for the `$GOGS_ROOT` value). Check [Googs Configuration Cheat Sheet](https://gogs.io/docs/advanced/configuration_cheat_sheet) for post installation configuration.
+3. Press **Install Gogs**. If Gogs is installed successfuly it will create an `app.ini` configuration file at `$GOGS_ROOT/data/gogs/conf` (see `setup.sh` for the `$GOGS_ROOT` value). Check [Googs Configuration Cheat Sheet](https://gogs.io/docs/advanced/configuration_cheat_sheet) for post installation configuration.
 
     > Do not forget to restart the `git` container after modifying `app.ini`, otherwise new configuration settings will not be applied.
 

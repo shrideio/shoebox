@@ -301,13 +301,13 @@
 
 ## VII. Set up directories for container volume mounts
 
-`setup_volumes_storage.sh` (can be found in `/src`) creates directories for container volume mounts and replaces placeholders in the `.evn` files with matching path values. `/var/dev` is chosen as a root directory and can be changed by editing `setup_volumes_storage.sh` if necessary.
-Please check the content of `setup_volumes_storage.sh` for more information.
+`setup.sh` (can be found in `/src`) creates directories for container volume mounts and replaces placeholders in the `.evn` files with matching path values. `/var/dev` is chosen as a root directory and can be changed by editing `setup.sh` if necessary.
+Please check the content of `setup.sh` for more information.
 
 Run the following commads to create directories for volume mounts
 ```
-$ sudo chmod +x /tmp/shoebox/src/setup_volumes_storage.sh
-$ sudo /tmp/shoebox/src/setup_volumes_storage.sh
+$ sudo chmod +x /tmp/shoebox/src/setup.sh
+$ sudo /tmp/shoebox/src/setup.sh
 ```
 
 Run `sudo ls -R /var/dev` for verifying the created directories structure
