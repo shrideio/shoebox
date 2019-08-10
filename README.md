@@ -1,4 +1,4 @@
-# Shoebox - minimalistic dev environment on CentOS 7
+# Shoebox - minimalist dev environment on CentOS 7
 
 ## I. Prerequisites
 
@@ -154,7 +154,7 @@
         ```
         Copy-paste the following piece of configuration to the end of the configuration file and save
         ```        
-        # Enable https trafic on port 443
+        # Enable https traffic on port 443
         <IfModule mod_ssl.c>
         Listen 443
         </IfModule>
@@ -168,13 +168,13 @@
         $ sudo systemctl restart httpd
         ```
 
-7. Create a unified cofiguration file for enabling ssl on virtual hosts
+7. Create a unified configuration file for enabling ssl on virtual hosts
 
     - Check if `options-ssl-apache.conf` was successfully created. This file is required for enabling ssl on virtual hosts and referenced by the virtual host configuration files
         ```
         $ sudo ls /etc/letsencrypt
         ```
-        The output shoud contain the file name
+        The output should contain the file name
     
     - Append the file with certificate references
         ```
@@ -301,13 +301,13 @@
 
 ## VII. Set up directories for container volume mounts
 
-`setup.sh` (can be found in `/src`) creates directories for container volume mounts and replaces placeholders in the `.evn` files with matching path values. `/var/dev` is chosen as a root directory and can be changed by editing `setup.sh` if necessary.
-Please check the content of `setup.sh` for more information.
+`setup_volume_mounts.sh` (can be found in `/src`) creates directories for container volume mounts and generates `.evn` files with matching path values from `env.tmpl` files. `/var/dev` is chosen as a root directory for volume mounts and can be changed by editing `setup_volume_mounts.sh` if necessary.
+Please check the content of `setup_volume_mounts.sh` for more information.
 
-Run the following commads to create directories for volume mounts
+Run the following commands to create the directories for volume mounts
 ```
-$ sudo chmod +x /tmp/shoebox/src/setup.sh
-$ sudo /tmp/shoebox/src/setup.sh
+$ sudo chmod +x /tmp/shoebox/src/setup_volume_mounts.sh
+$ sudo /tmp/shoebox/src/setup_volume_mounts.sh
 ```
 
 Run `sudo ls -R /var/dev` for verifying the created directories structure
@@ -319,7 +319,7 @@ $ sudo cat /tmp/shoebox/src/git/.env
 
 ## VII. Set up SMTP relay
 
-The majority of key servises of the dev environment setup requre an SMTP relay for sending email notifications.
+The majority of key services of the dev environment setup require an SMTP relay for sending email notifications.
 If your domain name service includes a free email address you may want to use the provider's SMTP server, otherwise, 
 there are a few email services providing free accounts with the limited number of message sent per day/month (at least 100 emails a day)
 - [SendPulse](https://sendpulse.com/prices/smtp) (12,000/month)
@@ -329,7 +329,7 @@ there are a few email services providing free accounts with the limited number o
 
 ## VIII. Set up dev environment services
 1. [Git (Gogs)](/src/git/README.md)
-2. [Packages and Docker registry (Proget)](/src/registry/README.md)
-3. [Continuous Integration (Drone)](/src/ci/README.md)
-4. [Key/Secret Vault (Vault)](/src/vault/README.md)
+2. [Packages and Docker registry (ProGet)](/src/registry/README.md)
+3. [Key/Secret Vault (Vault)](/src/vault/README.md)
+4. [Continuous Integration (Drone)](/src/ci/README.md)
 5. [Project Management (Taiga)](/src/project/README.md)
