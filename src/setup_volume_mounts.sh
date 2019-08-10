@@ -101,6 +101,13 @@ echo "VAULT_CONSUL_DATA: $VAULT_CONSUL_DATA"
 echo
 
 export VAULT_SRC=$SRC_ROOT/vault
+cp $VAULT_SRC/config/vault/config.hcl $VAULT_CONFIG/config.hcl
+cp $VAULT_SRC/config/consul/config.json $VAULT_CONSUL_CONFIG/config.json
+
+echo "Created Vault configuration file at '$VAULT_CONFIG/config.hcl'."
+echo "Created Consul configuration file at '$VAULT_CONSUL_CONFIG/config.json'."
+echo
+
 cp $VAULT_SRC/env.tmpl $VAULT_SRC/.env
 find $VAULT_SRC -type f -name '*.env' -exec sed -i -e 's|@VAULT_CONFIG|'"$VAULT_CONFIG"'|g' {} \;
 find $VAULT_SRC -type f -name '*.env' -exec sed -i -e 's|@VAULT_LOGS|'"$VAULT_LOGS"'|g' {} \;

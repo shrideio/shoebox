@@ -16,7 +16,7 @@ services:
   networks:
     - vault-network
   command: 
-    - agent -server -bind 0.0.0.0 -client 0.0.0.0 -bootstrap-expect 1
+    - agent -server -bind 0.0.0.0 -client 0.0.0.0 -bootstrap-expect 1 -config-file=/consul/config/config.json
   
   vault:
     image: vault:latest
@@ -26,14 +26,16 @@ services:
     depends_on:
       - git-db
     volumes:
-        - vault-config:/vault/config
-        - vault-logs:/vault/file
+      - vault-config:/vault/config
+      - vault-logs:/vault/file
     ports:
       - ${VAULT_PORT}:8200
     networks:
       - vault-network
     cap_add:
       - IPC_LOCK
+    command: 
+      - server -config=/vault/config/config.hcl
     depends_on:
       - vault-db
 
