@@ -28,7 +28,7 @@ echo "GOGS_MYSQL_DATA: $GOGS_MYSQL_DATA"
 echo
 
 export GIT_SRC=$SRC_ROOT/git
-mv $GIT_SRC/env.tmpl GIT_SRC/.env
+mv $GIT_SRC/env.tmpl $GIT_SRC/.env
 find $GIT_SRC -type f -name '*.env' -exec sed -i -e 's|@GOGS_DATA|'"$GOGS_DATA"'|g' {} \;
 find $GIT_SRC -type f -name '*.env' -exec sed -i -e 's|@GOGS_MYSQL_DATA|'"$GOGS_MYSQL_DATA"'|g' {} \;
 
