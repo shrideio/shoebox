@@ -8,15 +8,15 @@ services:
     container_name: vault-db
     hostname: vault-db
     restart: always
-  volumes:
-    - vault-consul-config:/consul/config
-    - vault-consul-data:/consul/data
-  ports:
-    - ${CONSUL_PORT}:8500
-  networks:
-    - vault-network
-  command: 
-    - agent -server -bind 0.0.0.0 -client 0.0.0.0 -bootstrap-expect 1 -config-file=/consul/config/config.json
+    volumes:
+      - vault-consul-config:/consul/config
+      - vault-consul-data:/consul/data
+    ports:
+      - ${CONSUL_PORT}:8500
+    networks:
+      - vault-network
+    command: 
+      - agent -server -bind 0.0.0.0 -client 0.0.0.0 -bootstrap-expect 1 -config-file=/consul/config/config.json
   
   vault:
     image: vault:latest
