@@ -65,7 +65,7 @@ echo "PROGET_POSTGRESQL_DATA: $PROGET_POSTGRESQL_DATA"
 echo
 
 export REGISTRY_SRC=$SRC_ROOT/registry
-cp $REGISTRY_SRC/env.tmpl $PACKAGES_SRC/.env
+cp $REGISTRY_SRC/env.tmpl $REGISTRY_SRC/.env
 find $REGISTRY_SRC -type f -name '*.env' -exec sed -i -e 's|@PROGET_PACKAGES|'"$PROGET_PACKAGES"'|g' {} \;
 find $REGISTRY_SRC -type f -name '*.env' -exec sed -i -e 's|@PROGET_EXTENSIONS|'"$PROGET_EXTENSIONS"'|g' {} \;
 find $REGISTRY_SRC -type f -name '*.env' -exec sed -i -e 's|@PROGET_POSTGRESQL_DATA|'"$PROGET_POSTGRESQL_DATA"'|g' {} \;
