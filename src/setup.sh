@@ -28,7 +28,7 @@ echo "GOGS_MYSQL_DATA: $GOGS_MYSQL_DATA"
 echo
 
 export GIT_SRC=$SRC_ROOT/git
-mv $GIT_SRC/env.tmpl $GIT_SRC/.env
+cp $GIT_SRC/env.tmpl $GIT_SRC/.env
 find $GIT_SRC -type f -name '*.env' -exec sed -i -e 's|@GOGS_DATA|'"$GOGS_DATA"'|g' {} \;
 find $GIT_SRC -type f -name '*.env' -exec sed -i -e 's|@GOGS_MYSQL_DATA|'"$GOGS_MYSQL_DATA"'|g' {} \;
 
@@ -61,7 +61,7 @@ echo "PROGET_POSTGRESQL_DATA: $PROGET_POSTGRESQL_DATA"
 echo
 
 export REGISTRY_SRC=$SRC_ROOT/registry
-mv $REGISTRY_SRC/env.tmpl $PACKAGES_SRC/.env
+cp $REGISTRY_SRC/env.tmpl $PACKAGES_SRC/.env
 find $REGISTRY_SRC -type f -name '*.env' -exec sed -i -e 's|@PROGET_PACKAGES|'"$PROGET_PACKAGES"'|g' {} \;
 find $REGISTRY_SRC -type f -name '*.env' -exec sed -i -e 's|@PROGET_EXTENSIONS|'"$PROGET_EXTENSIONS"'|g' {} \;
 find $REGISTRY_SRC -type f -name '*.env' -exec sed -i -e 's|@PROGET_POSTGRESQL_DATA|'"$PROGET_POSTGRESQL_DATA"'|g' {} \;
@@ -98,7 +98,7 @@ echo "VAULT_CONSUL_DATA: $VAULT_CONSUL_DATA"
 echo
 
 export VAULT_SRC=$SRC_ROOT/vault
-mv $VAULT_SRC/env.tmpl $VAULT_SRC/.env
+cp $VAULT_SRC/env.tmpl $VAULT_SRC/.env
 find $VAULT_SRC -type f -name '*.env' -exec sed -i -e 's|@VAULT_CONFIG|'"$VAULT_CONFIG"'|g' {} \;
 find $VAULT_SRC -type f -name '*.env' -exec sed -i -e 's|@VAULT_LOGS|'"$VAULT_LOGS"'|g' {} \;
 find $VAULT_SRC -type f -name '*.env' -exec sed -i -e 's|@VAULT_CONSUL_CONFIG|'"$VAULT_CONSUL_CONFIG"'|g' {} \;
