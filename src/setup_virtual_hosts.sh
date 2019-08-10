@@ -18,13 +18,13 @@ done
 
 find $HTTPD_CONFD_SRC -type f -name '*.conf' -exec sed -i -e 's|@YOUR_DOMAIN|'"$YOUR_DOMAIN"'|g' {} \;
 
-echo "Created virtual host configuration files '*.conf'."
+echo "Created virtual host configuration '.conf' files ."
 ls $HTTPD_CONFD_SRC -I "*.tmpl" -l
 echo
 
 cp  $HTTPD_CONFD_SRC/*.conf $HTTPD_CONFD
 
-echo "Copied virtual host configuration files '*.conf' to '$HTTPD_CONFD'."
+echo "Copied virtual host configuration '.conf' files  to '$HTTPD_CONFD'."
 ls $HTTPD_CONFD
 
 echo "Completed virtual hosts setup."

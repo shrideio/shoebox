@@ -115,7 +115,7 @@ find $VAULT_SRC -type f -name '*.env' -exec sed -i -e 's|@VAULT_LOGS|'"$VAULT_LO
 find $VAULT_SRC -type f -name '*.env' -exec sed -i -e 's|@VAULT_CONSUL_CONFIG|'"$VAULT_CONSUL_CONFIG"'|g' {} \;
 find $VAULT_SRC -type f -name '*.env' -exec sed -i -e 's|@VAULT_CONSUL_DATA|'"$VAULT_CONSUL_DATA"'|g' {} \;
 
-echo "Created .env file at '$VAULT_SRC'."
+echo "Created '.env' file at '$VAULT_SRC'."
 echo
 
 echo "Completed Vault setup."
