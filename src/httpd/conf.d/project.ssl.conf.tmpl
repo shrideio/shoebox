@@ -1,7 +1,7 @@
 <VirtualHost *:80>
 
-ServerName project.yourdomain.com
-ServerAlias www.project.yourdomain.com
+ServerName project.@YOUR_DOMAIN
+ServerAlias www.project.@YOUR_DOMAIN
 
 RewriteEngine On
 RewriteCond %{HTTPS} !=on
@@ -12,13 +12,13 @@ RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,NE,L]
 
 <VirtualHost *:443>
 
-ServerName project.yourdomain.com
-ServerAlias www.project.yourdomain.com
+ServerName project.@YOUR_DOMAIN
+ServerAlias www.project.@YOUR_DOMAIN
 
 # Logging
 LogLevel warn
-ErrorLog /var/log/httpd/project.yourdomain.com-error_log
-CustomLog /var/log/httpd/project.yourdomain.com-access_log combined
+ErrorLog /var/log/httpd/project.@YOUR_DOMAIN-error_log
+CustomLog /var/log/httpd/project.@YOUR_DOMAIN-access_log combined
 
 # Reverse proxy configuration
 <Location />

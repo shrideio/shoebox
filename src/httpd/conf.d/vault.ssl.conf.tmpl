@@ -1,7 +1,7 @@
 <VirtualHost *:80>
 
-ServerName vault.yourdomain.com
-ServerAlias www.vault.yourdomain.com
+ServerName vault.@YOUR_DOMAIN
+ServerAlias www.vault.@YOUR_DOMAIN
 
 RewriteEngine On
 RewriteCond %{HTTPS} !=on
@@ -12,13 +12,13 @@ RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,NE,L]
 
 <VirtualHost *:443>
 
-ServerName vault.yourdomain.com
-ServerAlias www.vault.yourdomain.com
+ServerName vault.@YOUR_DOMAIN
+ServerAlias www.vault.@YOUR_DOMAIN
 
 # Logging
 LogLevel warn
-ErrorLog /var/log/httpd/vault.yourdomain.com-error_log
-CustomLog /var/log/httpd/vault.yourdomain.com-access_log combined
+ErrorLog /var/log/httpd/vault.@YOUR_DOMAIN-error_log
+CustomLog /var/log/httpd/vault.@YOUR_DOMAIN-access_log combined
 
 # Reverse proxy configuration
 <Location />

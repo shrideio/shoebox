@@ -4,7 +4,8 @@ set -euo pipefail
 export DEV_ROOT=/var/dev
 export SRC_ROOT=/tmp/shoebox/src
 
-echo "Started setup."
+echo
+echo "Started volume mounts setup."
 echo
 
 echo "DEV_ROOT: $DEV_ROOT"
@@ -120,4 +121,5 @@ echo
 echo "Completed Vault setup."
 echo
 
-echo "Done!"
+echo "Completed volume mounts setup."
+echo

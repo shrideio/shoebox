@@ -1,7 +1,7 @@
 <VirtualHost *:80>
 
-ServerName git.yourdomain.com
-ServerAlias www.git.yourdomain.com
+ServerName git.@YOUR_DOMAIN
+ServerAlias www.git.@YOUR_DOMAIN
 
 RewriteEngine On
 RewriteCond %{HTTPS} !=on
@@ -12,13 +12,13 @@ RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,NE,L]
 
 <VirtualHost *:443>
 
-ServerName git.yourdomain.com
-ServerAlias www.git.yourdomain.com
+ServerName git.@YOUR_DOMAIN
+ServerAlias www.git.@YOUR_DOMAIN
 
 # Logging
 LogLevel warn
-ErrorLog /var/log/httpd/git.yourdomain.com-error_log
-CustomLog /var/log/httpd/git.yourdomain.com-access_log combined
+ErrorLog /var/log/httpd/git.@YOUR_DOMAIN-error_log
+CustomLog /var/log/httpd/git.@YOUR_DOMAIN-access_log combined
 
 # Reverse proxy configuration
 <Location />
