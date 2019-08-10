@@ -60,13 +60,13 @@ echo "PROGET_EXTENSIONS: $PROGET_EXTENSIONS"
 echo "PROGET_POSTGRESQL_DATA: $PROGET_POSTGRESQL_DATA"
 echo
 
-export PACKAGES_SRC=$SRC_ROOT/packages
-mv $PACKAGES_SRC/env.tmpl $PACKAGES_SRC/.env
-find $PACKAGES_SRC -type f -name '*.env' -exec sed -i -e 's|@PROGET_PACKAGES|'"$PROGET_PACKAGES"'|g' {} \;
-find $PACKAGES_SRC -type f -name '*.env' -exec sed -i -e 's|@PROGET_EXTENSIONS|'"$PROGET_EXTENSIONS"'|g' {} \;
-find $PACKAGES_SRC -type f -name '*.env' -exec sed -i -e 's|@PROGET_POSTGRESQL_DATA|'"$PROGET_POSTGRESQL_DATA"'|g' {} \;
+export REGISTRY_SRC=$SRC_ROOT/registry
+mv $REGISTRY_SRC/env.tmpl $PACKAGES_SRC/.env
+find $REGISTRY_SRC -type f -name '*.env' -exec sed -i -e 's|@PROGET_PACKAGES|'"$PROGET_PACKAGES"'|g' {} \;
+find $REGISTRY_SRC -type f -name '*.env' -exec sed -i -e 's|@PROGET_EXTENSIONS|'"$PROGET_EXTENSIONS"'|g' {} \;
+find $REGISTRY_SRC -type f -name '*.env' -exec sed -i -e 's|@PROGET_POSTGRESQL_DATA|'"$PROGET_POSTGRESQL_DATA"'|g' {} \;
 
-echo "Created .env file at '$PACKAGES_SRC'."
+echo "Created .env file at '$REGISTRY_SRC'."
 echo
 
 echo "Completed ProGet setup."
