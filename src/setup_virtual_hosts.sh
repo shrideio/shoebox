@@ -6,19 +6,23 @@ YOUR_DOMAIN = yourdomain.com
 
 HTTPD_CONFD = /etc/httpd/conf.d
 SRC_ROOT=/tmp/shoebox/src
-HTTPD_CONFD_SRC = $SRC_ROOT/httpd/conf.d
+HTTPD_SRC=$SRC_ROOT/httpd
+HTTPD_SRC_CONFD=$HTTPD_SRC/confg.d
+VHOST_CONF_TMPL=$HTTPD_SRC/ssl.conf.tmpl
 
 echo
 echo "Started virtual hosts setup."
 echo
 
+mkdir -p $HTTPD_SRC_CONFD
+
 SERVICES = (["git"]="10080" ["registry"]="10180" ["vault"]="10280" ["ci"]="10380" ["project"]="10480")
 for SRV in "${!SERVICES[@]}"
 do
-  CONF_FILE = $HTTPD_CONFD_SRC/$SRV.ssl.conf
+  CONF_FILE = $HTTPD_SRC_CONFD/$SRV.ssl.conf
   SVC_PORT = $SERVICES["'$SRV'"]
   
-  cp $HTTPD_CONFD_SRC/ssl.conf.tmpl $CONF_FILE
+  cp $VHOST_CONF_TMPL $CONF_FILE
   
   sed -i -e 's|@YOUR_DOMAIN|'"$YOUR_DOMAIN"'|g' $CONF_FILE
   sed -i -e 's|@SUBDOMAIN|'"$SRV"'|g' $CONF_FILE
