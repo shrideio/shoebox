@@ -2,9 +2,9 @@
 set -euo pipefail
 
 # Replace with the actual domain name
-YOUR_DOMAIN = yourdomain.com
+YOUR_DOMAIN=yourdomain.com
 
-HTTPD_CONFD = /etc/httpd/conf.d
+HTTPD_CONFD=/etc/httpd/conf.d
 SRC_ROOT=/tmp/shoebox/src
 HTTPD_SRC=$SRC_ROOT/httpd
 HTTPD_SRC_CONFD=$HTTPD_SRC/confg.d
@@ -16,11 +16,11 @@ echo
 
 mkdir -p $HTTPD_SRC_CONFD
 
-SERVICES = (["git"]="10080" ["registry"]="10180" ["vault"]="10280" ["ci"]="10380" ["project"]="10480")
+SERVICES=(["git"]="10080" ["registry"]="10180" ["vault"]="10280" ["ci"]="10380" ["project"]="10480")
 for SRV in "${!SERVICES[@]}"
 do
-  CONF_FILE = $HTTPD_SRC_CONFD/$SRV.ssl.conf
-  SVC_PORT = $SERVICES["'$SRV'"]
+  CONF_FILE=$HTTPD_SRC_CONFD/$SRV.ssl.conf
+  SVC_PORT=$SERVICES["'$SRV'"]
   
   cp $VHOST_CONF_TMPL $CONF_FILE
   
@@ -28,7 +28,7 @@ do
   sed -i -e 's|@SUBDOMAIN|'"$SRV"'|g' $CONF_FILE
   sed -i -e 's|@SVC_PORT|'"$SVC_PORT"'|g' $CONF_FILE
   
-  echo "Created a virtual host configuration file for '$SRV.$YOUR_DOMAIN' with a revers proxy at 'http://localhost:$SVC_PORT'"
+  echo "Created a virtual host configuration file for '$SRV.$YOUR_DOMAIN' with a revers proxy at 'http://localhost:$SVC_PORT'."
 done;
 
 echo
