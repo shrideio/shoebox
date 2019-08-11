@@ -38,11 +38,11 @@ do
 done;
 
 echo
-echo "Created virtual host configuration '.conf' files at '$HTTPD_CONFD_SRC'."
-ls $HTTPD_CONFD_SRC -I "*.conf" -l
+echo "Created virtual host configuration '.conf' files at '$HTTPD_SRC_CONFD'."
+ls $HTTPD_SRC_CONFD -I "*.conf" -l
 echo
 
-cp  $HTTPD_CONFD_SRC/*.conf $HTTPD_CONFD
+cp  $HTTPD_SRC_CONFD/*.conf $HTTPD_CONFD
 
 echo "Copied virtual host configuration '.conf' files  to '$HTTPD_CONFD'."
 ls $HTTPD_CONFD
