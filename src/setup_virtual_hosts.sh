@@ -16,11 +16,17 @@ echo
 
 mkdir -p $HTTPD_SRC_CONFD
 
-SERVICES=(["git"]="10080" ["registry"]="10180" ["vault"]="10280" ["ci"]="10380" ["project"]="10480")
+declare -A SERVICES=(
+  [git]=10080
+  [registry]=10180
+  [vault]=10280
+  [ci]=10380
+  [project]=10480
+)
 for SRV in "${!SERVICES[@]}"
 do
   CONF_FILE=$HTTPD_SRC_CONFD/$SRV.ssl.conf
-  SVC_PORT=$SERVICES["'$SRV'"]
+  SVC_PORT=${SERVICES[$SRV]}
   
   cp $VHOST_CONF_TMPL $CONF_FILE
   
