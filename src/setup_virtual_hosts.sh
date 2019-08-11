@@ -2,24 +2,34 @@
 set -euo pipefail
 
 # Replace with the actual domain name
-export YOUR_DOMAIN = yourdomain.com
+YOUR_DOMAIN = yourdomain.com
 
-export HTTPD_CONFD = /etc/httpd/conf.d
-export SRC_ROOT=/tmp/shoebox/src
-export HTTPD_CONFD_SRC = $SRC_ROOT/httpd/conf.d
+HTTPD_CONFD = /etc/httpd/conf.d
+SRC_ROOT=/tmp/shoebox/src
+HTTPD_CONFD_SRC = $SRC_ROOT/httpd/conf.d
 
 echo
 echo "Started virtual hosts setup."
 echo
 
-for f in $HTTPD_CONFD_SRC/*.tmpl; 
-  do cp "$f" "${f%.tmpl}";
-done
+SERVICES = (["git"]="10080" ["registry"]="10180" ["vault"]="10280" ["ci"]="10380" ["project"]="10480")
+for SRV in "${!SERVICES[@]}"
+do
+  CONF_FILE = $HTTPD_CONFD_SRC/$SRV.ssl.conf
+  SVC_PORT = $SERVICES["'$SRV'"]
+  
+  cp $HTTPD_CONFD_SRC/ssl.conf.tmpl $CONF_FILE
+  
+  sed -i -e 's|@YOUR_DOMAIN|'"$YOUR_DOMAIN"'|g' $CONF_FILE
+  sed -i -e 's|@SUBDOMAIN|'"$SRV"'|g' $CONF_FILE
+  sed -i -e 's|@SVC_PORT|'"$SVC_PORT"'|g' $CONF_FILE
+  
+  echo "Created a virtual host configuration file for '$SRV.$YOUR_DOMAIN' with a revers proxy at 'http://localhost:$SVC_PORT'"
+done;
 
-find $HTTPD_CONFD_SRC -type f -name '*.conf' -exec sed -i -e 's|@YOUR_DOMAIN|'"$YOUR_DOMAIN"'|g' {} \;
-
-echo "Created virtual host configuration '.conf' files ."
-ls $HTTPD_CONFD_SRC -I "*.tmpl" -l
+echo
+echo "Created virtual host configuration '.conf' files at '$HTTPD_CONFD_SRC'."
+ls $HTTPD_CONFD_SRC -I "*.conf" -l
 echo
 
 cp  $HTTPD_CONFD_SRC/*.conf $HTTPD_CONFD
