@@ -24,7 +24,7 @@
     ```
     export REPO_ROOT=/tmp/shoebox
     ```
-    Run `echo $REPO_ROOT`, to verify the path.
+    Run `echo $REPO_ROOT` to verify the path.
 
     Clone this repository into a local directory
     ```

@@ -1,5 +1,6 @@
 ## ProGet Setup
 Check [ProGet Documentation](https://docs.inedo.com/docs/proget/overview) and [ProGet Linux Installation Guide](https://docs.inedo.com/docs/proget/installation/installation-guide/linux-docker) for more detail.
+> Run `echo $REPO_ROOT` to verify that the environment variable is set correctly before continuing the setup. 
 
 1. Stage ProGet (registry) and PostgreSQL (registry-db) containers
     > This setup uses PostgreSQL instead of Microsoft SQL Server what is different from the official ProGet guide.
