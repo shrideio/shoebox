@@ -13,12 +13,32 @@
     - Discard changes: `ctrl` + `x`, `n`
     - Cancel: `ctrl` + `x`, `ctrl` + `c`
 
+ - Install `git` and clone this repository
+
+    ```
+    $ sudo yum install git
+    ```
+    Run `git --version` to confirm that `git` was successfully installed
+
+    Export the path to a directory where the repository will be cloned as an environment variable (`/tmp/shoebox` is used as default, can be changed if necessary)
+    ```
+    export REPO_ROOT=/tmp/shoebox
+    ```
+    Run `echo $REPO_ROOT`, to verify the path.
+
+    Clone this repository into a local directory
+    ```
+    $ sudo git clone --depth=1 https://github.com/shrideio/shoebox $REPO_ROOT
+    ```
+
 - Export your domain name as an environment variable
+
     > Do not forget to replace `yourdomain.com` with the actual domain name
+
     ```
-    $ export YOUR_DOMAIN_COM=yourdomain.com
+    $ export YOUR_DOMAIN=yourdomain.com
     ```
-    Run `echo $YOUR_DOMAIN_COM`, it should output the actual domain name
+    Run `echo $YOUR_DOMAIN`, it should output the actual domain name
 
 ## II. Disable SELinux
 
@@ -121,8 +141,8 @@
         --dns-cloudflare \
         --dns-cloudflare-credentials /etc/letsencrypt/renewal/dns/cloudflare.ini \
         --dns-cloudflare-propagation-seconds 30 \
-        -d $YOUR_DOMAIN_COM \
-        -d *.$YOUR_DOMAIN_COM
+        -d $YOUR_DOMAIN \
+        -d *.$YOUR_DOMAIN
     ```
     If the certificate is acquired successfuly a similar message to the shown bellow will be displayed by `certbot`
 
@@ -190,7 +210,7 @@
 
     - Replace `yourdomain.com` with the actual domain name in `letsencrypt.conf`
         ```
-        $ sudo sed -i -e 's/yourdomain.com/'"$YOUR_DOMAIN_COM"'/g' /etc/letsencrypt/options-ssl-apache.conf
+        $ sudo sed -i -e 's/yourdomain.com/'"$YOUR_DOMAIN"'/g' /etc/letsencrypt/options-ssl-apache.conf
         ```
         Verify the result
         ```
@@ -199,38 +219,39 @@
 
 ## V. Configure virtual hosts
 
-1. Install `git`
-    ```
-    $ sudo yum install git
-    ```
-    Run `git --version` to confirm that `git` was successfully installed
+1. Check if `$YOUR_DOMAIN` and `$REPO_ROOT` are set correctly, both variables are used in `setup_virtual_hosts.sh` for creating subdomain configuration files, by running the following commands
 
-2. Clone this repository into a local directory
     ```
-    $ git clone --depth=1 https://github.com/shrideio/shoebox /tmp/shoebox
+    $ echo $YOUR_DOMAIN
+    $ echo $REPO_ROOT
     ```
 
-3. Set up subdomains configuration
-    - Replace `yourdomain.com` with the actual domain name in the virtual host files
-        ```
-        $ sudo find /tmp/shoebox/src/apache/conf.d/ -type f -exec sed -i -e 's|yourdomain.com|'"$YOUR_DOMAIN_COM"'|g' {} \;
-        ```
-         Verify the result on a sample file (i.e. git.ssl.conf)
-        ```
-        $ sudo cat /tmp/shoebox/src/apache/conf.d/git.ssl.conf
-        ```
+    If any of the variable values is absent check the [Prerequisites](#Prerequisites) section.
 
-    -  Copy the modified virtual host files into the working `conf.d` directory
+2. Use `setup_virtual_hosts.sh` for creating virtual host configuration files
+
+    - Run the following commands to create and copy virtual host configuration files to `/etc/httpd/conf.d`
+
         ```
-        $ sudo cp /tmp/shoebox/src/apache/conf.d/* /etc/httpd/conf.d
+        $ sudo chmod +x $REPO_ROOT/src/setup_virtual_hosts.sh
+        $ sudo $REPO_ROOT/src/setup_virtual_hosts.sh
         ```
+    
+    - Run `sudo ls /etc/httpd/conf.d` to check if if the configuration files were indeed created. The output should contain the following files:
+        
+        - git.ssl.conf 
+        - registry.ssl.conf
+        - vault.ssl.conf
+        - ci.ssl.conf
+        - project.ssl.conf
 
     - Restart Apache and proceed if no error is reported, otherwise, check `error_log` and `access_log` for troubleshooting
+ 
         ```
         $ sudo systemctl restart httpd
         ```
 
-4. Configure subdomain records
+3. Configure subdomain records
     - Create _CNAME_ aliases (bolded) matching the following names
         - **git**.yourdomain.com (git server)
         - **registry**.yourdomain.com (packages and containers registry)
@@ -243,7 +264,8 @@
         - [x] Redirected from `http` to `https`
         - [x] Response is `503 Service Unavailable`
 
-        Proceed if the checks are passed, otherwise, check `error_log` and `access_log` for troubleshooting
+        Proceed if the checks are passed, otherwise, check `error_log` and `access_log` for troubleshooting.
+
 
 ## VI. Install Docker and Docker Compose
 
@@ -301,21 +323,19 @@
 
 ## VII. Set up directories for container volume mounts
 
-`setup_volume_mounts.sh` (can be found in `/src`) creates directories for container volume mounts and generates `.evn` files with matching path values from `env.tmpl` files. `/var/dev` is chosen as a root directory for volume mounts and can be changed by editing `setup_volume_mounts.sh` if necessary.
-Please check the content of `setup_volume_mounts.sh` for more information.
+`setup_volume_mounts.sh` creates directories for container volume mounts, copies configuration files for some of the services (i.e. Vault and Consul), and generates `.evn` files with matching paths from `env.tmpl` files. `DEV_ROOT` points at `/var/dev` which is chosen as a default root directory for volume mounts (can be changed if necessary). Please check the content of `setup_volume_mounts.sh` for more information.
 
-Run the following commands to create the directories for volume mounts
-```
-$ sudo chmod +x /tmp/shoebox/src/setup_volume_mounts.sh
-$ sudo /tmp/shoebox/src/setup_volume_mounts.sh
-```
+ - Run the following commands to create the directories for volume mounts
+    ```
+    $ sudo chmod +x $REPO_ROOT/src/setup_volume_mounts.sh
+    $ sudo $REPO_ROOT/src/setup_volume_mounts.sh
+    ```
+    Run `sudo ls -R /var/dev` for verifying the created directories structure
 
-Run `sudo ls -R /var/dev` for verifying the created directories structure
-
-Verify if the placeholders were replaced on a sample file (i.e. git/.env)
-```
-$ sudo cat /tmp/shoebox/src/git/.env
-```
+- Verify if the placeholders were replaced on a sample file (i.e. git/.env)
+    ```
+    $ sudo cat $REPO_ROOT/src/git/.env
+    ```
 
 ## VII. Set up SMTP relay
 

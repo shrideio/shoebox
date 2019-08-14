@@ -8,7 +8,7 @@ Check [Gogs on Docker Hub](https://hub.docker.com/r/gogs/gogs/) and [Gogs Docume
     > The `.env` file in `/src/git` directory contains environment variable values for the containers, review and modify if necessary.
 
     ```
-    $ sudo cd /tmp/shoebox/src/git
+    $ sudo cd $REPO_ROOT/src/git
     $ sudo docker-compose up -d
     ```
 

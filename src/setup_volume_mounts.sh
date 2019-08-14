@@ -2,7 +2,7 @@
 set -euo pipefail
 
 export DEV_ROOT=/var/dev
-export SRC_ROOT=/tmp/shoebox/src
+export SRC_ROOT=$REPO_ROOT/src
 
 echo
 echo "Started volume mounts setup."

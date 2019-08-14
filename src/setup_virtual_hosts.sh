@@ -1,12 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
-# Replace with the actual domain name
-YOUR_DOMAIN=yourdomain.com
-
 HTTPD_CONFD=/etc/httpd/conf.d
-SRC_ROOT=/tmp/shoebox/src
-HTTPD_SRC=$SRC_ROOT/httpd
+HTTPD_SRC=$REPO_ROOT/src/httpd
 HTTPD_SRC_CONFD=$HTTPD_SRC/confg.d
 VHOST_CONF_TMPL=$HTTPD_SRC/ssl.conf.tmpl
 

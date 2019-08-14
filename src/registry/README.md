@@ -9,7 +9,7 @@ Check [ProGet Documentation](https://docs.inedo.com/docs/proget/overview) and [P
     > The `.env` file in `/src/registry` contains environment variable values for the containers, review and modify if necessary.
 
     ```
-    $ sudo cd /tmp/shoebox/src/registry
+    $ sudo cd $REPO_ROOT/src/registry
     $ sudo docker-compose up -d
     ```
 
