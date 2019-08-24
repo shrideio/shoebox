@@ -1,6 +1,6 @@
 ## Gogs Setup
-Check [Gogs on Docker Hub](https://hub.docker.com/r/gogs/gogs/) and [Gogs Documentation](https://gogs.io/docs) for more detail.
-> Run `echo $REPO_ROOT` to verify that the environment variable is set correctly before continuing the setup. 
+Check [Gogs on Docker Hub](https://hub.docker.com/r/gogs/gogs/) and [Gogs Documentation](https://gogs.io/docs) for more information.
+> Run `echo $REPO_ROOT` to verify the environment variable is set before continuing the setup.
 
 1. Stage Gogs (git) and MySQL (git-db) containers.
 

@@ -1,1 +1,29 @@
-## VAULT
+## Vault Setup
+Check [Vault Documentation](https://www.vaultproject.io/docs/) and [Vault](https://hub.docker.com/_/vault) and [Consul](https://hub.docker.com/_/consul) Docker Hub pages for more information.
+> Run `echo $REPO_ROOT` to verify the environment variable is set before continuing the setup.
+
+1. Stage Vault (vault) and Consul (vault-db) containers.
+
+    > Consul was chosen over other open source storage providers as it is officially supported by HashiCorp. Check available Vault [storage options](https://www.vaultproject.io/docs/configuration/storage/) for more detail.
+
+    The following commands will navigate to the directory containing registry_docker_compose.yml and run the containers in the background.
+
+    > The `.env` file in `/src/vault` contains environment variable values for the containers, review and modify if necessary.
+
+    ```
+    $ sudo cd $REPO_ROOT/src/vault
+    $ sudo docker-compose up -d
+    ```
+
+    Run `sudo docker ps` to verify that `vault` and `vault-db` containers are up and running. Proceed if no error is detected, otherwise check the container logs for troubleshooting using the following command `sudo docker logs [container name]`.
+
+2. Unseal Vault
+
+    - Navigate to vault._yourdomain.com_ to start initial setup. It is recommended to have at least **5** _Key shares_ and **3** _Key threshold_ for the [key rotation](https://www.vaultproject.io/docs/internals/rotation.html). Set the values and click on **Initialize**. 
+    
+    - After the root token and key shares are generated click on the _Download keys_ link and download a json file containing the aforementioned tokes. Click on **Continue to Unseal** to proceed the setup.
+      > **Important**: Secure the file with tokens or the token as it will be used for accessing and managing the vault content.
+
+    - Enter 3 out of 5 master key portions from the json file one by one to unseal the vault and click on **Unseal** to proceed.
+
+    - Choose _Token_ as the authentication method and enter the root token from the json file. Click on **Sign in** to proceed.
