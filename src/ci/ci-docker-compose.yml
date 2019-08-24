@@ -1,0 +1,66 @@
+version: "3.5"
+
+
+services:
+
+    ci-db:
+      image: mysql:latest
+      container_name: ci-db
+      hostname: ci-db
+      restart: always
+      environment:
+        - MYSQL_DATABASE=${DRONE_MYSQL_DATABASE}
+        - MYSQL_ROOT_PASSWORD=${DRONE_MYSQL_ROOT_PASSWORD}
+        - MYSQL_USER=${DRONE_MYSQL_USER}
+        - MYSQL_PASSWORD=${DRONE_MYSQL_USER_PASSWORD}
+      ports:
+        - ${DRONE_MYSQL_PORT}:3306
+      networks:
+        - ci-network
+      volumes:
+        - drone-mysql-data:/var/lib/mysql
+
+    ci:
+      image: drone/drone
+      container_name: ci
+      hostname: ci
+      restart: always
+      environment:
+        - DRONE_USER_CREATE=${DRONE_USER_CREATE}
+        - DRONE_GIT_USERNAME=${DRONE_GIT_USERNAME}
+        - DRONE_GIT_PASSWORD=${DRONE_GIT_PASSWORD}
+        - DRONE_GIT_ALWAYS_AUTH=true
+        - DRONE_GOGS_SERVER=${DRONE_GOGS_SERVER}
+        - DRONE_SERVER_HOST=${DRONE_SERVER_HOST}
+        - DRONE_SERVER_PROTO=https
+        - DRONE_TLS_AUTOCERT=false
+        - DRONE_RUNNER_NETWORKS-ci-network
+        - DRONE_RUNNER_CAPACITY={DRONE_RUNNER_CAPACITY}
+      ports:
+        - ${DRONE_HTTP_PORT}:80
+      networks:
+        - ci-network
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - drone-data:/data
+
+
+networks:
+    ci-network:
+      name: ci-network
+      driver: bridge
+      
+
+volumes:
+
+    drone-data:
+      driver_opts:
+        type: none
+        device: ${DRONE_DATA}
+        o: bind
+
+    drone-mysql-data:
+      driver_opts:
+        type: none
+        device: ${DRONE_MYSQL_DATA}
+        o: bind      

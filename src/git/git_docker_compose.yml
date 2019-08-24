@@ -9,16 +9,16 @@ services:
       hostname: git-db
       restart: always
       environment:
-          - MYSQL_DATABASE=${GOGS_MYSQL_DATABASE}
-          - MYSQL_ROOT_PASSWORD=${GOGS_MYSQL_ROOT_PASSWORD}
-          - MYSQL_USER=${GOGS_MYSQL_USER}
-          - MYSQL_PASSWORD=${GOGS_MYSQL_USER_PASSWORD}
+        - MYSQL_DATABASE=${GOGS_MYSQL_DATABASE}
+        - MYSQL_ROOT_PASSWORD=${GOGS_MYSQL_ROOT_PASSWORD}
+        - MYSQL_USER=${GOGS_MYSQL_USER}
+        - MYSQL_PASSWORD=${GOGS_MYSQL_USER_PASSWORD}
       ports:
         - ${GOGS_MYSQL_PORT}:3306
       networks:
         - git-network
       volumes:
-          - gogs-mysql-data:/var/lib/mysql
+        - gogs-mysql-data:/var/lib/mysql
           
     git:
       image: gogs/gogs:latest
