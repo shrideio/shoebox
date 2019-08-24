@@ -44,4 +44,4 @@ Check [Vault Documentation](https://www.vaultproject.io/docs/) and [Vault](https
 
     - Navigate to `Secrets -> test` to open the secret management console the click on _Create secret_.
 
-    - Set _Path for this secret_ to `ci.test` and crete a single version data with the following key/value pair `HELLO_WORLD`/`Hello world!`. Click on **Save** to save changes. 
+    - Set _Path for this secret_ to `ci.test` and crete a single entry version data with the following key/value pair `HELLO_WORLD`/`Hello world!`. Click on **Save** to save changes. 
