@@ -17,6 +17,7 @@ Check [Vault Documentation](https://www.vaultproject.io/docs/) and [Vault](https
 
     Run `sudo docker ps` to verify that `vault` and `vault-db` containers are up and running. Proceed if no error is detected, otherwise check the container logs for troubleshooting using the following command `sudo docker logs [container name]`.
 
+
 2. Unseal Vault
 
     - Navigate to vault._yourdomain.com_ to start initial setup. It is recommended to have at least **5** _Key shares_ and **3** _Key threshold_ for the [key rotation](https://www.vaultproject.io/docs/internals/rotation.html). Set the values and click on **Initialize**. 
@@ -27,3 +28,20 @@ Check [Vault Documentation](https://www.vaultproject.io/docs/) and [Vault](https
     - Enter 3 out of 5 master key portions from the json file one by one to unseal the vault and click on **Unseal** to proceed.
 
     - Choose _Token_ as the authentication method and enter the root token from the json file. Click on **Sign in** to proceed.
+
+3. Enable new secrets engine
+
+    > There is a variety of [secret engines](https://www.vaultproject.io/docs/secrets/index.html) supported by Vault designated for different cases. **KV v2** (key/value) secret engine is  used to store arbitrary secrets within the configured physical storage for Vault.
+
+    - Click on the _Secrets_ menu in the top right corner to navigate to the secrets management console. Then click on _Enable new engine_ to proceed.
+
+    - Choose **KV** as a secrets engine and click on **Next** to proceed. Set _Path_ to `test` and _Version_ to `2` (default KV engine version). Check the [KV engine documentation](https://www.vaultproject.io/docs/secrets/kv/kv-v2.html) for the engine options details and modify if necessary. Click on **Enable Engine** to finish the setup.
+
+
+4. Create secret
+
+    > The secret will be used by the build server for a test build. 
+
+    - Navigate to `Secrets -> test` to open the secret management console the click on _Create secret_.
+
+    - Set _Path for this secret_ to `ci.test` and crete a single version data with the following key/value pair `HELLO_WORLD`/`Hello world!`. Click on **Save** to save changes. 
