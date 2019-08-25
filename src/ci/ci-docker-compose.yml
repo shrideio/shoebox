@@ -27,6 +27,8 @@ services:
       restart: always
       environment:
         - SECRET_KEY=${DRONE_SECRET_KEY}
+      networks:
+        - ci-network        
       ports:
         - ${DRONE_VAULT_PLUGIN_PORT}:3306
 
@@ -48,6 +50,11 @@ services:
         - DRONE_RUNNER_CAPACITY=${DRONE_RUNNER_CAPACITY}
         - DRONE_SECRET_SECRET=${DRONE_SECRET_KEY}
         - DRONE_SECRET_ENDPOINT=http://ci-secret:3000
+        - DRONE_DATABASE_DRIVER=mysql
+        - DRONE_DATABASE_DATASOURCE=${DRONE_MYSQL_USER}:${DRONE_MYSQL_USER_PASSWORD}@tcp(ci-db:3306)/${DRONE_MYSQL_DATABASE}?parseTime=true
+        - DRONE_LOGS_DEBUG=true
+        - DRONE_LOGS_PRETTY=true
+        - DRONE_LOGS_COLOR=true
       ports:
         - ${DRONE_HTTP_PORT}:80
       networks:
