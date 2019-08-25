@@ -327,8 +327,8 @@
 
  - Run the following commands to create volume mounts directories
     ```
-    $ sudo chmod +x $REPO_ROOT/src/setup_volume_mounts.sh
-    $ sudo $REPO_ROOT/src/setup_volume_mounts.sh
+    $ sudo chmod +x $REPO_ROOT/src/setup_containers.sh
+    $ sudo $REPO_ROOT/src/setup_containers.sh
     ```
     Run `sudo ls -R /var/dev` for verifying the created directories structure
 
