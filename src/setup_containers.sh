@@ -145,8 +145,8 @@ echo
 
 export DRONE_ADMIN_USERNAME=ciadmin
 export DRONE_GIT_USERNAME=ciagent
-export DRONE_ADMIN_PASSWORD=$(openssl rand 8 -base64)
-export DRONE_GIT_PASSWORD=$(openssl rand 8 -base64)
+export DRONE_ADMIN_PASSWORD=$(openssl rand 8 -hex)
+export DRONE_GIT_PASSWORD=$(openssl rand 8 -hex)
 export DRONE_SECRET_KEY=$(openssl rand 16 -hex)
 
 echo "Generated secrets for Drone CI."
