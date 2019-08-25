@@ -157,6 +157,7 @@ echo
 export CI_SRC=$SRC_ROOT/ci
 cp $CI_SRC/env.tmpl $CI_SRC/.env
 
+find $CI_SRC -type f -name '*.env' -exec sed -i -e 's|@YOUR_DOMAIN|'"$YOUR_DOMAIN"'|g' {} \;
 find $CI_SRC -type f -name '*.env' -exec sed -i -e 's|@DRONE_ADMIN_USERNAME|'"$DRONE_ADMIN_USERNAME"'|g' {} \;
 find $CI_SRC -type f -name '*.env' -exec sed -i -e 's|@DRONE_ADMIN_PASSWORD|'"$DRONE_ADMIN_PASSWORD"'|g' {} \;
 find $CI_SRC -type f -name '*.env' -exec sed -i -e 's|@DRONE_GIT_USERNAME|'"$DRONE_GIT_USERNAME"'|g' {} \;
