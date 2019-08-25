@@ -1,20 +1,20 @@
 ## ProGet Setup
 Check [ProGet Documentation](https://docs.inedo.com/docs/proget/overview) and [ProGet Linux Installation Guide](https://docs.inedo.com/docs/proget/installation/installation-guide/linux-docker) for more information.
-> Run `echo $REPO_ROOT` to verify the environment variable is set before continuing the setup.
+> Run `echo $REPO_ROOT` to verify if the environment variable is set before continuing.
 
 1. Stage ProGet (registry) and PostgreSQL (registry-db) containers
     > This setup uses PostgreSQL instead of Microsoft SQL Server what is different from the official ProGet guide. Check [ProGet Docker](https://hub.docker.com/r/inedo/proget/dockerfile) file for more detail.
     
     The following commands will navigate to the directory containing `registry_docker_compose.yml` and run the containers in the background.
 
-    > The `.env` file in `/src/registry` contains environment variable values for the containers, review and modify if necessary.
+    > The `.env` file in the `/src/registry` contains environment variable values for the containers, review and modify if necessary.
 
     ```
     $ sudo cd $REPO_ROOT/src/registry
     $ sudo docker-compose up -d
     ```
 
-    <a name="docker-logs"></a>Run `sudo docker ps` to verify that `registry` and `registry-db` containers are up and running. Proceed if no error is detected, otherwise check the container logs for troubleshooting using the following command `sudo docker logs [container name]`.
+    <a name="docker-logs"></a>Run `sudo docker ps` to verify if `registry` and `registry-db` containers are up and running. Proceed if no error is detected, otherwise check the container logs for troubleshooting using the following command `sudo docker logs [container name]`.
 
 2. Configure ProGet
 

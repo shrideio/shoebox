@@ -24,7 +24,7 @@
     ```
     export REPO_ROOT=/tmp/shoebox
     ```
-    Run `echo $REPO_ROOT` to verify the path.
+    Run `echo $REPO_ROOT` to verify if the path.
 
     Clone this repository into a local directory
     ```
@@ -323,9 +323,9 @@
 
 ## VII. Set up directories for container volume mounts
 
-`setup_volume_mounts.sh` creates directories for container volume mounts, copies configuration files for some of the services (i.e. Vault and Consul), and generates `.evn` files with matching paths from `env.tmpl` files. `DEV_ROOT` points at `/var/dev` which is chosen as a default root directory for volume mounts (can be changed if necessary). Please check the content of `setup_volume_mounts.sh` for more information.
+`setup_containers.sh` creates directories for container volume mounts, generates `.evn` files with matching paths from `env.tmpl` files and copies configuration files if necessary (i.e. Vault and Consul). `DEV_ROOT` points at `/var/dev` which is chosen as a default root directory for volume mounts. Check the content of `setup_containers.sh` for more information.
 
- - Run the following commands to create the directories for volume mounts
+ - Run the following commands to create volume mounts directories
     ```
     $ sudo chmod +x $REPO_ROOT/src/setup_volume_mounts.sh
     $ sudo $REPO_ROOT/src/setup_volume_mounts.sh

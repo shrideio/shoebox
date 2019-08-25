@@ -1,6 +1,6 @@
 ## Vault Setup
 Check [Vault Documentation](https://www.vaultproject.io/docs/) and [Vault](https://hub.docker.com/_/vault) and [Consul](https://hub.docker.com/_/consul) Docker Hub pages for more information.
-> Run `echo $REPO_ROOT` to verify the environment variable is set before continuing the setup.
+> Run `echo $REPO_ROOT` to verify if the environment variable is set before continuing.
 
 1. Stage Vault (vault) and Consul (vault-db) containers.
 
@@ -8,14 +8,14 @@ Check [Vault Documentation](https://www.vaultproject.io/docs/) and [Vault](https
 
     The following commands will navigate to the directory containing registry_docker_compose.yml and run the containers in the background.
 
-    > The `.env` file in `/src/vault` contains environment variable values for the containers, review and modify if necessary.
+    > The `.env` file in the `/src/vault` contains environment variable values for the containers, review and modify if necessary.
 
     ```
     $ sudo cd $REPO_ROOT/src/vault
     $ sudo docker-compose up -d
     ```
 
-    Run `sudo docker ps` to verify that `vault` and `vault-db` containers are up and running. Proceed if no error is detected, otherwise check the container logs for troubleshooting using the following command `sudo docker logs [container name]`.
+    Run `sudo docker ps` to verify if `vault` and `vault-db` containers are up and running. Proceed if no error is detected, otherwise check the container logs for troubleshooting using the following command `sudo docker logs [container name]`.
 
 
 2. Unseal Vault

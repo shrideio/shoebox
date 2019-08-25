@@ -1,19 +1,19 @@
 ## Gogs Setup
-Check [Gogs on Docker Hub](https://hub.docker.com/r/gogs/gogs/) and [Gogs Documentation](https://gogs.io/docs) for more information.
-> Run `echo $REPO_ROOT` to verify the environment variable is set before continuing the setup.
+Check [Gogs Documentation](https://gogs.io/docs) and  [Gogs on Docker Hub](https://hub.docker.com/r/gogs/gogs/) for more information.
+> Run `echo $REPO_ROOT` to verify if the environment variable is set before continuing.
 
 1. Stage Gogs (git) and MySQL (git-db) containers.
 
     The following commands will navigate to the directory containing `git_docker_compose.yml` and run the containers in the background.
 
-    > The `.env` file in `/src/git` directory contains environment variable values for the containers, review and modify if necessary.
+    > The `.env` file in the `/src/git` directory contains environment variable values for the containers, review and modify if necessary.
 
     ```
     $ sudo cd $REPO_ROOT/src/git
     $ sudo docker-compose up -d
     ```
 
-    <a name="docker-logs"></a>Run `sudo docker ps` to verify that `git` and `git-db` containers are up and running. Proceed if no error is detected, otherwise run `sudo docker logs [container name]` to check the logs for troubleshooting.
+    <a name="docker-logs"></a>Run `sudo docker ps` to verify if `git` and `git-db` containers are up and running. Proceed if no error is detected, otherwise run `sudo docker logs [container name]` to check the logs for troubleshooting.
 
 2. Configure Gogs
 
