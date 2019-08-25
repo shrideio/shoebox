@@ -20,6 +20,16 @@ services:
       volumes:
         - drone-mysql-data:/var/lib/mysql
 
+    ci-secret:
+      image: drone/vault
+      container_name: ci-secret
+      hostname: ci-secret
+      restart: always
+      environment:
+        - SECRET_KEY=${DRONE_SECRET_KEY}
+      ports:
+        - ${DRONE_VAULT_PLUGIN_PORT}:3306
+
     ci:
       image: drone/drone
       container_name: ci
@@ -35,7 +45,9 @@ services:
         - DRONE_SERVER_PROTO=https
         - DRONE_TLS_AUTOCERT=false
         - DRONE_RUNNER_NETWORKS-ci-network
-        - DRONE_RUNNER_CAPACITY={DRONE_RUNNER_CAPACITY}
+        - DRONE_RUNNER_CAPACITY=${DRONE_RUNNER_CAPACITY}
+        - DRONE_SECRET_SECRET=${DRONE_SECRET_KEY}
+        - DRONE_SECRET_ENDPOINT=http://ci-secret:3000
       ports:
         - ${DRONE_HTTP_PORT}:80
       networks:
@@ -43,6 +55,9 @@ services:
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
         - drone-data:/data
+      depends_on:
+        - ci-db
+        - ci-secret
 
 
 networks:

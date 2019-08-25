@@ -5,7 +5,7 @@ export DEV_ROOT=/var/dev
 export SRC_ROOT=$REPO_ROOT/src
 
 echo
-echo "Started volume mounts setup."
+echo "Started containers setup."
 echo
 
 echo "DEV_ROOT: $DEV_ROOT"
@@ -121,5 +121,52 @@ echo
 echo "Completed Vault setup."
 echo
 
-echo "Completed volume mounts setup."
+
+# DRONE
+
+echo "Setting up Drone CI..."
+echo "https://drone.io/"
+echo
+
+export DRONE_ROOT=$DEV_ROOT/drone
+export DRONE_DATA=$DRONE_ROOT/data
+export DRONE_MYSQL_DATA=$DRONE_ROOT/mysql/data
+
+mkdir -p $DRONE_DATA
+mkdir -p $DRONE_MYSQL_DATA
+
+echo "Created volume mounts for Drone CI."
+echo "DRONE_DATA: $DRONE_DATA"
+echo "DRONE_MYSQL_DATA: $DRONE_MYSQL_DATA"
+echo
+
+export DRONE_ADMIN_USERNAME=ciadmin
+export DRONE_GIT_USERNAME=ciagent
+export DRONE_ADMIN_PASSWORD=$(openssl rand -base64 8)
+export DRONE_GIT_PASSWORD=$(openssl rand -base64 8)
+export DRONE_SECRET_KEY=$(openssl -hex -base64 16)
+
+echo "Generated secrets for Drone CI."
+echo "Drone adimistartor user: $DRONE_ADMIN_USERNAME/$DRONE_ADMIN_PASSWORD"
+echo "Drone git user: $DRONE_GIT_USERNAME/$DRONE_GIT_PASSWORD"
+echo
+
+export CI_SRC=$SRC_ROOT/ci
+cp $CI_SRC/env.tmpl $CI_SRC/.env
+
+find $CI_SRC -type f -name '*.env' -exec sed -i -e 's|@DRONE_ADMIN_USERNAME|'"$DRONE_ADMIN_USERNAME"'|g' {} \;
+find $CI_SRC -type f -name '*.env' -exec sed -i -e 's|@DRONE_ADMIN_PASSWORD|'"$DRONE_ADMIN_PASSWORD"'|g' {} \;
+find $CI_SRC -type f -name '*.env' -exec sed -i -e 's|@DRONE_GIT_USERNAME|'"$DRONE_GIT_USERNAME"'|g' {} \;
+find $CI_SRC -type f -name '*.env' -exec sed -i -e 's|@DRONE_GIT_PASSWORD|'"$DRONE_GIT_PASSWORD"'|g' {} \;
+find $CI_SRC -type f -name '*.env' -exec sed -i -e 's|@DRONE_SECRET_KEY|'"$DRONE_SECRET_KEY"'|g' {} \;
+find $CI_SRC -type f -name '*.env' -exec sed -i -e 's|@DRONE_DATA|'"$DRONE_DATA"'|g' {} \;
+find $CI_SRC -type f -name '*.env' -exec sed -i -e 's|@DRONE_MYSQL_DATA|'"$DRONE_MYSQL_DATA"'|g' {} \;
+
+echo "Created '.env' file at '$CI_SRC'."
+echo
+
+echo "Completed Drone CI setup."
+echo
+
+echo "Completed containers setup."
 echo
