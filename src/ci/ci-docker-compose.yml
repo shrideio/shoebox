@@ -52,9 +52,6 @@ services:
         - DRONE_SECRET_ENDPOINT=http://ci-secret:3000
         - DRONE_DATABASE_DRIVER=mysql
         - DRONE_DATABASE_DATASOURCE=${DRONE_MYSQL_USER}:${DRONE_MYSQL_USER_PASSWORD}@tcp(ci-db:3306)/${DRONE_MYSQL_DATABASE}?parseTime=true
-        - DRONE_LOGS_DEBUG=true
-        - DRONE_LOGS_PRETTY=true
-        - DRONE_LOGS_COLOR=true
       ports:
         - ${DRONE_HTTP_PORT}:80
       networks:
