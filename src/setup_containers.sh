@@ -1,6 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
+export REPO_ROOT=$1
+export YOUR_DOMAIN=$2
+
 export DEV_ROOT=/var/dev
 export SRC_ROOT=$REPO_ROOT/src
 
