@@ -145,10 +145,8 @@ echo "DRONE_MYSQL_DATA: $DRONE_MYSQL_DATA"
 
 if test ! -f "$DRONE_SECRETS"; then
   DRONE_ADMIN_USERNAME=ciadmin
-  DRONE_ADMIN_PASSWORD=$(openssl rand 8 -hex)
   DRONE_ADMIN_TOKEN=$(openssl rand 16 -hex)
   echo "DRONE_ADMIN_USERNAME=$DRONE_ADMIN_USERNAME" >> $DRONE_SECRETS
-  echo "DRONE_ADMIN_PASSWORD=$DRONE_ADMIN_PASSWORD" >> $DRONE_SECRETS
   echo "DRONE_ADMIN_TOKEN=$DRONE_ADMIN_TOKEN" >> $DRONE_SECRETS
   
   DRONE_GIT_USERNAME=ciagent
@@ -162,7 +160,7 @@ fi
 source $DRONE_SECRETS
 
 echo "Generated secrets for Drone CI."
-echo "Drone adimistartor user: $DRONE_ADMIN_USERNAME/$DRONE_ADMIN_PASSWORD"
+echo "Drone adimistartor user: $DRONE_ADMIN_USERNAME/$DRONE_ADMIN_TOKEN"
 echo "Drone git user: $DRONE_GIT_USERNAME/$DRONE_GIT_PASSWORD"
 echo "Check '$DRONE_SECRETS' for more information."
 echo
@@ -172,7 +170,6 @@ cp $CI_SRC/env.tmpl $CI_SRC/.env
 
 find $CI_SRC -type f -name '*.env' -exec sed -i -e 's|@YOUR_DOMAIN|'"$YOUR_DOMAIN"'|g' {} \;
 find $CI_SRC -type f -name '*.env' -exec sed -i -e 's|@DRONE_ADMIN_USERNAME|'"$DRONE_ADMIN_USERNAME"'|g' {} \;
-find $CI_SRC -type f -name '*.env' -exec sed -i -e 's|@DRONE_ADMIN_PASSWORD|'"$DRONE_ADMIN_PASSWORD"'|g' {} \;
 find $CI_SRC -type f -name '*.env' -exec sed -i -e 's|@DRONE_ADMIN_TOKEN|'"$DRONE_ADMIN_TOKEN"'|g' {} \;
 find $CI_SRC -type f -name '*.env' -exec sed -i -e 's|@DRONE_GIT_USERNAME|'"$DRONE_GIT_USERNAME"'|g' {} \;
 find $CI_SRC -type f -name '*.env' -exec sed -i -e 's|@DRONE_GIT_PASSWORD|'"$DRONE_GIT_PASSWORD"'|g' {} \;
