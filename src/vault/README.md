@@ -104,7 +104,7 @@ Check [Vault Documentation](https://www.vaultproject.io/docs/) and [Vault](https
         
         -  Find and click `POST /auth/approle/login/` and then click **Try it out**. 
         
-        -  Fill in the request body with matching `role_id` and `secret_id` values then click **Execute - send a request with your token to Vault** follow the checklist:
+        -  Fill in the request body with matching `role_id` and `secret_id` values then click **Execute - send a request with your token to Vault** and follow the checklist:
 
             - [x] Response code is `200`
             - [x] The response body contains correct `role_name` and `token_policies` values
