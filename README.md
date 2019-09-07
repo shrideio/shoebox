@@ -126,7 +126,7 @@
         $ sudo mkdir -p /etc/letsencrypt/renewal/dns
         $ sudo nano /etc/letsencrypt/renewal/dns/cloudflare.ini
         ```
-    - Get the API key. Browse `Get your API key -> API Tokens -> Global API Key [View]`
+    - Get the API key. Browse `Overview -> Get your API key -> API Tokens -> Global API Key [View]`
     - Replace **email** and **API key** with the actual values and save the file    
         ```
         # Cloudflare API credentials used by Certbot
@@ -144,7 +144,7 @@
         -d $YOUR_DOMAIN \
         -d *.$YOUR_DOMAIN
     ```
-    If the certificate is acquired successfuly a similar message to the shown bellow will be displayed by `certbot`
+    If the certificate is acquired successfuly a similar message to the shown below will be displayed by `certbot`
 
     ```
     - Congratulations! Your certificate and chain have been saved at:
