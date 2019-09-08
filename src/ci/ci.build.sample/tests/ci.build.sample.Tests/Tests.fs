@@ -17,6 +17,7 @@ open Microsoft.Extensions.DependencyInjection
 let createHost() =
     WebHostBuilder()
         .UseContentRoot(Directory.GetCurrentDirectory())
+        .ConfigureAppConfiguration(ci.build.sample.App.buildConfiguration())
         .Configure(Action<IApplicationBuilder> ci.build.sample.App.configureApp)
         .ConfigureServices(Action<IServiceCollection> ci.build.sample.App.configureServices)
 
@@ -54,7 +55,7 @@ let shouldContain (expected : string) (actual : string) =
 // ---------------------------------
 
 [<Fact>]
-let ``Route /api/hello returns "Hello world, from Giraffe!"`` () =
+let ``Route /api/hello returns "Hello world test!"`` () =
     use server = new TestServer(createHost())
     use client = server.CreateClient()
 
