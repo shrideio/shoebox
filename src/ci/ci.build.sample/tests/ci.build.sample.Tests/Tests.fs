@@ -10,6 +10,7 @@ open Microsoft.AspNetCore.Hosting
 open Microsoft.AspNetCore.TestHost
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Configuration
+open System.Collections.Generic
 
 // ---------------------------------
 // Helper functions (extend as you need)
@@ -18,7 +19,7 @@ open Microsoft.Extensions.Configuration
 let buildConfiguration () =
     fun  _ (builder : IConfigurationBuilder) ->
         builder
-            .AddInMemoryCollection([ KeyValue("HELLO_WORLD", "Hello test!") ])
+            .AddInMemoryCollection([ KeyValuePair("HELLO_WORLD", "Hello test!") ])
             .Build()
             |> ignore
 
