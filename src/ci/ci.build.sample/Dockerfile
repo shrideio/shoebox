@@ -11,5 +11,5 @@ RUN dotnet publish ./build/src/ci.build.sample/ci.build.sample.fsproj --verbosit
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-alpine AS runtime
 WORKDIR /app
-COPY --from=build-env /app/out ./
+COPY --from=build /app/out ./
 ENTRYPOINT ["dotnet", "ci.build.sample.dll"]
