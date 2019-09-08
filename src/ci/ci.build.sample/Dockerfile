@@ -1,8 +1,15 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2-alpine AS build
 WORKDIR /app
 
-COPY src/. ./build/src/
 COPY tests/. ./build/tests/
+COPY src/. ./build/src/
 
-WORKDIR /app/build/tests
-RUN dotnet test **/*.fsproj
+ENV HELLO_WORLD="Hello test!"
+RUN dotnet test ./build/tests/**/*.fsproj --verbosity normal
+
+RUN dotnet publish ./build/src/ci.build.sample/ci.build.sample.fsproj --verbosity normal -c Release -o out
+
+FROM cr.microsoft.com/dotnet/core/aspnet:2.2-alpine AS runtime
+WORKDIR /app
+COPY --from=build-env /app/out ./
+ENTRYPOINT ["dotnet", "ci.build.sample.dll"]
