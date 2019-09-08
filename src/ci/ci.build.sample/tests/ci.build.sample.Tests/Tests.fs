@@ -9,15 +9,23 @@ open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
 open Microsoft.AspNetCore.TestHost
 open Microsoft.Extensions.DependencyInjection
+open Microsoft.Extensions.Configuration
 
 // ---------------------------------
 // Helper functions (extend as you need)
 // ---------------------------------
 
+let buildConfiguration () =
+    fun  _ (builder : IConfigurationBuilder) ->
+        builder
+            .AddInMemoryCollection([ KeyValue("HELLO_WORLD", "Hello test!") ])
+            .Build()
+            |> ignore
+
 let createHost() =
     WebHostBuilder()
         .UseContentRoot(Directory.GetCurrentDirectory())
-        .ConfigureAppConfiguration(ci.build.sample.App.buildConfiguration())
+        .ConfigureAppConfiguration(buildConfiguration())
         .Configure(Action<IApplicationBuilder> ci.build.sample.App.configureApp)
         .ConfigureServices(Action<IServiceCollection> ci.build.sample.App.configureServices)
 
