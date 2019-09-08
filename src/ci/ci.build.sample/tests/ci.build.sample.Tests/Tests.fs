@@ -62,7 +62,7 @@ let ``Route /api/hello returns "Hello world, from Giraffe!"`` () =
     |> httpGet "/api/hello"
     |> ensureSuccess
     |> readText
-    |> shouldContain "Hello world, from Giraffe!"
+    |> shouldContain "Hello test!"
 
 [<Fact>]
 let ``Route which doesn't exist returns 404 Page not found`` () =
