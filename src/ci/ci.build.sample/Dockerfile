@@ -9,7 +9,7 @@ RUN dotnet test ./build/tests/**/*.fsproj --verbosity normal
 
 RUN dotnet publish ./build/src/ci.build.sample/ci.build.sample.fsproj --verbosity normal -c Release -o out
 
-FROM cr.microsoft.com/dotnet/core/aspnet:2.2-alpine AS runtime
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-alpine AS runtime
 WORKDIR /app
 COPY --from=build-env /app/out ./
 ENTRYPOINT ["dotnet", "ci.build.sample.dll"]
