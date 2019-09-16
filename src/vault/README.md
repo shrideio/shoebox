@@ -72,7 +72,7 @@ Check [Vault Documentation](https://www.vaultproject.io/docs/) and [Vault](https
 
         - Create a new `ciagent` role and link it to the `ciagent` policy.
             ```
-            > vault write auth/approle/role/ciagent policies="ciagent"
+            > vault write auth/approle/role/ciagent policies="ciagent, default"
             ```
 
         - Read the Role ID. The Role ID is used for issuing an access token.
