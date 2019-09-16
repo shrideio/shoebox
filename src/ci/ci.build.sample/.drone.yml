@@ -1,0 +1,41 @@
+kind: pipeline
+name: build
+
+steps:
+
+- name: restore
+  image: mcr.microsoft.com/dotnet/core/sdk
+  pull: always
+  volumes:
+  - name: nuget
+    path: /root/.nuget
+  commands:
+    - "for file in $(find . -name '*.fsproj'); do dotnet restore $file --verbosity normal; done"
+  when:
+    event:
+    - push
+    - pull_request
+    - tag
+
+- name: build
+  image: mcr.microsoft.com/dotnet/core/sdk
+  pull: always
+  volumes:
+  - name: nuget
+    path: /root/.nuget
+  commands:
+    - dotnet build src/**/*.fsproj --no-restore --verbosity normal
+    - dotnet build tests/**/*.fsproj --no-restore --verbosity normal
+
+- name: test
+  image: mcr.microsoft.com/dotnet/core/sdk
+  pull: always
+  volumes:
+  - name: nuget
+    path: /root/.nuget
+  commands:
+    - dotnet test tests/**/*.fsproj --no-build --no-restore --verbosity normal
+
+volumes:
+- name: nuget
+  temp: {}
