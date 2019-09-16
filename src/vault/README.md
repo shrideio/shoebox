@@ -50,7 +50,7 @@ Check [Vault Documentation](https://www.vaultproject.io/docs/) and [Vault](https
     
     > Check [AppRole Pull Authentication](https://learn.hashicorp.com/vault/identity-access-management/iam-authentication) for more information.
 
-    - Enable the AppRole authentication method. Navigate to `Access`, then choose the _AppRole_ option from the list and click **Next** to continue. Leave the _Path_ value (expected to be `approle`) and _Method Options_ unchanged and click **Enable Method** to finish.
+    - Enable the AppRole authentication method. Navigate to `Access`, then choose the _AppRole_ option from the list and click **Next** to continue. Click `Expand Method` to expand the options section and set _Default Lease TTL_ and  _Max Lease TTL_ to **30 days**. Leave the _Path_ value (expected to be `approle`) click **Enable Method** to finish.
 
     - Create a policy for authenticating with role credentials and accessing secrets. Navigate to `Policies` and click **Create ACL policy**. Set the _Name_ field to `ciagent` and copy-paste the configuration bellow into the _Policy_ field.
     
@@ -70,12 +70,12 @@ Check [Vault Documentation](https://www.vaultproject.io/docs/) and [Vault](https
     
     -  Create a role linked with the policy and generate a secret id for the role. Click the Vault CLI shell icon (![Alt text](/resources/img/vault_shell.png?raw=true "Vault shell")) in the top right corner to open a command shell. Execute the following commands in the UI shell.
 
-        - Create a new `ciagent` role and link it with the `ciagent` policy.
+        - Create a new `ciagent` role and link it to the `ciagent` policy.
             ```
             > vault write auth/approle/role/ciagent policies="ciagent"
             ```
 
-        - Read the read the Role ID. The Role ID is used as a login.
+        - Read the Role ID. The Role ID is used for issuing an access token.
             ```
             > vault read auth/approle/role/ciagent/role-id
             ```
@@ -100,13 +100,22 @@ Check [Vault Documentation](https://www.vaultproject.io/docs/) and [Vault](https
 
             Generate a new Secret ID as described in the previous step.
 
-    - Check if the created credentials can be used for authenticating. Type `api` in thw UI shell and press `Enter` to open _Vault API explorer_. 
+    - Issue a client token. Type `api` in the UI shell and press the `Enter` key to open _Vault API explorer_. 
         
-        -  Find and click `POST /auth/approle/login/` and then click **Try it out**. 
+        -  Find `POST /auth/approle/login/` and click on the section to expand it, then click **Try it out** to enable editing.
         
-        -  Fill in the request body with matching `role_id` and `secret_id` values then click **Execute - send a request with your token to Vault** and follow the checklist:
+        -  Fill in request body parameters with matching `role_id` and `secret_id` values then click **Execute - send a request with your token to Vault**. Follow the checklist:
 
             - [x] Response code is `200`
             - [x] The response body contains correct `role_name` and `token_policies` values
+            - [x] The response body contains `client_token`, `lease_duration` is set to _2592000_ and `renewable` is _true_
 
             Proceed if the checks are passed, otherwise consult with the Vault documentation.
+            
+        - Extract and save the `client_token` value, it will be used further for configuring the integration between ci and vault servers. Run the following command to set an environment variable for the vault token.
+            > Replace `[client_token]` with the actual vault token value.
+
+            ```
+            export VAULT_TOKEN=[client_token]
+            ```
+            Run `echo $VAULT_TOKEN` to verify if the variable is set.
