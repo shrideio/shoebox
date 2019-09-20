@@ -63,8 +63,8 @@ Check [Vault Documentation](https://www.vaultproject.io/docs/) and [Vault](https
         }
         
         # Read all secrets
-        path "secret/*" {
-            capabilities = [ "read" ]
+        path "ciagent/data/ci.test/*" {
+          capabilities = [ "read" ]
         }
         ```
     
