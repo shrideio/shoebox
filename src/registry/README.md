@@ -35,14 +35,14 @@ Check [ProGet Documentation](https://docs.inedo.com/docs/proget/overview) and [P
 
     - Open the _Tasks_ tab after the users have been created.
 
-    - Deprive `Anonymous` from `View & Download Packages` by removing the record from the task's row.
+    - Deprive `Anonymous` from `View & Download Packages` by removing the record from the task row.
 
     - Assign `View & Download Packages` to `FeedConsumer`, and `View & Download Packages` and `Publish Packages` to `PackagePublisher`. click **Add Permission** to open the _Add Privilege_ dialog and create the aforementioned associations. The users and tasks grid is expected to look as follows:
 
         | Task                     | Scope     | Users & Groups                 |
         | :----------------------- |:--------- | :----------------------------- |
         | Publish Packages         | all feeds | PackagePublisher               |
-        | View & Download Packages | all feeds | FeedConsumer, PackagePublisher |
+        | View & Download Packages | all feeds | FeedConsumer                   |
 
 4. Create API keys
 
