@@ -154,7 +154,7 @@ if test ! -f "$DRONE_SECRETS"; then
   DRONE_SECRET_KEY=$(openssl rand 16 -hex)
   echo "DRONE_GIT_USERNAME=$DRONE_GIT_USERNAME" >> $DRONE_SECRETS
   echo "DRONE_GIT_PASSWORD=$DRONE_GIT_PASSWORD" >> $DRONE_SECRETS
-  echo "DRONE_SECRET_KEY=$DRONE_SECRET_KEY" >> $DRONE_SECRETS
+  echo "DRONE_SECRET=$DRONE_SECRET" >> $DRONE_SECRETS
 fi
 
 source $DRONE_SECRETS
@@ -173,7 +173,7 @@ find $CI_SRC -type f -name '*.env' -exec sed -i -e 's|@DRONE_ADMIN_USERNAME|'"$D
 find $CI_SRC -type f -name '*.env' -exec sed -i -e 's|@DRONE_ADMIN_TOKEN|'"$DRONE_ADMIN_TOKEN"'|g' {} \;
 find $CI_SRC -type f -name '*.env' -exec sed -i -e 's|@DRONE_GIT_USERNAME|'"$DRONE_GIT_USERNAME"'|g' {} \;
 find $CI_SRC -type f -name '*.env' -exec sed -i -e 's|@DRONE_GIT_PASSWORD|'"$DRONE_GIT_PASSWORD"'|g' {} \;
-find $CI_SRC -type f -name '*.env' -exec sed -i -e 's|@DRONE_SECRET_KEY|'"$DRONE_SECRET_KEY"'|g' {} \;
+find $CI_SRC -type f -name '*.env' -exec sed -i -e 's|@DRONE_SECRET|'"$DRONE_SECRET"'|g' {} \;
 find $CI_SRC -type f -name '*.env' -exec sed -i -e 's|@DRONE_DATA|'"$DRONE_DATA"'|g' {} \;
 find $CI_SRC -type f -name '*.env' -exec sed -i -e 's|@DRONE_MYSQL_DATA|'"$DRONE_MYSQL_DATA"'|g' {} \;
 
