@@ -24,12 +24,12 @@ services:
       hostname: ci-secret
       restart: always
       environment:
-        - DRONE_SECRET=${DRONE_SECRET}
-        - DRONE_DEBUG=true
+        - SECRET_KEY=${DRONE_SECRET}
         - VAULT_ADDR=${VAULT_ADDR}
         - VAULT_TOKEN=${VAULT_TOKEN}
         - VAULT_TOKEN_RENEWAL=720h
         - VAULT_TOKEN_TTL=720h
+        - DRONE_DEBUG=true
       networks:
         - ci-network
       ports:
