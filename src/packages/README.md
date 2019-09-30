@@ -61,4 +61,4 @@ Check [ProGet Documentation](https://docs.inedo.com/docs/proget/overview) and [P
 
     - ProGet supports feed connectors allowing to unify package feeds from different sources. click **add connector** to open the _Select Connector_ dialog, select `nuget.org` from the _Connector_ dropdown and click *Save* to create a new feed. When _v2_ viewed in the feed viewer page (`Feed -> v2`) it is expected to display packages derived from _nuget.org_.
 
-    > Currently Proget hosted as a linux container cannot be used as a Docker registry due to the following issue [Docker Push to Proget Container Registry fails](https://forums.inedo.com/topic/2788/docker-push-to-proget-container-registry-fails).
+    > Despite Proget offering the Docker registry feature, it does not function properly when hosted in a Linux container due to the following issue [Docker Push to Proget Container Registry fails](https://forums.inedo.com/topic/2788/docker-push-to-proget-container-registry-fails). That is why its use as a Docker registry temporarily retried and the official Docker registry is used instead.
