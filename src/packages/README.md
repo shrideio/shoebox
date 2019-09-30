@@ -52,7 +52,7 @@ Check [ProGet Documentation](https://docs.inedo.com/docs/proget/overview) and [P
 
     - Create exclusive API keys for the _FeedConsumer_ and _PackagePublisher_ users. click **Create API Key** to open the _Create API Key_ dialog. Fill in the _Impersonate user_ and _Description_ fields with matching user names (the API user is not shown in the API Keys table, that is why setting _Description_ is important). click **Save API Key** to save changes and proceed.
 
-5. Create NuGet feed and Docker registry
+5. Create NuGet feed
 
     NuGet feed and Docker registry are needed for testing the continues integration setup.
     > This setup is focused on .NET Core projects. If it does not suit the case a different feed type can be created and used further. Check the Third-Party Packages & Feed Types section in the ProGet documentation for more detail.
@@ -61,4 +61,4 @@ Check [ProGet Documentation](https://docs.inedo.com/docs/proget/overview) and [P
 
     - ProGet supports feed connectors allowing to unify package feeds from different sources. click **add connector** to open the _Select Connector_ dialog, select `nuget.org` from the _Connector_ dropdown and click *Save* to create a new feed. When _v2_ viewed in the feed viewer page (`Feed -> v2`) it is expected to display packages derived from _nuget.org_.
 
-    - Browse to `Container` and click **Create New Docker Registry** to open the _Create Docker Registry_ dialog. Enter the registry name, `docker.default` will be used further, and click **Create Docker Registry** to save changes. Add a _hub.docker.com_ connector to the newly created registry similarly to what is described above.
+    > Currently Proget hosted as a linux container cannot be used as a Docker registry due to the following issue [Docker Push to Proget Container Registry fails](https://forums.inedo.com/topic/2788/docker-push-to-proget-container-registry-fails).
