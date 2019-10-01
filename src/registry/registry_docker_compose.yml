@@ -10,10 +10,8 @@ services:
       restart: always
       volumes:
         - proget-postgresql-data:/var/lib/postgresql/data
-      environment:
-        - POSTGRES_DB=${PROGET_POSTGRESQL_DATABASE}
-        - POSTGRES_USER=${PROGET_POSTGRESQL_USER}
-        - POSTGRES_PASSWORD=${PROGET_POSTGRESQL_PASSWORD}
+      env_file:
+        - variables.env
       ports:
         - ${PROGET_POSTGRES_PORT}:5432
       networks: 
@@ -38,6 +36,7 @@ services:
 
 
 networks:
+
   registry-network:
     name: registry-network
     driver: bridge

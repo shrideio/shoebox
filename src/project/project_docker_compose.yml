@@ -1,0 +1,146 @@
+version: '3'
+
+services:
+  back:
+    image: dockertaiga/back
+    container_name: taiga-back
+    restart: unless-stopped
+    depends_on:
+      - db
+      - events
+    networks:
+      - taiga-network
+    volumes:
+      - taiga-back-media:/taiga-media
+      - taiga-back:/taiga-conf
+    environment:
+      - RABBIT_PORT=5672
+      - TAIGA_HOST=${TAIGA_HOST}
+      - TAIGA_SECRET=${TAIGA_SECRET}
+      - TAIGA_SCHEME=${TAIGA_SCHEME}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - RABBIT_HOST=${RABBIT_HOST}
+      - RABBIT_USER=${POSTGRES_DB}
+      - RABBIT_PASSWORD=${RABBIT_PASSWORD}
+      - RABBIT_VHOST=${RABBIT_VHOST}
+      - STARTUP_TIMEOUT=${STARTUP_TIMEOUT}
+    
+  front:
+    image: dockertaiga/front
+    container_name: taiga-front
+    restart: unless-stopped
+    networks:
+      - taiga-network
+    volumes:
+      - taiga-front:/taiga-conf
+    environment:
+      - TAIGA_HOST=${TAIGA_HOST}
+      - TAIGA_SCHEME=${TAIGA_SCHEME}
+
+  db:
+    image: postgres:11-alpine
+    container_name: taiga-db
+    restart: unless-stopped
+    networks:
+      - taiga-network
+    ports:
+    - ${TAIGA_POSTGRES_PORT}:5432
+    volumes:
+      - taiga-db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+
+  rabbit:
+    image: dockertaiga/rabbit
+    container_name: taiga-rabbit
+    restart: unless-stopped
+    networks:
+      - taiga-network
+    environment:
+      - RABBIT_HOST=${RABBIT_HOST}
+      - RABBIT_USER=${POSTGRES_DB}
+      - RABBIT_PASSWORD=${RABBIT_PASSWORD}
+      - RABBIT_VHOST=${RABBIT_VHOST}
+      - STARTUP_TIMEOUT=${STARTUP_TIMEOUT}
+
+  events:
+    image: dockertaiga/events
+    container_name: taiga-events
+    restart: unless-stopped
+    depends_on:
+      - rabbit
+    networks:
+      - taiga-network
+    environment:
+      - RABBIT_HOST=${RABBIT_HOST}
+      - RABBIT_USER=${POSTGRES_DB}
+      - RABBIT_PASSWORD=${RABBIT_PASSWORD}
+      - RABBIT_VHOST=${RABBIT_VHOST}
+      - TAIGA_SECRET=${TAIGA_SECRET}
+
+  proxy:
+    image: dockertaiga/proxy
+    container_name: taiga-proxy
+    restart: unless-stopped
+    depends_on:
+      - back
+      - front
+      - events
+    networks:
+      - taiga-network
+    ports:
+      - 80:10280
+      - 443:443
+    volumes:
+      #- ./cert:/taiga-cert
+      - taiga-proxy:/taiga-conf
+    environment:
+      - TAIGA_BACK_HOST=${TAIGA_HOST}
+      - TAIGA_FRONT_HOST=${TAIGA_HOST}
+      - EVENTS_HOST=${TAIGA_HOST}
+      - ENABLE_SSL=${ENABLE_SSL}
+      - CERT_NAME=${CERT_NAME}
+      - CERT_KEY=${CERT_KEY}
+
+ 
+networks:
+
+  taiga-network:
+    driver: bridge
+
+volumes:
+  taiga-back:
+    driver_opts:
+      type: none
+      device: ${STORAGE_TAIGA_BACK}
+      o: bind
+  
+  taiga-back-media:
+    driver_opts:
+      type: none
+      device: ${STORAGE_TAIGA-BACK_MEDIA}
+      o: bind
+
+  taiga-front:
+    driver_opts:
+      type: none
+      device: ${STORAGE_TAIGA_FRONT}
+      o: bind
+
+  taiga-db:
+    driver_opts:
+      type: none
+      device: ${STORAGE_TAIGA_DB}
+      o: bind
+      
+  taiga-proxy:
+    driver_opts:
+      type: none
+      device: ${STORAGE_TAIGA_PROXY}
+      o: bind
