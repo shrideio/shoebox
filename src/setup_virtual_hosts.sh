@@ -15,20 +15,25 @@ echo
 
 mkdir -p $HTTPD_SRC_CONFD
 
+source ports_prefix.ini
+
 declare -A SERVICES=(
-  [git]=10080
-  [registry]=10180
-  [vault]=10280
-  [ci]=10380
-  [project]=10480
+  [git]=${GIT_PORTS_PREFIX}80
+  [packages]=${PACKAGES_PORTS_PREFIX}80
+  [registryui]=${REGISTRY_PORTS_PREFIX}80
+  [registry]=${REGISTRY_PORTS_PREFIX}50
+  [vault]=${VAULT_PORTS_PREFIX}80
+  [ci]=${CI_PORTS_PREFIX}80
+  [project]=${PROJETC_PORTS_PREFIX}80
 )
+
 for SRV in "${!SERVICES[@]}"
 do
   CONF_FILE=$HTTPD_SRC_CONFD/$SRV.ssl.conf
   SVC_PORT=${SERVICES[$SRV]}
-  
+
   cp $VHOST_CONF_TMPL $CONF_FILE
-  
+ 
   sed -i -e 's|@YOUR_DOMAIN|'"$YOUR_DOMAIN"'|g' $CONF_FILE
   sed -i -e 's|@SUBDOMAIN|'"$SRV"'|g' $CONF_FILE
   sed -i -e 's|@SVC_PORT|'"$SVC_PORT"'|g' $CONF_FILE
