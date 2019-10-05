@@ -347,9 +347,10 @@ there are a few email services providing free accounts with the limited number o
 - [Mailjet](https://www.mailjet.com/pricing/) (6,000/month, 200/day)
 - [SendGrid](https://sendgrid.com/marketing/sendgrid-services-cro/#pricing-app) (100/day)
 
-## VIII. Set up dev environment services
+## VIII. Set up dev environment (order matters).
 1. [Git (Gogs)](/src/git/README.md)
-2. [Packages and Docker registry (ProGet)](/src/registry/README.md)
-3. [Key/Secret Vault (Vault)](/src/vault/README.md)
-4. [Continuous Integration (Drone)](/src/ci/README.md)
-5. [Project Management (Taiga)](/src/project/README.md)
+2. [Key/Secret Vault (Vault)](/src/vault/README.md)
+3. [Packages (ProGet)](/src/packages/README.md)
+5. [Docker Registry](/src/registry/README.md)
+5. [Continuous Integration (Drone)](/src/ci/README.md)
+6. [Project Management (Taiga)](/src/project/README.md)

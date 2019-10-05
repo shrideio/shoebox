@@ -1,5 +1,5 @@
 ## Drone CI Setup
-Check [Drone Documentation](https://docs.drone.io/) and [Drone Vault plugin](https://readme.drone.io/extend/secrets/vault/) for more information.
+Check [Drone documentation](https://docs.drone.io/) and [Drone Vault plugin](https://readme.drone.io/extend/secrets/vault/) for more information.
 > Run `echo $REPO_ROOT` to verify if the environment variable is set before continuing.
 
 1. Stage Drone CI (ci), Drone Vault plugin (ci-secret) and MySQL (ci-db) containers.
@@ -11,7 +11,7 @@ Check [Drone Documentation](https://docs.drone.io/) and [Drone Vault plugin](htt
       $ sudo docker-compose up -d
       ```
 
-    > The `.env` file in the `/src/git` directory contains environment variable values for the containers, review and modify if necessary.
+    > The `.env` file in the `/src/ci` directory contains environment variable values for the containers, review and modify if necessary.
     
     > Drone admin user and git user passwords are auto-generated and may be changed if necessary.
 

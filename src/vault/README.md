@@ -29,22 +29,22 @@ Check [Vault Documentation](https://www.vaultproject.io/docs/) and [Vault](https
 
     - Choose _Token_ as the authentication method and enter the root token from the json file. click **Sign in** to proceed.
 
-3. Enable new secrets engine
+3. Enable KVv2 secrets engine
 
-    > There is a variety of [secret engines](https://www.vaultproject.io/docs/secrets/index.html) supported by Vault designated for different cases. **KV v2** (key/value) secret engine is  used to store arbitrary secrets within the configured physical storage for Vault.
+    > There is a variety of [secret engines](https://www.vaultproject.io/docs/secrets/index.html) supported by Vault designated for different use cases. **KVv2** (key/value) secret engine is used to store arbitrary secrets within the configured physical storage for Vault.
 
     - click the _Secrets_ menu in the top right corner to navigate to the secrets management console. Then click _Enable new engine_ to proceed.
 
-    - Choose **KV** as a secrets engine and click **Next** to proceed. Set _Path_ to `test` and _Version_ to `2` (default KV engine version). Check the [KV engine documentation](https://www.vaultproject.io/docs/secrets/kv/kv-v2.html) for the engine options details and modify if necessary. click **Enable Engine** to finish the setup.
+    - Choose **KV** as a secrets engine and click **Next** to proceed. Set _Path_ to `secrets` and _Version_ to `2` (default KV engine version). Check the [KV engine documentation](https://www.vaultproject.io/docs/secrets/kv/kv-v2.html) for the engine options details and modify if necessary. click **Enable Engine** to finish the setup.
 
 
-4. Create a secret
+4. <a name="create-a-secret"></a>Create a secret
 
     > The secret will be used by a continues integration server for a test build.
 
-    - Navigate to `Secrets -> test` to open the secret management console the click _Create secret_.
+    - Navigate to `Secrets -> secrets` to open the secret management console then click _Create secret_.
 
-    - Set _Path for this secret_ to `ci.test` and crete a single entry version data with the following key/value pair `HELLO_WORLD`/`Hello world!`. click **Save** to save changes. 
+    - Set _Path for this secret_ to `ci.build.sample` and create a single entry version data with the following key/value pair `HELLO_WORLD`/`Hello world!`. click **Save** to save changes.
 
 5. Configure machine identity access
     
@@ -63,19 +63,19 @@ Check [Vault Documentation](https://www.vaultproject.io/docs/) and [Vault](https
         }
         
         # Read all secrets
-        path "ciagent/data/ci.test/*" {
+        path "secrets/data/*" {
           capabilities = [ "read" ]
         }
         ```
     
-    -  Create a role linked with the policy and generate a secret id for the role. Click the Vault CLI shell icon (![Alt text](/resources/img/vault_shell.png?raw=true "Vault shell")) in the top right corner to open a command shell. Execute the following commands in the UI shell.
+    -  Create a role linked with the policy and generate a secret id for that role. Click the Vault CLI shell icon (![Alt text](/resources/img/vault_shell.png?raw=true "Vault shell")) in the top right corner to open the command shell. Execute the following commands in the UI shell.
 
         - Create a new `ciagent` role and link it to the `ciagent` policy.
             ```
             > vault write auth/approle/role/ciagent policies="ciagent, default"
             ```
 
-        - Read the Role ID. The Role ID is used for issuing an access token.
+        - Read Role ID. The Role ID is used for issuing an access token.
             ```
             > vault read auth/approle/role/ciagent/role-id
             ```
@@ -85,7 +85,7 @@ Check [Vault Documentation](https://www.vaultproject.io/docs/) and [Vault](https
             > vault write -force auth/approle/role/ciagent/secret-id
             ```
 
-        - If the Secret ID was not captured or lost the only way to restore it is to regenerate a new one. Run the following command to list available *secret_id_accessor*s.
+        - If the Secret ID was not captured or lost the only way to restore is to regenerate a new one. Run the following command to list available *secret_id_accessor*s.
 
             ```
             > vault list auth/approle/role/ciagent/secret-id 
