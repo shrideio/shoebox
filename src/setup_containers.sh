@@ -130,7 +130,7 @@ source $REGISTRY_SECRETS
 
 REGISTRY_SRC=$SRC_ROOT/registry
 
-htpasswd -bic -C 16 $REGISTRY_SRC/htpasswd $REGISTRY_USER $REGISTRY_USER_PASSWORD
+htpasswd -bc -C 16 $REGISTRY_SRC/htpasswd $REGISTRY_USER $REGISTRY_USER_PASSWORD
 cp $REGISTRY_SRC/config.tmpl $REGISTRY_SRC/config.yml
 find $REGISTRY_SRC -type f -name 'config.yml' -exec sed -i -e 's|@YOUR_DOMAIN|'"$YOUR_DOMAIN"'|g' {} \;
 
@@ -274,7 +274,7 @@ echo "Drone secrets:"
 echo
 echo "Admin user: $DRONE_ADMIN_USERNAME/$DRONE_ADMIN_TOKEN"
 echo "Git user: $DRONE_GIT_USERNAME/$DRONE_GIT_PASSWORD"
-echo "DRONE_SECRET: '$DRONE_SECRET'"
+echo "DRONE_SECRET_KEY: '$DRONE_SECRET_KEY'"
 echo
 
 echo "Created '.env' file at '$CI_SRC'."
