@@ -2,10 +2,10 @@
 set -euo pipefail
 
 YOUR_DOMAIN=$1
-REPO_ROOT=$(pwd)
+SRC_ROOT=$(pwd)
 
 HTTPD_CONFD=/etc/httpd/conf.d
-HTTPD_SRC=$REPO_ROOT/src/httpd
+HTTPD_SRC=$SRC_ROOT/httpd
 HTTPD_SRC_CONFD=$HTTPD_SRC/confg.d
 VHOST_CONF_TMPL=$HTTPD_SRC/ssl.conf.tmpl
 

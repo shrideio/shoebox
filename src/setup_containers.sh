@@ -2,10 +2,9 @@
 set -euo pipefail
 
 YOUR_DOMAIN=$1
-REPO_ROOT=$(pwd)
-
+SRC_ROOT=$(pwd)
 DEV_ROOT=/var/dev
-SRC_ROOT=$REPO_ROOT/src
+
 
 echo
 echo "Started containers setup."
