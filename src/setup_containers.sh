@@ -1,8 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
-REPO_ROOT=$1
-YOUR_DOMAIN=$2
+YOUR_DOMAIN=$1
+REPO_ROOT=$(pwd)
 
 DEV_ROOT=/var/dev
 SRC_ROOT=$REPO_ROOT/src
@@ -131,7 +131,7 @@ source $REGISTRY_SECRETS
 
 REGISTRY_SRC=$SRC_ROOT/registry
 
-htpasswd -bc -C 16 $REGISTRY_SRC/htpasswd $REGISTRY_USER $REGISTRY_USER_PASSWORD
+htpasswd -bBc -C 10 $REGISTRY_SRC/htpasswd $REGISTRY_USER $REGISTRY_USER_PASSWORD
 cp $REGISTRY_SRC/config.tmpl $REGISTRY_SRC/config.yml
 find $REGISTRY_SRC -type f -name 'config.yml' -exec sed -i -e 's|@YOUR_DOMAIN|'"$YOUR_DOMAIN"'|g' {} \;
 

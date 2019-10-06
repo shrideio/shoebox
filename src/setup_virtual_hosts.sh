@@ -1,8 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
-export REPO_ROOT=$1
-export YOUR_DOMAIN=$2
+YOUR_DOMAIN=$1
+REPO_ROOT=$(pwd)
 
 HTTPD_CONFD=/etc/httpd/conf.d
 HTTPD_SRC=$REPO_ROOT/src/httpd
