@@ -11,8 +11,7 @@ services:
       - ${REGISTRY_PORT}:5000
     volumes:
       - registry-data:/var/lib/registry
-      - registry-config-file/etc/docker/registry/config.yml
-      - registry-password-file:/etc/docker/registry/htpasswd
+      - registry-config:/etc/docker/registry
     networks:
       - registry-network
 
@@ -43,14 +42,8 @@ volumes:
         device: ${REGISTRY_DATA}
         o: bind
 
-    registry-config-file:
+    registry-config:
       driver_opts:
         type: none
-        device: ${REGISTRY_CONFIG_FILE}
-        o: bind
-
-    registry-password-file:
-      driver_opts:
-        type: none
-        device: ${REGISTRY_PASSWORD_FILE}
+        device: ${REGISTRY_CONFIG}
         o: bind
