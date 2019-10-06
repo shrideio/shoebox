@@ -1,6 +1,7 @@
-version: '3'
+version: '3.5'
 
 services:
+
   back:
     image: dockertaiga/back
     container_name: taiga-back
@@ -11,8 +12,8 @@ services:
     networks:
       - taiga-network
     volumes:
-      - taiga-back-media:/taiga-media
-      - taiga-back:/taiga-conf
+      - ${STORAGE_TAIGA-BACK_MEDIA}:/taiga-media
+      - ${STORAGE_TAIGA_BACK}:/taiga-conf
     environment:
       - RABBIT_PORT=5672
       - TAIGA_HOST=${TAIGA_HOST}
@@ -27,7 +28,7 @@ services:
       - RABBIT_PASSWORD=${RABBIT_PASSWORD}
       - RABBIT_VHOST=${RABBIT_VHOST}
       - STARTUP_TIMEOUT=${STARTUP_TIMEOUT}
-    
+
   front:
     image: dockertaiga/front
     container_name: taiga-front
@@ -35,7 +36,7 @@ services:
     networks:
       - taiga-network
     volumes:
-      - taiga-front:/taiga-conf
+      - ${STORAGE_TAIGA_FRONT}:/taiga-conf
     environment:
       - TAIGA_HOST=${TAIGA_HOST}
       - TAIGA_SCHEME=${TAIGA_SCHEME}
@@ -49,12 +50,17 @@ services:
     ports:
     - ${TAIGA_POSTGRES_PORT}:5432
     volumes:
-      - taiga-db:/var/lib/postgresql/data
+      - ${STORAGE_TAIGA_DB}:/var/lib/postgresql/data
     environment:
       - POSTGRES_HOST=${POSTGRES_HOST}
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - RABBIT_HOST=${RABBIT_HOST}
+      - RABBIT_USER=${POSTGRES_DB}
+      - RABBIT_PASSWORD=${RABBIT_PASSWORD}
+      - RABBIT_VHOST=${RABBIT_VHOST}
+      - STARTUP_TIMEOUT=${STARTUP_TIMEOUT}
 
   rabbit:
     image: dockertaiga/rabbit
@@ -95,11 +101,10 @@ services:
     networks:
       - taiga-network
     ports:
-      - 80:10280
-      - 443:443
+      - 10780:80
     volumes:
       #- ./cert:/taiga-cert
-      - taiga-proxy:/taiga-conf
+      - ${STORAGE_TAIGA_PROXY}:/taiga-conf
     environment:
       - TAIGA_BACK_HOST=${TAIGA_HOST}
       - TAIGA_FRONT_HOST=${TAIGA_HOST}
@@ -107,10 +112,8 @@ services:
       - ENABLE_SSL=${ENABLE_SSL}
       - CERT_NAME=${CERT_NAME}
       - CERT_KEY=${CERT_KEY}
-
- 
+	  
 networks:
-
   taiga-network:
     driver: bridge
 
@@ -120,7 +123,7 @@ volumes:
       type: none
       device: ${STORAGE_TAIGA_BACK}
       o: bind
-  
+
   taiga-back-media:
     driver_opts:
       type: none
@@ -138,9 +141,15 @@ volumes:
       type: none
       device: ${STORAGE_TAIGA_DB}
       o: bind
-      
+
   taiga-proxy:
     driver_opts:
       type: none
       device: ${STORAGE_TAIGA_PROXY}
       o: bind
+
+
+	  
+	  
+	  
+
