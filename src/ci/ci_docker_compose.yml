@@ -25,10 +25,15 @@ services:
       restart: always
       environment:
         - SECRET_KEY=${DRONE_SECRET_KEY}
+        - VAULT_ADDR=${VAULT_ADDR}
+        - VAULT_TOKEN=${VAULT_TOKEN}
+        - VAULT_TOKEN_RENEWAL=720h
+        - VAULT_TOKEN_TTL=720h
+        - DRONE_DEBUG=true
       networks:
-        - ci-network        
+        - ci-network
       ports:
-        - ${DRONE_VAULT_PLUGIN_PORT}:3306
+        - ${DRONE_VAULT_PLUGIN_PORT}:3000
 
     ci:
       image: drone/drone
@@ -46,10 +51,10 @@ services:
         - DRONE_TLS_AUTOCERT=false
         - DRONE_RUNNER_NETWORKS-ci-network
         - DRONE_RUNNER_CAPACITY=${DRONE_RUNNER_CAPACITY}
-        - DRONE_SECRET_SECRET=${DRONE_SECRET_KEY}
-        - DRONE_SECRET_ENDPOINT=http://ci-secret:3000
         - DRONE_DATABASE_DRIVER=mysql
         - DRONE_DATABASE_DATASOURCE=root:${DRONE_MYSQL_ROOT_PASSWORD}@tcp(ci-db:3306)/${DRONE_MYSQL_DATABASE}?parseTime=true
+        - DRONE_SECRET_ENDPOINT=http://ci-secret:3000
+        - DRONE_SECRET_SECRET=${DRONE_SECRET_KEY}
       ports:
         - ${DRONE_HTTP_PORT}:80
       networks:
@@ -80,4 +85,4 @@ volumes:
       driver_opts:
         type: none
         device: ${DRONE_MYSQL_DATA}
-        o: bind      
+        o: bind

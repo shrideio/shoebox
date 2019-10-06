@@ -9,14 +9,24 @@ open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
 open Microsoft.AspNetCore.TestHost
 open Microsoft.Extensions.DependencyInjection
+open Microsoft.Extensions.Configuration
+open System.Collections.Generic
 
 // ---------------------------------
 // Helper functions (extend as you need)
 // ---------------------------------
 
+let buildConfiguration () =
+    fun  _ (builder : IConfigurationBuilder) ->
+        builder
+            .AddInMemoryCollection([ KeyValuePair("HELLO_WORLD", "Hello test!") ])
+            .Build()
+            |> ignore
+
 let createHost() =
     WebHostBuilder()
         .UseContentRoot(Directory.GetCurrentDirectory())
+        .ConfigureAppConfiguration(buildConfiguration())
         .Configure(Action<IApplicationBuilder> ci.build.sample.App.configureApp)
         .ConfigureServices(Action<IServiceCollection> ci.build.sample.App.configureServices)
 
@@ -54,7 +64,7 @@ let shouldContain (expected : string) (actual : string) =
 // ---------------------------------
 
 [<Fact>]
-let ``Route /api/hello returns "Hello world, from Giraffe!"`` () =
+let ``Route /api/hello returns "Hello world test!"`` () =
     use server = new TestServer(createHost())
     use client = server.CreateClient()
 
@@ -62,7 +72,7 @@ let ``Route /api/hello returns "Hello world, from Giraffe!"`` () =
     |> httpGet "/api/hello"
     |> ensureSuccess
     |> readText
-    |> shouldContain "Hello world, from Giraffe!"
+    |> shouldContain "Hello test!"
 
 [<Fact>]
 let ``Route which doesn't exist returns 404 Page not found`` () =
