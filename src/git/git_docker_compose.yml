@@ -39,6 +39,7 @@ services:
 
 
 networks:
+
     git-network:
       name: git-network
       driver: bridge
