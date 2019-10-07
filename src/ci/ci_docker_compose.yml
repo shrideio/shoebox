@@ -29,7 +29,7 @@ services:
         - VAULT_TOKEN=${VAULT_TOKEN}
         - VAULT_TOKEN_RENEWAL=720h
         - VAULT_TOKEN_TTL=720h
-        - DRONE_DEBUG=true
+        #- DEBUG=true
       networks:
         - ci-network
       ports:
@@ -49,7 +49,7 @@ services:
         - DRONE_SERVER_HOST=${DRONE_SERVER_HOST}
         - DRONE_SERVER_PROTO=https
         - DRONE_TLS_AUTOCERT=false
-        - DRONE_RUNNER_NETWORKS-ci-network
+        - DRONE_RUNNER_NETWORKS=ci-network
         - DRONE_RUNNER_CAPACITY=${DRONE_RUNNER_CAPACITY}
         - DRONE_DATABASE_DRIVER=mysql
         - DRONE_DATABASE_DATASOURCE=root:${DRONE_MYSQL_ROOT_PASSWORD}@tcp(ci-db:3306)/${DRONE_MYSQL_DATABASE}?parseTime=true
