@@ -14,7 +14,7 @@ echo "DEV_ROOT: $DEV_ROOT"
 echo "SRC_ROOT: $SRC_ROOT"
 echo
 
-source ./ports_prefix.ini
+source $SRC_ROOT/ports_prefix.ini
 
 # GOGS
 

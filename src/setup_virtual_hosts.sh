@@ -15,7 +15,7 @@ echo
 
 mkdir -p $HTTPD_SRC_CONFD
 
-source ./ports_prefix.ini
+source $SRC_ROOT/ports_prefix.ini
 
 declare -A SERVICES=(
   [git]=${GIT_PORTS_PREFIX}80
