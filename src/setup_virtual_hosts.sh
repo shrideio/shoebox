@@ -2,7 +2,7 @@
 set -euo pipefail
 
 YOUR_DOMAIN=$1
-SRC_ROOT=$(pwd)
+SRC_ROOT=$(dirname "$0")
 
 HTTPD_CONFD=/etc/httpd/conf.d
 HTTPD_SRC=$SRC_ROOT/httpd
@@ -15,7 +15,7 @@ echo
 
 mkdir -p $HTTPD_SRC_CONFD
 
-source ports_prefix.ini
+source ./ports_prefix.ini
 
 declare -A SERVICES=(
   [git]=${GIT_PORTS_PREFIX}80

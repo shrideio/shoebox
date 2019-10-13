@@ -2,7 +2,7 @@
 set -euo pipefail
 
 YOUR_DOMAIN=$1
-SRC_ROOT=$(pwd)
+SRC_ROOT=$(dirname "$0")
 DEV_ROOT=/var/dev
 
 
@@ -14,7 +14,7 @@ echo "DEV_ROOT: $DEV_ROOT"
 echo "SRC_ROOT: $SRC_ROOT"
 echo
 
-source ports_prefix.ini
+source ./ports_prefix.ini
 
 # GOGS
 
@@ -277,7 +277,8 @@ echo "Drone secrets:"
 echo
 echo "Admin user: $DRONE_ADMIN_USERNAME/$DRONE_ADMIN_TOKEN"
 echo "Git user: $DRONE_GIT_USERNAME/$DRONE_GIT_PASSWORD"
-echo "DRONE_SECRET_KEY: '$DRONE_SECRET_KEY'"
+echo "DRONE_SECRET: '$DRONE_SECRET'"
+echo "DRONE_RPC_SECRET: '$DRONE_RPC_SECRET'"
 echo
 
 echo "Created '.env' file at '$CI_SRC'."
