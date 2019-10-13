@@ -234,7 +234,7 @@
 
         ```
         $ sudo chmod +x $REPO_ROOT/src/setup_virtual_hosts.sh
-        $ sudo $REPO_ROOT/src/setup_virtual_hosts.sh $REPO_ROOT $YOUR_DOMAIN
+        $ sudo $REPO_ROOT/src/setup_virtual_hosts.sh $YOUR_DOMAIN
         ```
     
     - Run `sudo ls /etc/httpd/conf.d` to check if if the configuration files were indeed created. The output should contain the following files:
@@ -328,7 +328,7 @@
  - Run the following commands to create volume mounts directories
     ```
     $ sudo chmod +x $REPO_ROOT/src/setup_containers.sh
-    $ sudo $REPO_ROOT/src/setup_containers.sh $REPO_ROOT $YOUR_DOMAIN
+    $ sudo $REPO_ROOT/src/setup_containers.sh $YOUR_DOMAIN
     ```
     Run `sudo ls -R /var/dev` for verifying the created directories structure
 
