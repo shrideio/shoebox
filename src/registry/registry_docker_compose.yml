@@ -24,7 +24,8 @@ services:
       -  ${REGISTRY_UI_PORT}:80
     environment:
       - REGISTRY_URL=http://registry:5000
-      - RELETE_IMAGES=true
+      - PULL_URL=$PULL_URL
+      - DELETE_IMAGES=true
       - REGISTRY_TITLE=Docker Registry
     networks:
       - registry-network
