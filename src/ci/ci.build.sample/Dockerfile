@@ -8,17 +8,23 @@
 # sudo curl http://localhost:9880/api/hello
 
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2-alpine AS build
-WORKDIR /app
+WORKDIR /build
 
-COPY tests/. ./build/tests/
-COPY src/. ./build/src/
+COPY tests/. ./tests/
+COPY src/. ./src/
 
-RUN for file in $(find ./build -name '*.fsproj'); do dotnet restore $file --verbosity normal; done
+# build
+RUN dotnet build ./src/**/*.fsproj --verbosity normal --configuration Release
+RUN dotnet build ./tests/**/*.fsproj --verbosity normal --configuration Release
 
-RUN dotnet test ./build/tests/**/*.fsproj --no-restore --verbosity normal
-RUN dotnet publish ./build/src/ci.build.sample/ci.build.sample.fsproj --no-restore --verbosity normal -c Release -o /app/out
+# test
+RUN dotnet test ./tests/**/*.fsproj --no-build --no-restore --verbosity normal --configuration Release
 
+# publish
+RUN dotnet publish ./src/ci.build.sample/ci.build.sample.fsproj --no-build --no-restore --verbosity normal --configuration Release --output /build/release
+
+# containerize
 FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-alpine AS runtime
 WORKDIR /app
-COPY --from=build /app/out ./
+COPY --from=build /build/release ./
 ENTRYPOINT ["dotnet", "ci.build.sample.dll"]
