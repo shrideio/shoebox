@@ -1,6 +1,6 @@
 # Shoebox - minimalist dev environment on CentOS 7
 
-## I. Prerequisites
+## Prerequisites
 
 - Install Nano (simple console-based text editor)
     
@@ -40,7 +40,7 @@
     ```
     Run `echo $YOUR_DOMAIN`, it should output the actual domain name
 
-## II. Disable SELinux
+## Disable SELinux
 
 1. Check SELinux status. It is recommended to disable SELinux for the ease of use of Docker, and the ease of setting up other auxiliary services
 
@@ -73,7 +73,7 @@
     SELinux status:                 disabled
     ```
     
-## III. Install Apache
+## Install Apache
 
 1. Run
     ```
@@ -217,57 +217,62 @@
         $ sudo cat /etc/letsencrypt/options-ssl-apache.conf
         ```
 
-## V. Configure virtual hosts
+## Configure virtual hosts
 
-1. Check if `$YOUR_DOMAIN` and `$REPO_ROOT` are set correctly, both variables are used in `setup_virtual_hosts.sh` for creating subdomain configuration files, by running the following commands
+1. Configure subdomain records.
+    - Create _CNAME_ aliases (bolded) matching the following names
+        - **git**.yourdomain.com (git server)
+        - **registry**.yourdomain.com (Docker registry)
+        - **registryui**.yourdomain.com (Docker registry ui)
+        - **packages**.yourdomain.com (package registry)
+        - **vault**.yourdomain.com (secret/key vault server)
+        - **ci**.yourdomain.com (continues integration/build server)
+        - **project**.yourdomain.com (project management tool)
+
+    > Do not forget to disable the http proxy for all of the subdomains as it is described [here](#turn-off-http-proxy)
+
+2. Check if `$YOUR_DOMAIN` and `$REPO_ROOT` are set.
 
     ```
     $ echo $YOUR_DOMAIN
     $ echo $REPO_ROOT
     ```
 
-    If any of the variable values is absent check the [Prerequisites](#Prerequisites) section.
+    If absent check the [Prerequisites](#Prerequisites) section.
 
-2. Use `setup_virtual_hosts.sh` for creating virtual host configuration files
+3. Run `setup_virtual_hosts.sh` for creating virtual host configuration files.
 
-    - Run the following commands to create and copy virtual host configuration files to `/etc/httpd/conf.d`
+    > `ports_prefix.ini` contains virtual host to underlying service port mappings. Review and modify if necessary. 
+
+    - The following commands will create and copy virtual host configuration files to `/etc/httpd/conf.d`
 
         ```
         $ sudo chmod +x $REPO_ROOT/src/setup_virtual_hosts.sh
         $ sudo $REPO_ROOT/src/setup_virtual_hosts.sh $YOUR_DOMAIN
         ```
-    
-    - Run `sudo ls /etc/httpd/conf.d` to check if if the configuration files were indeed created. The output should contain the following files:
+
+    - Run `sudo ls /etc/httpd/conf.d` to check if the virtual host configurations files have been created. The output should contain the following files:
         
         - git.ssl.conf 
         - registry.ssl.conf
+        - registryui.ssl.conf
+        - packages.ssl.conf
         - vault.ssl.conf
         - ci.ssl.conf
         - project.ssl.conf
 
-    - Restart Apache and proceed if no error is reported, otherwise, check `error_log` and `access_log` for troubleshooting
- 
-        ```
-        $ sudo systemctl restart httpd
-        ```
+    - Restart Apache `sudo systemctl restart httpd`, and proceed if no error is reported, otherwise, check `error_log` and `access_log` for troubleshooting
 
-3. Configure subdomain records
-    - Create _CNAME_ aliases (bolded) matching the following names
-        - **git**.yourdomain.com (git server)
-        - **registry**.yourdomain.com (packages and containers registry)
-        - **ci**.yourdomain.com (continues integration/build server)
-        - **project**.yourdomain.com (project management tool)
-        - **vault**.yourdomain.com (secret/key vault server)
-        > Do not forget to disable the http proxy for all of the subdomains as it is described [here](#turn-off-http-proxy)
+    - Verify that the http server is serving https traffic by browsing to any of the created subdomains. 
 
-    - Verify that the http server is serving https traffic by browsing to any of the created subdomains. Follow the check list:
+        Follow the check list:
         - [x] Redirected from `http` to `https`
         - [x] Response is `503 Service Unavailable`
 
         Proceed if the checks are passed, otherwise, check `error_log` and `access_log` for troubleshooting.
 
 
-## VI. Install Docker and Docker Compose
+## Install Docker and Docker Compose
 
 1. Uninstall old versions
     ```
@@ -321,7 +326,7 @@
     ````
     Run `docker-compose --version` to confirm that `docker-compose` is installed successfully
 
-## VII. Set up directories for container volume mounts
+## Set up directories for container volume mounts
 
 `setup_containers.sh` creates directories for container volume mounts, generates `.evn` files with matching paths from `env.tmpl` files and copies configuration files if necessary (i.e. Vault and Consul). `DEV_ROOT` points at `/var/dev` which is chosen as a default root directory for volume mounts. Check the content of `setup_containers.sh` for more information.
 
@@ -337,17 +342,16 @@
     $ sudo cat $REPO_ROOT/src/git/.env
     ```
 
-## VII. Set up SMTP relay
+## Set up SMTP relay
 
-The majority of key services of the dev environment setup require an SMTP relay for sending email notifications.
-If your domain name service includes a free email address you may want to use the provider's SMTP server, otherwise, 
+The majority of the services of the dev environment setup require an SMTP relay for sending email notifications. If your domain name service includes a free email address you may want to use the provider's SMTP server, otherwise, 
 there are a few email services providing free accounts with the limited number of message sent per day/month (at least 100 emails a day)
 - [SendPulse](https://sendpulse.com/prices/smtp) (12,000/month)
 - [Mailgun](https://www.mailgun.com/pricing-options) (10,000/month)
 - [Mailjet](https://www.mailjet.com/pricing/) (6,000/month, 200/day)
 - [SendGrid](https://sendgrid.com/marketing/sendgrid-services-cro/#pricing-app) (100/day)
 
-## VIII. Set up dev environment (order matters).
+## Set up dev environment (order matters).
 1. [Git (Gogs)](/src/git/README.md)
 2. [Key/Secret Vault (Vault)](/src/vault/README.md)
 3. [Packages (ProGet)](/src/packages/README.md)
