@@ -142,6 +142,7 @@ find $REGISTRY_SRC -type f -name '.env' -exec sed -i -e 's|@REGISTRY_DATA|'"$REG
 find $REGISTRY_SRC -type f -name '.env' -exec sed -i -e 's|@REGISTRY_CONFIG|'"$REGISTRY_CONFIG"'|g' {} \;
 find $REGISTRY_SRC -type f -name '.env' -exec sed -i -e 's|@REGISTRY_PORT|'"$REGISTRY_PORT"'|g' {} \;
 find $REGISTRY_SRC -type f -name '.env' -exec sed -i -e 's|@REGISTRY_UI_PORT|'"$REGISTRY_UI_PORT"'|g' {} \;
+find $REGISTRY_SRC -type f -name '.env' -exec sed -i -e 's|@YOUR_DOMAIN|'"$YOUR_DOMAIN"'|g' {} \;
 
 echo "Docker registry mouns:"
 echo "REGISTRY_DATA: $REGISTRY_DATA"
