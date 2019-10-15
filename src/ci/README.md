@@ -2,7 +2,7 @@
 Check [Drone documentation](https://docs.drone.io/) and [Drone Vault plugin](https://readme.drone.io/extend/secrets/vault/) for more information.
 > Run `echo $REPO_ROOT` to verify if the environment variable is set before continuing.
 
-1. Stage Drone CI (ci), Drone Vault plugin (ci-secret) and MySQL (ci-db) containers.
+1. Stage Drone CI (ci), Drone build agent (ci-agent), Drone Vault plugin (ci-secret) and MySQL (ci-db) containers.
 
     The following commands will navigate to the directory containing `ci_docker_compose.yml` and run the containers in the background.
 
