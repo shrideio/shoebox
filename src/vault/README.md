@@ -21,7 +21,7 @@ Check [Vault Documentation](https://www.vaultproject.io/docs/) and [Vault](https
 2. Unseal Vault
 
     - Navigate to vault._yourdomain.com_ to start initial setup. It is recommended to have at least **5** _Key shares_ and **3** _Key threshold_ for the [key rotation](https://www.vaultproject.io/docs/internals/rotation.html). Set the values and click **Initialize**. 
-    
+
     - After the root token and key shares are generated click the _Download keys_ link and download a json file containing the aforementioned tokes. click **Continue to Unseal** to proceed the setup.
       > **Important**: Secure the file with tokens or the token as it will be used for accessing and managing the vault content.
 
@@ -47,7 +47,7 @@ Check [Vault Documentation](https://www.vaultproject.io/docs/) and [Vault](https
     - Set _Path for this secret_ to `ci.build.sample` and create a single entry version data with the following key/value pair `HELLO_WORLD`/`Hello world!`. click **Save** to save changes.
 
 5. Configure machine identity access
-    
+
     > Check [AppRole Pull Authentication](https://learn.hashicorp.com/vault/identity-access-management/iam-authentication) for more information.
 
     - Enable the AppRole authentication method. Navigate to `Access`, then choose the _AppRole_ option from the list and click **Next** to continue. Click `Expand Method` to expand the options section and set _Default Lease TTL_ and  _Max Lease TTL_ to **30 days**. Leave the _Path_ value (expected to be `approle`) click **Enable Method** to finish.
@@ -100,7 +100,7 @@ Check [Vault Documentation](https://www.vaultproject.io/docs/) and [Vault](https
 
             Generate a new Secret ID as described in the previous step.
 
-    - Issue a client token. Type `api` in the UI shell and press the `Enter` key to open _Vault API explorer_. 
+    - <a name="issue-a-client-token"></a> Issue a client token. Type `api` in the UI shell and press the `Enter` key to open _Vault API explorer_. 
         
         -  Find `POST /auth/approle/login/` and click on the section to expand it, then click **Try it out** to enable editing.
         
