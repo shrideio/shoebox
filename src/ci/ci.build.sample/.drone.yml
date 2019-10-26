@@ -49,8 +49,8 @@ steps:
     HELLO_WORLD:
       from_secret: hello_world
   settings:
-    registry: registry.shride.io
-    repo: registry.shride.io/ci.test/ci.build.sample
+    registry: registry.@YOUR_DOMAIN
+    repo: registry.@YOUR_DOMAIN/ci.test/ci.build.sample
     username:
       from_secret: docker_username
     password:
