@@ -245,7 +245,7 @@
 
     - Replace `yourdomain.com` with the actual domain name in `letsencrypt.conf`
         ```
-        $ sudo sed -i -e 's/yourdomain.com/'"$YOUR_DOMAIN"'/g' /etc/letsencrypt/options-ssl-apache.conf
+        $ sudo sed -i -e 's|yourdomain.com|'"$YOUR_DOMAIN"'|g' /etc/letsencrypt/options-ssl-apache.conf
         ```
         Verify the result
         ```
