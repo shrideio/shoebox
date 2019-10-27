@@ -296,7 +296,7 @@
         - ci.ssl.conf
         - project.ssl.conf
     
-    - <a href="modify-registry-vhost-config"></a>Modify `registry.ssl.conf` to avoid `docker push` from failing.
+    - <a id="modify-registry-vhost-config"></a>Modify `registry.ssl.conf` to avoid `docker push` from failing.
         
         Open `registry.ssl.conf` for editing.
         ```
