@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- ### Install Nano (simple console-based text editor)
+- #### Install Nano (simple console-based text editor)
     
     ```
     $ sudo yum install nano
@@ -13,12 +13,13 @@
     - Discard changes: `ctrl` + `x`, `n`
     - Cancel: `ctrl` + `x`, `ctrl` + `c`
 
- - ### Install `git` and clone this repository
+ - #### Install git and clone this repository
 
     ```
     $ sudo yum install git
     ```
-    Run `git --version` to confirm that `git` was successfully installed
+    
+    Run `git --version` to confirm that `git` was successfully installed.
 
     Export the path of the directory where the repository will be cloned as an environment variable (`/tmp/shoebox` is used as default, can be changed if necessary).
     ```
@@ -31,7 +32,7 @@
     $ sudo git clone --depth=1 https://github.com/shrideio/shoebox $REPO_ROOT
     ```
 
-- ### Export your domain name as an environment variable
+- #### Export your domain name as an environment variable
 
     > Do not forget to replace `yourdomain.com` with the actual domain name
 
@@ -42,7 +43,7 @@
 
 ## Infrastructure
 
-- ### Disable SELinux
+- #### Disable SELinux
 
     Check SELinux status. It is recommended to disable SELinux for the ease of use of Docker, and the ease of setting up other auxiliary services
 
@@ -77,7 +78,7 @@
     SELinux status:                 disabled
     ```
 
-- ### Install Docker and Docker Compose
+- #### Install Docker and Docker Compose
 
     ```
     $ sudo yum remove docker \
@@ -108,7 +109,7 @@
 
     Run `docker-compose --version` to confirm that `docker-compose` is installed successfully
     
- - ### Install Apache with mod_ssl
+ - #### Install Apache with mod_ssl
 
     ```
     $ sudo yum install httpd
@@ -277,7 +278,7 @@
 
 3. Run `setup_virtual_hosts.sh` for creating virtual host configuration files.
 
-    > `ports_prefix.ini` contains virtual host to underlying service port mappings. Review and modify if necessary. 
+    > `ports_prefix.ini` contains virtual host to underlying service port mappings. Review and modify if necessary.
 
     - The following commands will create and copy virtual host configuration files to `/etc/httpd/conf.d`
 
@@ -319,7 +320,7 @@
 
 ## Services
 
-- ### Setup containers 
+- #### Setup containers 
 
     The `setup_containers.sh` script creates directories for container volume mounts, generates `.evn` files with matching paths from `env.tmpl` files and copies configuration files if necessary (i.e. Vault and Consul). `DEV_ROOT` points at `/var/dev` which is a default root directory for volume mounts and cab be modified if necessary. Check the content of `setup_containers.sh` for more information.
 
@@ -334,7 +335,7 @@
     $ sudo cat $REPO_ROOT/src/git/.env
     ```
 
-- ### Set up services (order matters)
+- #### Set up services (order matters)
 
     1. [Git (Gogs)](/src/git/README.md)
     2. [Key/Secret Vault (Vault)](/src/vault/README.md)
@@ -346,7 +347,7 @@
 
 ## Misc
 
-- ### SMTP relay
+- #### SMTP relay
 
     The majority of the services of the dev environment setup require an SMTP relay for sending email notifications. If your domain name service includes a free email address you may want to use the provider's SMTP server, otherwise, 
     there are a few email services providing free accounts with the limited number of message sent per day/month (at least 100 emails a day).
