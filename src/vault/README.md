@@ -18,7 +18,7 @@ Check [Vault Documentation](https://www.vaultproject.io/docs/) and [Vault](https
     Run `sudo docker ps` to verify if `vault` and `vault-db` containers are up and running. Proceed if no error is detected, otherwise check the container logs for troubleshooting using the following command `sudo docker logs [container name]`.
 
 
-2. <a href="#unseal-vault"></a>Unseal Vault
+2. <a id="unseal-vault"></a>Unseal Vault
 
     - Navigate to vault._yourdomain.com_ to start initial setup. It is recommended to have at least **5** _Key shares_ and **3** _Key threshold_ for the [key rotation](https://www.vaultproject.io/docs/internals/rotation.html). Set the values and click **Initialize**. 
 
@@ -52,7 +52,7 @@ Check [Vault Documentation](https://www.vaultproject.io/docs/) and [Vault](https
 
     - Enable the AppRole authentication method. Navigate to `Access`, then choose the _AppRole_ option from the list and click **Next** to continue. Click `Expand Method` to expand the options section and set _Default Lease TTL_ and  _Max Lease TTL_ to **30 days**. Leave the _Path_ value (expected to be `approle`) click **Enable Method** to finish.
 
-    - <a href="#acl-policy"></a>Create a policy for authenticating with role credentials and accessing secrets. Navigate to `Policies` and click **Create ACL policy**. Set the _Name_ field to `ciagent` and copy-paste the configuration bellow into the _Policy_ field.
+    - <a id="acl-policy"></a>Create a policy for authenticating with role credentials and accessing secrets. Navigate to `Policies` and click **Create ACL policy**. Set the _Name_ field to `ciagent` and copy-paste the configuration bellow into the _Policy_ field.
     
         > `approle` is the alias for the _AppRole_ authentication method enabled earlier. In case a different alias is chosen make sure to correct the `path` value for login policy.
         
