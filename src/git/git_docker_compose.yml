@@ -4,21 +4,20 @@ version: "3.5"
 services:
 
     git-db:
-      image: mysql:latest
+      image: postgres:alpine
       container_name: git-db
       hostname: git-db
       restart: always
       environment:
-        - MYSQL_DATABASE=${GOGS_MYSQL_DATABASE}
-        - MYSQL_ROOT_PASSWORD=${GOGS_MYSQL_ROOT_PASSWORD}
-        - MYSQL_USER=${GOGS_MYSQL_USER}
-        - MYSQL_PASSWORD=${GOGS_MYSQL_USER_PASSWORD}
+        - POSTGRES_DB=${GOGS_POSTGRESQL_DATABASE}
+        - POSTGRES_USER=${GOGS_POSTGRESQL_USER}
+        - POSTGRES_PASSWORD=${GOGS_POSTGRESQL_PASSWORD}
       ports:
-        - ${GOGS_MYSQL_PORT}:3306
+        - ${GOGS_POSTGRESQL_PORT}:5432
       networks:
         - git-network
       volumes:
-        - gogs-mysql-data:/var/lib/mysql
+        - gogs-postgresql-data:/var/lib/postgresql/data
           
     git:
       image: gogs/gogs:latest
@@ -56,5 +55,5 @@ volumes:
     gogs-mysql-data:
       driver_opts:
         type: none
-        device: ${GOGS_MYSQL_DATA}
+        device: ${GOGS_POSTGRESQL_DATA}
         o: bind
