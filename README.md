@@ -1,4 +1,4 @@
-# Shoebox - minimalist dev environment on CentOS 7
+# Shoebox - minimalistic dev environment on CentOS 7
 
 ## Prerequisites
 
