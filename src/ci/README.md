@@ -116,4 +116,4 @@ Check [Drone documentation](https://docs.drone.io/), [Drone Vault plugin](https:
 
       If correct secret values are displayed the cause of the issue is not related to the secrets plugin or Vault configuration, otherwise check `VAULT_TOKEN` by trying to login using its value and confirm that Access Login Policy is configured correctly as described [here](/src/vault/README.md#acl-policy).
 
-    - If secrets fetching is not an issue check if the registry can be accessed by the provided username and password values ([here](/src/registry/README.md#docker-registry-username-and-password)) and the registry virtual host file has been amended as described [here](/src/README.md#modify-registry-vhost-config).
+    - If secrets fetching is not an issue check if the registry can be accessed by the provided username and password values ([here](/src/registry/README.md#docker-registry-username-and-password)) and the registry virtual host file has been amended as described [here](/README.md#modify-registry-vhost-config).
