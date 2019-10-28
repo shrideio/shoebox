@@ -288,5 +288,83 @@ echo
 echo "Completed Drone CI setup."
 echo
 
+# TAIGA
+
+echo "Setting up Taiga..."
+echo "https://taiga.io/"
+echo
+
+TAIGA_ROOT=$DEV_ROOT/TAIGA
+TAIGA_SECRETS=$TAIGA_ROOT/secrets.ini
+TAIGA_DATA=$TAIGA_ROOT/data
+
+TAIGA_DATA_BACK=$TAIGA_DATA/back
+TAIGA_DATA_BACK_MEDIA=$TAIGA_DATA/back_media
+TAIGA_DATA_FRONT=$TAIGA_DATA/front
+TAIGA_DATA_DB=$TAIGA_DATA/db
+TAIGA_DATA_PROXY=$TAIGA_DATA/proxy
+
+TAIGA_POSTGRES_PORT=${TAIGA_PORTS_PREFIX}32
+TAIGA_PROXY_PORT=${TAIGA_PORTS_PREFIX}80
+
+
+mkdir -p $TAIGA_DATA
+mkdir -p $TAIGA_DATA_BACK
+mkdir -p $TAIGA_DATA_BACK_MEDIA
+mkdir -p $TAIGA_DATA_FRONT
+mkdir -p $TAIGA_DATA_DB
+mkdir -p $TAIGA_DATA_PROXY
+
+echo "Created volume mounts for Taiga."
+echo "TAIGA_DATA: $TAIGA_DATA"
+echo "TAIGA_DATA_BACK: $TAIGA_DATA_BACK"
+echo "TAIGA_DATA_BACK_MEDIA: $TAIGA_DATA_BACK_MEDIA"
+echo "TAIGA_DATA_FRONT: $TAIGA_DATA_FRONT"
+echo "TAIGA_DATA_DB: $TAIGA_DATA_DB"
+echo "TAIGA_DATA_PROXY: $TAIGA_DATA_PROXY"
+
+if test ! -f "$TAIGA_SECRETS"; then
+  TAIGA_SECRET=$(openssl rand 16 -hex)
+  TAIGA_POSTGRES_USER=taiga_t0iG022
+  TAIGA_POSTGRES_PASSWORD=$(openssl rand 16 -hex)
+  TAIGA_RABBIT_USER=taiga_r2bB2t
+  TAIGA_RABBIT_PASSWORD=$(openssl rand 16 -hex)
+  echo "TAIGA_SECRET=$TAIGA_SECRET" >> $TAIGA_SECRETS
+  echo "TAIGA_POSTGRES_USER=$TAIGA_POSTGRES_USER" >> $TAIGA_SECRETS
+  echo "TAIGA_POSTGRES_PASSWORD=$TAIGA_POSTGRES_PASSWORD" >> $TAIGA_SECRETS
+  echo "TAIGA_RABBIT_USER=$TAIGA_RABBIT_USER" >> $TAIGA_SECRETS
+  echo "TAIGA_RABBIT_PASSWORD=$TAIGA_RABBIT_PASSWORD" >> $TAIGA_SECRETS
+fi
+
+source $TAIGA_SECRETS
+
+echo "Generated secrets for Taiga."
+echo "Taiga adimistartor user: admin/123123"
+echo "Check '$TAIGA_SECRETS' for more information."
+echo
+
+TAIGA_SRC=$SRC_ROOT/project
+cp $TAIGA_SRC/env.tmpl $TAIGA_SRC/.env
+
+find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@YOUR_DOMAIN|'"$YOUR_DOMAIN"'|g' {} \;
+find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_DATA_BACK_MEDIA|'"$TAIGA_DATA_BACK_MEDIA"'|g' {} \;
+find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_DATA_BACK|'"$TAIGA_DATA_BACK"'|g' {} \;
+find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_DATA_FRONT|'"$TAIGA_DATA_FRONT"'|g' {} \;
+find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_DATA_DB|'"$TAIGA_DATA_DB"'|g' {} \;
+find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_DATA_PROXY|'"$TAIGA_DATA_PROXY"'|g' {} \;
+find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_SECRET|'"$TAIGA_SECRET"'|g' {} \;
+find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_POSTGRES_USER|'"$TAIGA_POSTGRES_USER"'|g' {} \;
+find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_POSTGRES_PASSWORD|'"$TAIGA_POSTGRES_PASSWORD"'|g' {} \;
+find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_RABBIT_USER|'"$TAIGA_RABBIT_USER"'|g' {} \;
+find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_RABBIT_PASSWORD|'"$TAIGA_RABBIT_PASSWORD"'|g' {} \;
+find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_POSTGRES_PORT|'"$TAIGA_POSTGRES_PORT"'|g' {} \;
+find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_PROXY_PORT|'"$TAIGA_PROXY_PORT"'|g' {} \;
+
+echo "Created '.env' file at '$TAIGA_ROOT'."
+echo
+
+echo "Completed Taiga CI setup."
+echo
+
 echo "Completed containers setup."
 echo
