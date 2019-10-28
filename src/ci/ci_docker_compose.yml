@@ -4,19 +4,20 @@ version: "3.5"
 services:
 
     ci-db:
-      image: mysql:latest
+      image: postgres:alpine
       container_name: ci-db
       hostname: ci-db
       restart: always
       environment:
-        - MYSQL_DATABASE=${DRONE_MYSQL_DATABASE}
-        - MYSQL_ROOT_PASSWORD=${DRONE_MYSQL_ROOT_PASSWORD}
+        - POSTGRES_DB=${DRONE_POSTGRESQL_DATABASE}
+        - POSTGRES_USER=${DRONE_POSTGRESQL_USER}
+        - POSTGRES_PASSWORD=${DRONE_POSTGRESQL_PASSWORD}
       ports:
-        - ${DRONE_MYSQL_PORT}:3306
+        - ${DRONE_POSTGRESQL_PORT}:5432
       networks:
         - ci-network
       volumes:
-        - drone-mysql-data:/var/lib/mysql
+        - drone-postgresql-data:/var/lib/postgresql/data
 
     ci:
       image: drone/drone
@@ -33,8 +34,8 @@ services:
         - DRONE_SERVER_PROTO=https
         - DRONE_TLS_AUTOCERT=false
         - DRONE_RUNNER_NETWORKS=ci-network
-        - DRONE_DATABASE_DRIVER=mysql
-        - DRONE_DATABASE_DATASOURCE=root:${DRONE_MYSQL_ROOT_PASSWORD}@tcp(ci-db:3306)/${DRONE_MYSQL_DATABASE}?parseTime=true
+        - DRONE_DATABASE_DRIVER=postgres
+        - DRONE_DATABASE_DATASOURCE=postgres://${DRONE_POSTGRESQL_USER}:${DRONE_POSTGRESQL_PASSWORD}@ci-db:5432/${DRONE_POSTGRESQL_DATABASE}?sslmode=disable
         - DRONE_AGENTS_ENABLED=true
         - DRONE_RPC_SECRET=${DRONE_RPC_SECRET}
       ports:
@@ -90,7 +91,7 @@ networks:
     ci-network:
       name: ci-network
       driver: bridge
-      
+
 
 volumes:
 
@@ -100,8 +101,8 @@ volumes:
         device: ${DRONE_DATA}
         o: bind
 
-    drone-mysql-data:
+    drone-postgresql-data:
       driver_opts:
         type: none
-        device: ${DRONE_MYSQL_DATA}
+        device: ${DRONE_POSTGRESQL_DATA}
         o: bind
