@@ -52,7 +52,7 @@ volumes:
         device: ${GOGS_DATA}
         o: bind
 
-    gogs-mysql-data:
+    gogs-postgresql-data:
       driver_opts:
         type: none
         device: ${GOGS_POSTGRESQL_DATA}
