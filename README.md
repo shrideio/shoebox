@@ -32,9 +32,14 @@
     $ sudo git clone --depth=1 https://github.com/shrideio/shoebox $REPO_ROOT
     ```
 
+    Change the file mode to `execute` for all of the `*.sh` scripts in the source root.
+    ```
+    $ sudo find REPO_ROOT -type f -name "*.sh" -exec chmod +x {} \;
+    ```
+
 - #### Export your domain name as an environment variable
 
-    > Do not forget to replace `yourdomain.com` with the actual domain name
+    > Do not forget to replace `yourdomain.com` with the actual domain name.
 
     ```
     $ export YOUR_DOMAIN=yourdomain.com
@@ -141,9 +146,10 @@
     - On *step 6* **Cloudfalre** is chosen as a DNS provider for the dns challenge. Please consult with the [DNS providers](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438) list supporting *Let's Encrypt* and *Certbot* [DNS Plugins](https://certbot.eff.org/docs/using.html#dns-plugins) integration. 
 
 3. Setup *Cloudflare* credentials
+
     - Create a [Cloudflare account](https://dash.cloudflare.com/sign-up), the basic plan is free of charge, and get the api key
 
-    - Change the nameservers at your domain name provider controil panel to the Cloudflare's name servers
+    - Change the name servers at your domain name provider control panel to the Cloudflare's name servers
 
     - <a name="turn-off-http-proxy"></a>Turn off the HTTP proxy for main and subdomain names. click the cloud icon ![Alt text](/resources/img/http_proxy_on.png?raw=true "HTTP proxy - ON") next to each domain/subdomain name to gray it out ![Alt text](/resources/img/http_proxy_off.png?raw=true "HTTP proxy - OFF").
         > If you forget to disable the http proxy you may receive an obscure error such as `ERR_TOO_MANY_REDIRECTS`
@@ -283,7 +289,6 @@
     - The following commands will create and copy virtual host configuration files to `/etc/httpd/conf.d`
 
         ```
-        $ sudo chmod +x $REPO_ROOT/src/setup_virtual_hosts.sh
         $ sudo $REPO_ROOT/src/setup_virtual_hosts.sh $YOUR_DOMAIN
         ```
 
@@ -326,7 +331,6 @@
 
     Run the following commands to create volume mounts directories
     ```
-    $ sudo chmod +x $REPO_ROOT/src/setup_containers.sh
     $ sudo $REPO_ROOT/src/setup_containers.sh $YOUR_DOMAIN
     ```
 
