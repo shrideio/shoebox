@@ -4,7 +4,7 @@ version: "3.5"
 services:
 
     git-db:
-      image: postgres:alpine
+      image: postgres:12-alpine
       container_name: git-db
       hostname: git-db
       restart: always
@@ -17,7 +17,7 @@ services:
       networks:
         - git-network
       volumes:
-        - gogs-postgresql-data:/var/lib/postgresql/data
+        - git-db-data:/var/lib/postgresql/data
           
     git:
       image: gogs/gogs:latest
@@ -27,7 +27,7 @@ services:
       environment:
         - RUN_CROND=true
       volumes:
-        - gogs-data:/data
+        - git-data:/data
       networks:
         - git-network
       ports:
@@ -46,13 +46,13 @@ networks:
 
 volumes:
 
-    gogs-data:
+    git-data:
       driver_opts:
         type: none
         device: ${GOGS_DATA}
         o: bind
 
-    gogs-postgresql-data:
+    git-db-data:
       driver_opts:
         type: none
         device: ${GOGS_POSTGRESQL_DATA}

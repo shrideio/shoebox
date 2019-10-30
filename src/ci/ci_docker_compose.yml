@@ -4,7 +4,7 @@ version: "3.5"
 services:
 
     ci-db:
-      image: postgres:alpine
+      image: postgres:12-alpine
       container_name: ci-db
       hostname: ci-db
       restart: always
@@ -17,7 +17,7 @@ services:
       networks:
         - ci-network
       volumes:
-        - drone-postgresql-data:/var/lib/postgresql/data
+        - ci-db-data:/var/lib/postgresql/data
 
     ci:
       image: drone/drone
@@ -44,7 +44,7 @@ services:
         - ci-network
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
-        - drone-data:/data
+        - ci-data:/data
       depends_on:
         - ci-db
 
@@ -95,13 +95,13 @@ networks:
 
 volumes:
 
-    drone-data:
+    ci-data:
       driver_opts:
         type: none
         device: ${DRONE_DATA}
         o: bind
 
-    drone-postgresql-data:
+    ci-db-data:
       driver_opts:
         type: none
         device: ${DRONE_POSTGRESQL_DATA}
