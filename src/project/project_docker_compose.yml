@@ -2,8 +2,7 @@ version: '3.5'
 
 services:
 
-  back:
-
+  project-back:
     image: dockertaiga/back
     container_name: project-back
     hostname: project-back
@@ -14,56 +13,57 @@ services:
     networks:
       - project-network
     volumes:
-      - taiga-back-media:/taiga-media
-      - taiga-back-conf:/taiga-conf
+      - project-back-media:/taiga-media
+      - project-back-conf:/taiga-conf
     environment:
       - RABBIT_PORT=5672
       - TAIGA_HOST=${TAIGA_HOST}
       - TAIGA_SECRET=${TAIGA_SECRET}
       - TAIGA_SCHEME=${TAIGA_SCHEME}
-      - POSTGRES_HOST=db
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - RABBIT_HOST=rabbit
-      - RABBIT_USER=${RABBIT_USER}
-      - RABBIT_PASSWORD=${RABBIT_PASSWORD}
-      - RABBIT_VHOST=${RABBIT_VHOST}
-      - STARTUP_TIMEOUT=${STARTUP_TIMEOUT}
+      - POSTGRES_HOST=project-db
+      - POSTGRES_DB=${TAIGA_POSTGRES_DB}
+      - POSTGRES_USER=${TAIGA_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${TAIGA_POSTGRES_PASSWORD}
+      - RABBIT_HOST=project-messaging
+      - RABBIT_USER=${TAIGA_RABBIT_USER}
+      - RABBIT_PASSWORD=${TAIGA_RABBIT_PASSWORD}
+      - RABBIT_VHOST=${TAIGA_RABBIT_VHOST}
+      - STARTUP_TIMEOUT=${TAIGA_STARTUP_TIMEOUT}
 
-  front:
+  project-front:
     image: dockertaiga/front
     container_name: project-front
-    hostname: project-back
+    hostname: project-front
     restart: unless-stopped
     networks:
       - project-network
     volumes:
-      - taiga-front-conf:/taiga-conf
+      - project-front-conf:/taiga-conf
     environment:
       - TAIGA_HOST=${TAIGA_HOST}
       - TAIGA_SCHEME=${TAIGA_SCHEME}
 
-  db:
+  project-db:
     image: postgres:11-alpine
     container_name: project-db
+    hostname: project-db
     restart: unless-stopped
     networks:
       - project-network
     ports:
     - ${TAIGA_POSTGRES_PORT}:5432
     volumes:
-      - taiga-db:/var/lib/postgresql/data
+      - project-posgresql-db:/var/lib/postgresql/data
     environment:
-      - POSTGRES_HOST=db
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - RABBIT_HOST=rabbit
-      - RABBIT_USER=${RABBIT_USER}
-      - RABBIT_PASSWORD=${RABBIT_PASSWORD}
-      - RABBIT_VHOST=${RABBIT_VHOST}
-      - STARTUP_TIMEOUT=${STARTUP_TIMEOUT}
+      - POSTGRES_HOST=project-db
+      - POSTGRES_DB=${TAIGA_POSTGRES_DB}
+      - POSTGRES_USER=${TAIGA_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${TAIGA_POSTGRES_PASSWORD}
+      - RABBIT_HOST=project-messaging
+      - RABBIT_USER=${TAIGA_RABBIT_USER}
+      - RABBIT_PASSWORD=${TAIGA_RABBIT_PASSWORD}
+      - RABBIT_VHOST=${TAIGA_RABBIT_VHOST}
+      - STARTUP_TIMEOUT=${TAIGA_STARTUP_TIMEOUT}
 
   project-messaging:
     image: dockertaiga/rabbit
@@ -73,11 +73,11 @@ services:
     networks:
       - project-network
     environment:
-      - RABBIT_HOST=${TAIGA_RABBIT_HOST}
+      - RABBIT_HOST=project-messaging
       - RABBIT_USER=${TAIGA_RABBIT_USER}
       - RABBIT_PASSWORD=${TAIGA_RABBIT_PASSWORD}
-      - RABBIT_VHOST=project-messaging
-      - STARTUP_TIMEOUT=${STARTUP_TIMEOUT}
+      - RABBIT_VHOST=${TAIGA_RABBIT_VHOST}
+      - STARTUP_TIMEOUT=${TAIGA_STARTUP_TIMEOUT}
 
   project-events:
     image: dockertaiga/events
@@ -89,10 +89,10 @@ services:
     networks:
       - project-network
     environment:
-      - RABBIT_HOST=${TAIGA_RABBIT_HOST}
+      - RABBIT_HOST=project-messaging
       - RABBIT_USER=${TAIGA_RABBIT_USER}
       - RABBIT_PASSWORD=${TAIGA_RABBIT_PASSWORD}
-      - RABBIT_VHOST=project-messaging
+      - RABBIT_VHOST=${TAIGA_RABBIT_VHOST}
       - TAIGA_SECRET=${TAIGA_SECRET}
 
   project-proxy:
@@ -107,48 +107,49 @@ services:
     networks:
       - project-network
     ports:
-      - ${PROJECT_PROXY_PORT}:80
+      - ${TAIGA_PROXY_PORT}:80
     volumes:
-      - taiga-proxy-conf:/taiga-conf
+      - project-proxy-conf:/taiga-conf
     environment:
+      - TAIGA_HOST=${TAIGA_HOST}
       - TAIGA_BACK_HOST=project-back
       - TAIGA_FRONT_HOST=project-front
       - EVENTS_HOST=project-events
-      - ENABLE_SSL=false
+      - ENABLE_SSL=no
 
 
 networks:
 
-    taiga-network:
+    project-network:
       driver: bridge
 
 
 volumes:
-  taiga-back-conf:
+  project-back-conf:
     driver_opts:
       type: none
       device: ${TAIGA_BACK_CONF}
       o: bind
 
-  taiga-back-media:
+  project-back-media:
     driver_opts:
       type: none
-      device: ${STORAGE_TAIGA_BACK_MEDIA}
+      device: ${TAIGA_BACK_MEDIA}
       o: bind
 
-  taiga-front-conf:
+  project-front-conf:
     driver_opts:
       type: none
       device: ${TAIGA_FRONT_CONF}
       o: bind
 
-  taiga-posgresql-db:
+  project-posgresql-db:
     driver_opts:
       type: none
       device: ${TAIGA_POSTGRESQL_DATA}
       o: bind
 
-  taiga-proxy-conf:
+  project-proxy-conf:
     driver_opts:
       type: none
       device: ${TAIGA_PROXY_CONF}
