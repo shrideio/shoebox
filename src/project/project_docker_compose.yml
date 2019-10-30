@@ -4,16 +4,17 @@ services:
 
   back:
     image: dockertaiga/back
-    container_name: taiga-back
+    container_name: project-back
+    hostname: project-back
     restart: unless-stopped
     depends_on:
-      - db
-      - events
+      - project-db
+      - project-events
     networks:
-      - taiga-network
+      - project-network
     volumes:
-      - ${STORAGE_TAIGA-BACK_MEDIA}:/taiga-media
-      - ${STORAGE_TAIGA_BACK}:/taiga-conf
+      - taiga-back-media:/taiga-media
+      - taiga-back-conf:/taiga-conf
     environment:
       - RABBIT_PORT=5672
       - TAIGA_HOST=${TAIGA_HOST}
@@ -31,22 +32,23 @@ services:
 
   front:
     image: dockertaiga/front
-    container_name: taiga-front
+    container_name: project-front
+    hostname: project-back
     restart: unless-stopped
     networks:
-      - taiga-network
+      - project-network
     volumes:
-      - ${STORAGE_TAIGA_FRONT}:/taiga-conf
+      - taiga-front-conf:/taiga-conf
     environment:
       - TAIGA_HOST=${TAIGA_HOST}
       - TAIGA_SCHEME=${TAIGA_SCHEME}
 
   db:
     image: postgres:11-alpine
-    container_name: taiga-db
+    container_name: project-db
     restart: unless-stopped
     networks:
-      - taiga-network
+      - project-network
     ports:
     - ${TAIGA_POSTGRES_PORT}:5432
     volumes:
@@ -62,94 +64,90 @@ services:
       - RABBIT_VHOST=${RABBIT_VHOST}
       - STARTUP_TIMEOUT=${STARTUP_TIMEOUT}
 
-  rabbit:
+  project-messaging:
     image: dockertaiga/rabbit
-    container_name: taiga-rabbit
+    container_name: project-messaging
+    hostname: project-messaging
     restart: unless-stopped
     networks:
-      - taiga-network
+      - project-network
     environment:
-      - RABBIT_HOST=${RABBIT_HOST}
-      - RABBIT_USER=${POSTGRES_DB}
-      - RABBIT_PASSWORD=${RABBIT_PASSWORD}
-      - RABBIT_VHOST=${RABBIT_VHOST}
+      - RABBIT_HOST=${TAIGA_RABBIT_HOST}
+      - RABBIT_USER=${TAIGA_RABBIT_USER}
+      - RABBIT_PASSWORD=${TAIGA_RABBIT_PASSWORD}
+      - RABBIT_VHOST=project-messaging
       - STARTUP_TIMEOUT=${STARTUP_TIMEOUT}
 
-  events:
+  project-events:
     image: dockertaiga/events
-    container_name: taiga-events
+    container_name: project-events
+    hostname: project-events
     restart: unless-stopped
     depends_on:
-      - rabbit
+      - project-messaging
     networks:
-      - taiga-network
+      - project-network
     environment:
-      - RABBIT_HOST=${RABBIT_HOST}
-      - RABBIT_USER=${POSTGRES_DB}
-      - RABBIT_PASSWORD=${RABBIT_PASSWORD}
-      - RABBIT_VHOST=${RABBIT_VHOST}
+      - RABBIT_HOST=${TAIGA_RABBIT_HOST}
+      - RABBIT_USER=${TAIGA_RABBIT_USER}
+      - RABBIT_PASSWORD=${TAIGA_RABBIT_PASSWORD}
+      - RABBIT_VHOST=project-messaging
       - TAIGA_SECRET=${TAIGA_SECRET}
 
-  proxy:
+  project-proxy:
     image: dockertaiga/proxy
-    container_name: taiga-proxy
+    container_name: project-proxy
+    hostname: project-proxy
     restart: unless-stopped
     depends_on:
-      - back
-      - front
-      - events
+      - project-back
+      - project-front
+      - project-events
     networks:
-      - taiga-network
+      - project-network
     ports:
-      - 10780:80
+      - ${PROJECT_PROXY_PORT}:80
     volumes:
-      #- ./cert:/taiga-cert
-      - ${STORAGE_TAIGA_PROXY}:/taiga-conf
+      - taiga-proxy-conf:/taiga-conf
     environment:
-      - TAIGA_BACK_HOST=${TAIGA_HOST}
-      - TAIGA_FRONT_HOST=${TAIGA_HOST}
-      - EVENTS_HOST=${TAIGA_HOST}
-      - ENABLE_SSL=${ENABLE_SSL}
-      - CERT_NAME=${CERT_NAME}
-      - CERT_KEY=${CERT_KEY}
-	  
+      - TAIGA_BACK_HOST=project-back
+      - TAIGA_FRONT_HOST=project-front
+      - EVENTS_HOST=project-events
+      - ENABLE_SSL=false
+
+
 networks:
   taiga-network:
     driver: bridge
 
+
 volumes:
-  taiga-back:
+  taiga-back-conf:
     driver_opts:
       type: none
-      device: ${STORAGE_TAIGA_BACK}
+      device: ${TAIGA_BACK_CONF}
       o: bind
 
   taiga-back-media:
     driver_opts:
       type: none
-      device: ${STORAGE_TAIGA-BACK_MEDIA}
+      device: ${STORAGE_TAIGA_BACK_MEDIA}
       o: bind
 
-  taiga-front:
+  taiga-front-conf:
     driver_opts:
       type: none
-      device: ${STORAGE_TAIGA_FRONT}
+      device: ${TAIGA_FRONT_CONF}
       o: bind
 
-  taiga-db:
+  taiga-posgresql-db:
     driver_opts:
       type: none
-      device: ${STORAGE_TAIGA_DB}
+      device: ${TAIGA_POSTGRESQL_DATA}
       o: bind
 
-  taiga-proxy:
+  taiga-proxy-conf:
     driver_opts:
       type: none
-      device: ${STORAGE_TAIGA_PROXY}
+      device: ${TAIGA_PROXY_CONF}
       o: bind
-
-
-	  
-	  
-	  
-
