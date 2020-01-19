@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-BOX_ROOT=$1
+SHOEBOX_ROOT=$1
 YOUR_DOMAIN=$2
 PORTS_PREFIX=$3
 
@@ -14,7 +14,7 @@ echo "https://hub.docker.com/_/registry"
 echo "https://joxit.dev/docker-registry-ui"
 echo
 
-REGISTRY_ROOT=$BOX_ROOT/registry
+REGISTRY_ROOT=$SHOEBOX_ROOT/registry
 REGISTRY_SECRETS=$REGISTRY_ROOT/secrets.ini
 REGISTRY_DATA=$REGISTRY_ROOT/data
 REGISTRY_CONFIG=$REGISTRY_ROOT/config

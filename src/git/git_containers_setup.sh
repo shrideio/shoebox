@@ -3,7 +3,7 @@ set -euo pipefail
 
 # GOGS
 
-BOX_ROOT=$1
+SHOEBOX_ROOT=$1
 YOUR_DOMAIN=$2
 PORTS_PREFIX=$3
 
@@ -13,7 +13,7 @@ echo "Setting up Gogs..."
 echo "https://gogs.io/"
 echo
 
-GOGS_ROOT=$BOX_ROOT/gogs
+GOGS_ROOT=$SHOEBOX_ROOT/gogs
 GOGS_SECRETS=$GOGS_ROOT/secrets.ini
 GOGS_DATA=$GOGS_ROOT/data
 GOGS_POSTGRESQL_DATA=$GOGS_ROOT/postgresql/data

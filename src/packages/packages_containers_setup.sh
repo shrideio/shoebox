@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-BOX_ROOT=$1
+SHOEBOX_ROOT=$1
 YOUR_DOMAIN=$2
 PORTS_PREFIX=$3
 
@@ -13,7 +13,7 @@ echo "Setting up ProGet..."
 echo "https://inedo.com/proget"
 echo
 
-PROGET_ROOT=$BOX_ROOT/proget
+PROGET_ROOT=$SHOEBOX_ROOT/proget
 PROGET_SECRETS=$PROGET_ROOT/secrets.ini
 PROGET_PACKAGES=$PROGET_ROOT/packages
 PROGET_EXTENSIONS=$PROGET_ROOT/extensions

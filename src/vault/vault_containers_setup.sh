@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-BOX_ROOT=$1
+SHOEBOX_ROOT=$1
 YOUR_DOMAIN=$2
 PORTS_PREFIX=$3
 
@@ -13,7 +13,7 @@ echo "Setting up Vault..."
 echo "https://www.vaultproject.io/"
 echo
 
-VAULT_ROOT=$BOX_ROOT/vault
+VAULT_ROOT=$SHOEBOX_ROOT/vault
 VAULT_CONFIG=$VAULT_ROOT/config
 VAULT_LOGS=$VAULT_ROOT/logs
 VAULT_CONSUL_CONFIG=$VAULT_ROOT/consul/config

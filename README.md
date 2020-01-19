@@ -46,6 +46,12 @@
     ```
     Run `echo $YOUR_DOMAIN` to verify if the variable is set.
 
+- #### Export setup root path
+    ```
+    $ export SHOEBOX_ROOT=/var/shoebox
+    ```
+    > This variable is used in the containers setup and volumes backup scripts
+
 ## Infrastructure
 
 - #### Disable SELinux
@@ -325,21 +331,35 @@
 
 ## Services
 
-- #### Setup containers 
+- #### Setup prerequisites
 
-    The `setup_containers.sh` script creates directories for container volume mounts, generates `.evn` files with matching paths from `env.tmpl` files and copies configuration files if necessary (i.e. Vault and Consul). `DEV_ROOT` points at `/var/dev` which is a default root directory for volume mounts and cab be modified if necessary. Check the content of `setup_containers.sh` for more information.
+    The `setup_containers.sh` script creates directories for container volume mounts, generates `.evn` files with matching paths from `env.tmpl` files and copies configuration files if necessary (i.e. Vault and Consul). The setup script requires two input parameters, first for the setup root directory and second for a domain.
 
-    Run the following commands to create volume mounts directories
+    The setup is split into a batch of scripts per service where each script can be run separately if necessary. The input parameters are same for all of the scripts and match the following pattern.
+
     ```
-    $ sudo $REPO_ROOT/src/setup_containers.sh $YOUR_DOMAIN
+    sudo $REPO_ROOT/src/[service]_containers_setup.sh [shoebox-root] [domain-name] [port-prefix]
     ```
 
-    Run `sudo ls -R /var/dev` for verifying the created directories structure. Verify if the placeholders were replaced on a sample file (i.e. git/.env).
+    - [git_containers_setup.sh](/src/git/git_containers_setup.sh) - Git
+    - [vault_containers_setup.sh](/src/vault/vault_containers_setup.sh) - key/secret vault 
+    - [packages_containers_setup.sh](/src/packages/packages_containers_setup.sh) - package management system
+    - [registry_containers_setup.sh](/src/registry/registry_containers_setup.sh) - Docker registry
+    - [ci_containers_setup.sh](/src/ci/ci_containers_setup.sh) - continuous integration/build server
+    - [project_containers_setup.sh](/src/project/project_containers_setup.sh) - project management tool
+
+    Review the scripts and modify if necessary before running the full setup script as follows.
+    
+    ```
+    $ sudo $REPO_ROOT/src/setup_containers.sh $SHOEBOX_ROOT $YOUR_DOMAIN
+    ```
+
+    Run `sudo ls -R $SHOEBOX_ROOT` for verifying the created directories structure. Verify if placeholders have been replaced on a sample file (i.e. git/.env).
     ```
     $ sudo cat $REPO_ROOT/src/git/.env
     ```
 
-- #### Set up services (order matters)
+- #### Setup services (order matters)
 
     1. [Git (Gogs)](/src/git/README.md)
     2. [Key/Secret Vault (Vault)](/src/vault/README.md)
@@ -360,3 +380,6 @@
     - [Mailgun](https://www.mailgun.com/pricing-options) (10,000/month)
     - [Mailjet](https://www.mailjet.com/pricing/) (6,000/month, 200/day)
     - [SendGrid](https://sendgrid.com/marketing/sendgrid-services-cro/#pricing-app) (100/day)
+
+- #### Backup
+    :see_no_evil: :hear_no_evil: :speak_no_evil:

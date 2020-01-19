@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-BOX_ROOT=$1
+SHOEBOX_ROOT=$1
 YOUR_DOMAIN=$2
 PORTS_PREFIX=$3
 
@@ -13,7 +13,7 @@ echo "Setting up Drone..."
 echo "https://drone.io/"
 echo
 
-DRONE_ROOT=$DEV_ROOT/drone
+DRONE_ROOT=$SHOEBOX_ROOT/drone
 DRONE_DATA=$DRONE_ROOT/data
 DRONE_SECRETS=$DRONE_ROOT/secrets.ini
 DRONE_POSTGRESQL_DATA=$DRONE_ROOT/postgresql/data
