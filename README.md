@@ -34,7 +34,7 @@
 
     Change the file mode to `execute` for all of the `*.sh` scripts in the source root.
     ```
-    $ sudo find REPO_ROOT -type f -name "*.sh" -exec chmod +x {} \;
+    $ sudo find $REPO_ROOT -type f -name "*.sh" -exec chmod +x {} \;
     ```
 
 - #### Export your domain name as an environment variable
