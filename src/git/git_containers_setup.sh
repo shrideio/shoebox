@@ -51,17 +51,17 @@ echo "GOGS_POSTGRESQL_PASSWORD: $GOGS_POSTGRESQL_PASSWORD"
 echo
 
 cp $GIT_SRC/env.tmpl $GIT_SRC/.env
-find $GIT_SRC -type f -name '.env' -exec sed -i -e 's|@GOGS_DATA|'"$GOGS_DATA"'|g' {} \;
-find $GIT_SRC -type f -name '.env' -exec sed -i -e 's|@GOGS_POSTGRESQL_DATA|'"$GOGS_POSTGRESQL_DATA"'|g' {} \;
-find $GIT_SRC -type f -name '.env' -exec sed -i -e 's|@GOGS_SSH_PORT|'"$GOGS_SSH_PORT"'|g' {} \;
-find $GIT_SRC -type f -name '.env' -exec sed -i -e 's|@GOGS_HTTP_PORT|'"$GOGS_HTTP_PORT"'|g' {} \;
-find $GIT_SRC -type f -name '.env' -exec sed -i -e 's|@GOGS_POSTGRESQL_PORT|'"$GOGS_POSTGRESQL_PORT"'|g' {} \;
-find $GIT_SRC -type f -name '.env' -exec sed -i -e 's|@GOGS_POSTGRESQL_DATABASE|'"$GOGS_POSTGRESQL_DATABASE"'|g' {} \;
-find $GIT_SRC -type f -name '.env' -exec sed -i -e 's|@GOGS_POSTGRESQL_USER|'"$GOGS_POSTGRESQL_USER"'|g' {} \;
-find $GIT_SRC -type f -name '.env' -exec sed -i -e 's|@GOGS_POSTGRESQL_PASSWORD|'"$GOGS_POSTGRESQL_PASSWORD"'|g' {} \;
+GOGS_ENV=$GIT_SRC/.env
+sed -i 's|@GOGS_DATA$|'"$GOGS_DATA"'|g' $GOGS_ENV
+sed -i 's|@GOGS_POSTGRESQL_DATA$|'"$GOGS_POSTGRESQL_DATA"'|g' $GOGS_ENV
+sed -i 's|@GOGS_SSH_PORT$|'"$GOGS_SSH_PORT"'|g' $GOGS_ENV
+sed -i 's|@GOGS_HTTP_PORT$|'"$GOGS_HTTP_PORT"'|g' $GOGS_ENV
+sed -i 's|@GOGS_POSTGRESQL_PORT$|'"$GOGS_POSTGRESQL_PORT"'|g' $GOGS_ENV
+sed -i 's|@GOGS_POSTGRESQL_DATABASE$|'"$GOGS_POSTGRESQL_DATABASE"'|g' $GOGS_ENV
+sed -i 's|@GOGS_POSTGRESQL_USER$|'"$GOGS_POSTGRESQL_USER"'|g' $GOGS_ENV
+sed -i 's|@GOGS_POSTGRESQL_PASSWORD$|'"$GOGS_POSTGRESQL_PASSWORD"'|g' $GOGS_ENV
 
 echo "Created .env file at '$GIT_SRC'."
 echo
-
 echo "Completed Gogs setup."
 echo
