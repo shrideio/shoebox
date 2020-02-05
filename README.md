@@ -32,14 +32,25 @@
     $ sudo git clone --depth=1 https://github.com/shrideio/shoebox $REPO_ROOT
     ```
 
+    Change the file mode to `execute` for all of the `*.sh` scripts in the source root.
+    ```
+    $ sudo find $REPO_ROOT -type f -name "*.sh" -exec chmod +x {} \;
+    ```
+
 - #### Export your domain name as an environment variable
 
-    > Do not forget to replace `yourdomain.com` with the actual domain name
+    > Do not forget to replace `yourdomain.com` with the actual domain name.
 
     ```
     $ export YOUR_DOMAIN=yourdomain.com
     ```
     Run `echo $YOUR_DOMAIN` to verify if the variable is set.
+
+- #### Export setup root path
+    ```
+    $ export SHOEBOX_ROOT=/var/shoebox
+    ```
+    > This variable is used in the containers setup and volumes backup scripts
 
 ## Infrastructure
 
@@ -141,9 +152,10 @@
     - On *step 6* **Cloudfalre** is chosen as a DNS provider for the dns challenge. Please consult with the [DNS providers](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438) list supporting *Let's Encrypt* and *Certbot* [DNS Plugins](https://certbot.eff.org/docs/using.html#dns-plugins) integration. 
 
 3. Setup *Cloudflare* credentials
+
     - Create a [Cloudflare account](https://dash.cloudflare.com/sign-up), the basic plan is free of charge, and get the api key
 
-    - Change the nameservers at your domain name provider controil panel to the Cloudflare's name servers
+    - Change the name servers at your domain name provider control panel to the Cloudflare's name servers
 
     - <a name="turn-off-http-proxy"></a>Turn off the HTTP proxy for main and subdomain names. click the cloud icon ![Alt text](/resources/img/http_proxy_on.png?raw=true "HTTP proxy - ON") next to each domain/subdomain name to gray it out ![Alt text](/resources/img/http_proxy_off.png?raw=true "HTTP proxy - OFF").
         > If you forget to disable the http proxy you may receive an obscure error such as `ERR_TOO_MANY_REDIRECTS`
@@ -283,7 +295,6 @@
     - The following commands will create and copy virtual host configuration files to `/etc/httpd/conf.d`
 
         ```
-        $ sudo chmod +x $REPO_ROOT/src/setup_virtual_hosts.sh
         $ sudo $REPO_ROOT/src/setup_virtual_hosts.sh $YOUR_DOMAIN
         ```
 
@@ -320,22 +331,35 @@
 
 ## Services
 
-- #### Setup containers 
+- #### Setup prerequisites
 
-    The `setup_containers.sh` script creates directories for container volume mounts, generates `.evn` files with matching paths from `env.tmpl` files and copies configuration files if necessary (i.e. Vault and Consul). `DEV_ROOT` points at `/var/dev` which is a default root directory for volume mounts and cab be modified if necessary. Check the content of `setup_containers.sh` for more information.
+    The `setup_containers.sh` script creates directories for container volume mounts, generates `.evn` files with matching paths from `env.tmpl` files and copies configuration files if necessary (i.e. Vault and Consul). The setup script requires two input parameters, first for the setup root directory and second for a domain.
 
-    Run the following commands to create volume mounts directories
+    The setup is split into a batch of scripts per service where each script can be run separately if necessary. The input parameters are same for all of the scripts and match the following pattern.
+
     ```
-    $ sudo chmod +x $REPO_ROOT/src/setup_containers.sh
-    $ sudo $REPO_ROOT/src/setup_containers.sh $YOUR_DOMAIN
+    sudo $REPO_ROOT/src/[service]_containers_setup.sh [shoebox-root] [domain-name] [port-prefix]
     ```
 
-    Run `sudo ls -R /var/dev` for verifying the created directories structure. Verify if the placeholders were replaced on a sample file (i.e. git/.env).
+    - [git_containers_setup.sh](/src/git/git_containers_setup.sh) - Git
+    - [vault_containers_setup.sh](/src/vault/vault_containers_setup.sh) - key/secret vault 
+    - [packages_containers_setup.sh](/src/packages/packages_containers_setup.sh) - package management system
+    - [registry_containers_setup.sh](/src/registry/registry_containers_setup.sh) - Docker registry
+    - [ci_containers_setup.sh](/src/ci/ci_containers_setup.sh) - continuous integration/build server
+    - [project_containers_setup.sh](/src/project/project_containers_setup.sh) - project management tool
+
+    Review the scripts and modify if necessary before running the full setup script as follows.
+    
+    ```
+    $ sudo $REPO_ROOT/src/setup_containers.sh $SHOEBOX_ROOT $YOUR_DOMAIN
+    ```
+
+    Run `sudo ls -R $SHOEBOX_ROOT` for verifying the created directories structure. Verify if placeholders have been replaced on a sample file (i.e. git/.env).
     ```
     $ sudo cat $REPO_ROOT/src/git/.env
     ```
 
-- #### Set up services (order matters)
+- #### Setup services (order matters)
 
     1. [Git (Gogs)](/src/git/README.md)
     2. [Key/Secret Vault (Vault)](/src/vault/README.md)
@@ -356,3 +380,6 @@
     - [Mailgun](https://www.mailgun.com/pricing-options) (10,000/month)
     - [Mailjet](https://www.mailjet.com/pricing/) (6,000/month, 200/day)
     - [SendGrid](https://sendgrid.com/marketing/sendgrid-services-cro/#pricing-app) (100/day)
+
+- #### Backup
+    :see_no_evil: :hear_no_evil: :speak_no_evil:

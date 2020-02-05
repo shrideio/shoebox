@@ -9,8 +9,8 @@ services:
     hostname: vault-db
     restart: always
     volumes:
-      - vault-consul-config:/consul/config
-      - vault-consul-data:/consul/data
+      - vault-db-config:/consul/config
+      - vault-db-data:/consul/data
     ports:
       - ${CONSUL_PORT}:8500
     networks:
@@ -23,7 +23,7 @@ services:
     hostname: vault
     restart: always
     depends_on:
-      - git-db
+      - vault-db
     volumes:
       - vault-config:/vault/config
       - vault-logs:/vault/file
@@ -62,13 +62,13 @@ volumes:
         device: ${VAULT_LOGS}
         o: bind
 
-    vault-consul-config:
+    vault-db-config:
       driver_opts:
         type: none
         device: ${VAULT_CONSUL_CONFIG}
         o: bind
 
-    vault-consul-data:
+    vault-db-data:
       driver_opts:
         type: none
         device: ${VAULT_CONSUL_DATA}

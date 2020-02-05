@@ -18,7 +18,7 @@ Check [Drone documentation](https://docs.drone.io/), [Drone Vault plugin](https:
       $ sudo cat $REPO_ROOT/src/ci/.env
       ```
 
-2. Stage Drone CI (ci), Drone build agent (ci-agent), Drone Vault plugin (ci-secret) and MySQL (ci-db) containers.
+2. Stage Drone CI (ci), Drone build agent (ci-agent), Drone Vault plugin (ci-secret) and PostgreSQL (ci-db) containers.
 
     The following commands will navigate to the directory containing `ci_docker_compose.yml` and run the containers in the background.
 
