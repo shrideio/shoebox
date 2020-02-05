@@ -35,7 +35,7 @@ source $REGISTRY_SECRETS
 
 htpasswd -bBc -C 10 $REGISTRY_SRC/htpasswd $REGISTRY_USER $REGISTRY_USER_PASSWORD
 cp $REGISTRY_SRC/config.tmpl $REGISTRY_SRC/config.yml
-sed -i's|@YOUR_DOMAIN$|'"$YOUR_DOMAIN"'|g' $REGISTRY_ENV
+sed -i' s|@YOUR_DOMAIN$|'"$YOUR_DOMAIN"'|g' $REGISTRY_SRC/config.yml
 
 cp $REGISTRY_SRC/config.yml $REGISTRY_CONFIG/config.yml
 cp $REGISTRY_SRC/htpasswd $REGISTRY_CONFIG/htpasswd
