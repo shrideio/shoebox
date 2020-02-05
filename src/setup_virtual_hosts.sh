@@ -24,7 +24,7 @@ declare -A SERVICES=(
   [registry]=${REGISTRY_PORTS_PREFIX}50
   [vault]=${VAULT_PORTS_PREFIX}80
   [ci]=${CI_PORTS_PREFIX}80
-  [project]=${PROJETC_PORTS_PREFIX}80
+  [project]=${PROJECT_PORTS_PREFIX}80
 )
 
 for SRV in "${!SERVICES[@]}"
