@@ -29,13 +29,18 @@ mkdir -p $VAULT_CONSUL_DATA
 cp $VAULT_SRC/config/vault/config.hcl $VAULT_CONFIG/config.hcl
 cp $VAULT_SRC/config/consul/config.json $VAULT_CONSUL_CONFIG/config.json
 
-cp $VAULT_SRC/env.tmpl $VAULT_SRC/.env
-find $VAULT_SRC -type f -name '.env' -exec sed -i -e 's|@VAULT_CONFIG|'"$VAULT_CONFIG"'|g' {} \;
-find $VAULT_SRC -type f -name '.env' -exec sed -i -e 's|@VAULT_LOGS|'"$VAULT_LOGS"'|g' {} \;
-find $VAULT_SRC -type f -name '.env' -exec sed -i -e 's|@VAULT_CONSUL_CONFIG|'"$VAULT_CONSUL_CONFIG"'|g' {} \;
-find $VAULT_SRC -type f -name '.env' -exec sed -i -e 's|@VAULT_CONSUL_DATA|'"$VAULT_CONSUL_DATA"'|g' {} \;
-find $VAULT_SRC -type f -name '.env' -exec sed -i -e 's|@VAULT_PORT|'"$VAULT_PORT"'|g' {} \;
-find $VAULT_SRC -type f -name '.env' -exec sed -i -e 's|@CONSUL_PORT|'"$CONSUL_PORT"'|g' {} \;
+VAULT_ENV=$VAULT_SRC/.env
+cp $VAULT_SRC/env.tmpl $VAULT_ENV
+
+sed -i 's|@VAULT_CONFIG$ |'"$VAULT_CONFIG"'|g' $VAULT_ENV
+sed -i 's|@VAULT_LOGS$ |'"$VAULT_LOGS"'|g' $VAULT_ENV
+sed -i 's|@VAULT_CONSUL_CONFIG$ |'"$VAULT_CONSUL_CONFIG"'|g' $VAULT_ENV
+sed -i 's|@VAULT_CONSUL_DATA$ |'"$VAULT_CONSUL_DATA"'|g' $VAULT_ENV
+sed -i 's|@VAULT_PORT$ |'"$VAULT_PORT"'|g' $VAULT_ENV
+sed -i 's|@CONSUL_PORT$ |'"$CONSUL_PORT"'|g' $VAULT_ENV
+
+echo "Created '.env' file at '$VAULT_SRC'."
+echo
 
 echo "Vault volume mounts:"
 echo "VAULT_CONFIG: $VAULT_CONFIG"
@@ -50,9 +55,6 @@ echo
 echo "Configuration files:"
 echo "Vault: '$VAULT_CONFIG/config.hcl'."
 echo "Consul: '$VAULT_CONSUL_CONFIG/config.json'."
-echo
-
-echo "Created '.env' file at '$VAULT_SRC'."
 echo
 
 echo "Completed Vault setup."

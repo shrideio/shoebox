@@ -38,6 +38,22 @@ fi
 
 source $PROGET_SECRETS
 
+PACKAGES_ENV=$PACKAGES_SRC/.env
+cp $PACKAGES_SRC/env.tmpl $PACKAGES_ENV
+
+sed -i 's|@PROGET_PACKAGES$|'"$PROGET_PACKAGES"'|g' $PACKAGES_ENV
+sed -i 's|@PROGET_EXTENSIONS$|'"$PROGET_EXTENSIONS"'|g' $PACKAGES_ENV
+sed -i 's|@PROGET_CONFIG$|'"$PROGET_CONFIG"'|g' $PACKAGES_ENV
+sed -i 's|@PROGET_POSTGRESQL_DATA$|'"$PROGET_POSTGRESQL_DATA"'|g' $PACKAGES_ENV
+sed -i 's|@PROGET_HTTP_PORT$|'"$PROGET_HTTP_PORT"'|g' $PACKAGES_ENV
+sed -i 's|@PROGET_POSTGRESQL_PORT$|'"$PROGET_POSTGRESQL_PORT"'|g' $PACKAGES_ENV
+sed -i 's|@PROGET_POSTGRESQL_DATABASE$|'"$PROGET_POSTGRESQL_DATABASE"'|g' $PACKAGES_ENV
+sed -i 's|@PROGET_POSTGRESQL_USER$|'"$PROGET_POSTGRESQL_USER"'|g' $PACKAGES_ENV
+sed -i 's|@PROGET_POSTGRESQL_PASSWORD$|'"$PROGET_POSTGRESQL_PASSWORD"'|g' $PACKAGES_ENV
+
+echo "Created .env file at '$PACKAGES_SRC'."
+echo
+
 echo "ProGet volume mounts:"
 echo "PROGET_PACKAGES: $PROGET_PACKAGES"
 echo "PROGET_EXTENSIONS: $PROGET_EXTENSIONS"
@@ -52,20 +68,6 @@ echo "ProGet secrets:"
 echo "PROGET_POSTGRESQL_DATABASE: $PROGET_POSTGRESQL_DATABASE"
 echo "PROGET_POSTGRESQL_USER: $PROGET_POSTGRESQL_USER"
 echo "PROGET_POSTGRESQL_PASSWORD: $PROGET_POSTGRESQL_PASSWORD"
-echo
-
-cp $PACKAGES_SRC/env.tmpl $PACKAGES_SRC/.env
-find $PACKAGES_SRC -type f -name '.env' -exec sed -i -e 's|@PROGET_PACKAGES|'"$PROGET_PACKAGES"'|g' {} \;
-find $PACKAGES_SRC -type f -name '.env' -exec sed -i -e 's|@PROGET_EXTENSIONS|'"$PROGET_EXTENSIONS"'|g' {} \;
-find $PACKAGES_SRC -type f -name '.env' -exec sed -i -e 's|@PROGET_CONFIG|'"$PROGET_CONFIG"'|g' {} \;
-find $PACKAGES_SRC -type f -name '.env' -exec sed -i -e 's|@PROGET_POSTGRESQL_DATA|'"$PROGET_POSTGRESQL_DATA"'|g' {} \;
-find $PACKAGES_SRC -type f -name '.env' -exec sed -i -e 's|@PROGET_HTTP_PORT|'"$PROGET_HTTP_PORT"'|g' {} \;
-find $PACKAGES_SRC -type f -name '.env' -exec sed -i -e 's|@PROGET_POSTGRESQL_PORT|'"$PROGET_POSTGRESQL_PORT"'|g' {} \;
-find $PACKAGES_SRC -type f -name '.env' -exec sed -i -e 's|@PROGET_POSTGRESQL_DATABASE|'"$PROGET_POSTGRESQL_DATABASE"'|g' {} \;
-find $PACKAGES_SRC -type f -name '.env' -exec sed -i -e 's|@PROGET_POSTGRESQL_USER|'"$PROGET_POSTGRESQL_USER"'|g' {} \;
-find $PACKAGES_SRC -type f -name '.env' -exec sed -i -e 's|@PROGET_POSTGRESQL_PASSWORD|'"$PROGET_POSTGRESQL_PASSWORD"'|g' {} \;
-
-echo "Created .env file at '$PACKAGES_SRC'."
 echo
 
 echo "Completed ProGet setup."

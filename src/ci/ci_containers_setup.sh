@@ -49,22 +49,27 @@ fi
 
 source $DRONE_SECRETS
 
-cp $CI_SRC/env.tmpl $CI_SRC/.env
-find $CI_SRC -type f -name '.env' -exec sed -i -e 's|@YOUR_DOMAIN|'"$YOUR_DOMAIN"'|g' {} \;
-find $CI_SRC -type f -name '.env' -exec sed -i -e 's|@DRONE_ADMIN_USERNAME|'"$DRONE_ADMIN_USERNAME"'|g' {} \;
-find $CI_SRC -type f -name '.env' -exec sed -i -e 's|@DRONE_ADMIN_TOKEN|'"$DRONE_ADMIN_TOKEN"'|g' {} \;
-find $CI_SRC -type f -name '.env' -exec sed -i -e 's|@DRONE_GIT_USERNAME|'"$DRONE_GIT_USERNAME"'|g' {} \;
-find $CI_SRC -type f -name '.env' -exec sed -i -e 's|@DRONE_GIT_PASSWORD|'"$DRONE_GIT_PASSWORD"'|g' {} \;
-find $CI_SRC -type f -name '.env' -exec sed -i -e 's|@DRONE_SECRET|'"$DRONE_SECRET"'|g' {} \;
-find $CI_SRC -type f -name '.env' -exec sed -i -e 's|@DRONE_RPC_SECRET|'"$DRONE_RPC_SECRET"'|g' {} \;
-find $CI_SRC -type f -name '.env' -exec sed -i -e 's|@DRONE_DATA|'"$DRONE_DATA"'|g' {} \;
-find $CI_SRC -type f -name '.env' -exec sed -i -e 's|@DRONE_POSTGRESQL_DATA|'"$DRONE_POSTGRESQL_DATA"'|g' {} \;
-find $CI_SRC -type f -name '.env' -exec sed -i -e 's|@DRONE_HTTP_PORT|'"$DRONE_HTTP_PORT"'|g' {} \;
-find $CI_SRC -type f -name '.env' -exec sed -i -e 's|@DRONE_VAULT_PLUGIN_PORT|'"$DRONE_VAULT_PLUGIN_PORT"'|g' {} \;
-find $CI_SRC -type f -name '.env' -exec sed -i -e 's|@DRONE_POSTGRESQL_PORT|'"$DRONE_POSTGRESQL_PORT"'|g' {} \;
-find $CI_SRC -type f -name '.env' -exec sed -i -e 's|@DRONE_POSTGRESQL_DATABASE|'"$DRONE_POSTGRESQL_DATABASE"'|g' {} \;
-find $CI_SRC -type f -name '.env' -exec sed -i -e 's|@DRONE_POSTGRESQL_USER|'"$DRONE_POSTGRESQL_USER"'|g' {} \;
-find $CI_SRC -type f -name '.env' -exec sed -i -e 's|@DRONE_POSTGRESQL_PASSWORD|'"$DRONE_POSTGRESQL_PASSWORD"'|g' {} \;
+CI_ENV=$CI_SRC/.env
+cp $CI_SRC/env.tmpl $CI_ENV
+
+sed -i 's|@YOUR_DOMAIN$|'"$YOUR_DOMAIN"'|g' $CI_ENV
+sed -i 's|@DRONE_ADMIN_USERNAME$|'"$DRONE_ADMIN_USERNAME"'|g' $CI_ENV
+sed -i 's|@DRONE_ADMIN_TOKEN$|'"$DRONE_ADMIN_TOKEN"'|g' $CI_ENV
+sed -i 's|@DRONE_GIT_USERNAME$|'"$DRONE_GIT_USERNAME"'|g' $CI_ENV
+sed -i 's|@DRONE_GIT_PASSWORD$|'"$DRONE_GIT_PASSWORD"'|g' $CI_ENV
+sed -i 's|@DRONE_SECRET$|'"$DRONE_SECRET"'|g' $CI_ENV
+sed -i 's|@DRONE_RPC_SECRET$|'"$DRONE_RPC_SECRET"'|g' $CI_ENV
+sed -i 's|@DRONE_DATA$|'"$DRONE_DATA"'|g' $CI_ENV
+sed -i 's|@DRONE_POSTGRESQL_DATA$|'"$DRONE_POSTGRESQL_DATA"'|g' $CI_ENV
+sed -i 's|@DRONE_HTTP_PORT$|'"$DRONE_HTTP_PORT"'|g' $CI_ENV
+sed -i 's|@DRONE_VAULT_PLUGIN_PORT$|'"$DRONE_VAULT_PLUGIN_PORT"'|g' $CI_ENV
+sed -i 's|@DRONE_POSTGRESQL_PORT$|'"$DRONE_POSTGRESQL_PORT"'|g' $CI_ENV
+sed -i 's|@DRONE_POSTGRESQL_DATABASE$|'"$DRONE_POSTGRESQL_DATABASE"'|g' $CI_ENV
+sed -i 's|@DRONE_POSTGRESQL_USER$|'"$DRONE_POSTGRESQL_USER"'|g' $CI_ENV
+sed -i 's|@DRONE_POSTGRESQL_PASSWORD$|'"$DRONE_POSTGRESQL_PASSWORD"'|g' $CI_ENV
+
+echo "Created '.env' file at '$CI_SRC'."
+echo
 
 echo "Drone volume mounts:"
 echo "DRONE_DATA: $DRONE_DATA"
@@ -83,9 +88,6 @@ echo "DRONE_RPC_SECRET: '$DRONE_RPC_SECRET'"
 echo "DRONE_POSTGRESQL_DATABASE: $DRONE_POSTGRESQL_DATABASE"
 echo "DRONE_POSTGRESQL_USER: $DRONE_POSTGRESQL_USER"
 echo "DRONE_POSTGRESQL_PASSWORD: $DRONE_POSTGRESQL_PASSWORD"
-echo
-
-echo "Created '.env' file at '$CI_SRC'."
 echo
 
 echo "Completed Drone CI setup."
