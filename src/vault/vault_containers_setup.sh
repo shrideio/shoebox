@@ -32,12 +32,12 @@ cp $VAULT_SRC/config/consul/config.json $VAULT_CONSUL_CONFIG/config.json
 VAULT_ENV=$VAULT_SRC/.env
 cp $VAULT_SRC/env.tmpl $VAULT_ENV
 
-sed -i 's|@VAULT_CONFIG$ |'"$VAULT_CONFIG"'|g' $VAULT_ENV
-sed -i 's|@VAULT_LOGS$ |'"$VAULT_LOGS"'|g' $VAULT_ENV
-sed -i 's|@VAULT_CONSUL_CONFIG$ |'"$VAULT_CONSUL_CONFIG"'|g' $VAULT_ENV
-sed -i 's|@VAULT_CONSUL_DATA$ |'"$VAULT_CONSUL_DATA"'|g' $VAULT_ENV
-sed -i 's|@VAULT_PORT$ |'"$VAULT_PORT"'|g' $VAULT_ENV
-sed -i 's|@CONSUL_PORT$ |'"$CONSUL_PORT"'|g' $VAULT_ENV
+sed -i 's|@VAULT_CONFIG$|'"$VAULT_CONFIG"'|g' $VAULT_ENV
+sed -i 's|@VAULT_LOGS$|'"$VAULT_LOGS"'|g' $VAULT_ENV
+sed -i 's|@VAULT_CONSUL_CONFIG$|'"$VAULT_CONSUL_CONFIG"'|g' $VAULT_ENV
+sed -i 's|@VAULT_CONSUL_DATA$|'"$VAULT_CONSUL_DATA"'|g' $VAULT_ENV
+sed -i 's|@VAULT_PORT$|'"$VAULT_PORT"'|g' $VAULT_ENV
+sed -i 's|@CONSUL_PORT$|'"$CONSUL_PORT"'|g' $VAULT_ENV
 
 echo "Created '.env' file at '$VAULT_SRC'."
 echo
