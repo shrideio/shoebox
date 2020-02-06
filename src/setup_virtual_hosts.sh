@@ -33,11 +33,11 @@ do
   SVC_PORT=${SERVICES[$SRV]}
 
   cp $VHOST_CONF_TMPL $CONF_FILE
- 
-  sed -i 's|@YOUR_DOMAIN$|'"$YOUR_DOMAIN"'|g' $CONF_FILE
-  sed -i 's|@SUBDOMAIN$|'"$SRV"'|g' $CONF_FILE
-  sed -i 's|@SVC_PORT$|'"$SVC_PORT"'|g' $CONF_FILE
-  
+
+  sed -i 's|@YOUR_DOMAIN|'"$YOUR_DOMAIN"'|g' $CONF_FILE
+  sed -i 's|@SUBDOMAIN|'"$SRV"'|g' $CONF_FILE
+  sed -i 's|@SVC_PORT|'"$SVC_PORT"'|g' $CONF_FILE
+
   echo "Created a virtual host configuration file for '$SRV.$YOUR_DOMAIN' with a revers proxy at 'http://localhost:$SVC_PORT'."
 done;
 
