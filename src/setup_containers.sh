@@ -21,7 +21,7 @@ bash $SRC_ROOT/vault/vault_containers_setup.sh "$SHOEBOX_ROOT" "$YOUR_DOMAIN" "$
 bash $SRC_ROOT/packages/packages_containers_setup.sh "$SHOEBOX_ROOT" "$YOUR_DOMAIN" "$PACKAGES_PORTS_PREFIX"
 bash $SRC_ROOT/registry/registry_containers_setup.sh "$SHOEBOX_ROOT" "$YOUR_DOMAIN" "$REGISTRY_PORTS_PREFIX"
 bash $SRC_ROOT/ci/ci_containers_setup.sh "$SHOEBOX_ROOT" "$YOUR_DOMAIN" "$CI_PORTS_PREFIX"
-bash $SRC_ROOT/project/project_containers_setup.sh "$SHOEBOX_ROOT" "$YOUR_DOMAIN" "$CI_PORTS_PREFIX"
+bash $SRC_ROOT/project/project_containers_setup.sh "$SHOEBOX_ROOT" "$YOUR_DOMAIN" "$PROJECT_PORTS_PREFIX"
 
 echo "Completed containers setup."
 echo
