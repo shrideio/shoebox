@@ -2,62 +2,35 @@
 
 ## Prerequisites
 
-- #### Install Nano (simple console-based text editor)
-    
+### Tools
+
+> If a text editor and Git client are already installed you may skip the next section.
+
+- #### Nano
+    Simple console-based text editor.
     ```
     $ sudo yum install nano
     ```
-    
+
     Shortcuts:
     - Save changes: `ctrl` + `x`, `y`
     - Discard changes: `ctrl` + `x`, `n`
     - Cancel: `ctrl` + `x`, `ctrl` + `c`
 
- - #### Install git and clone this repository
+- #### Git client
 
     ```
     $ sudo yum install git
+    $ sudo git --version # to confirm `git` is successfully installed
     ```
+
+### Infrastructure
+
+- ### Disable SELinux
     
-    Run `git --version` to confirm that `git` was successfully installed.
+    > It is highly recommended to disable SELinux for avoiding issues when setting up the infrastructure and Docker containers.
 
-    Export the path of the directory where the repository will be cloned as an environment variable (`/tmp/shoebox` is used as default, can be changed if necessary).
-    ```
-    export REPO_ROOT=/tmp/shoebox
-    ```
-    Run `echo $REPO_ROOT` to verify if the variable is set.
-
-    Clone this repository.
-    ```
-    $ sudo git clone --depth=1 https://github.com/shrideio/shoebox $REPO_ROOT
-    ```
-
-    Change the file mode to `execute` for all of the `*.sh` scripts in the source root.
-    ```
-    $ sudo find $REPO_ROOT -type f -name "*.sh" -exec chmod +x {} \;
-    ```
-
-- #### Export your domain name as an environment variable
-
-    > Do not forget to replace `yourdomain.com` with the actual domain name.
-
-    ```
-    $ export YOUR_DOMAIN=yourdomain.com
-    ```
-    Run `echo $YOUR_DOMAIN` to verify if the variable is set.
-
-- #### Export setup root path
-    ```
-    $ export SHOEBOX_ROOT=/var/shoebox
-    ```
-    > This variable is used in the containers setup and volumes backup scripts
-
-## Infrastructure
-
-- #### Disable SELinux
-
-    Check SELinux status. It is recommended to disable SELinux for the ease of use of Docker, and the ease of setting up other auxiliary services
-
+    Check SELinux status.
     ```
     $ sestatus
 
@@ -68,19 +41,24 @@
     Current mode:                   enforcing
     ```
 
-    Disable SELinux permanently by modifying `/etc/selinux/config`
+    If SELinux is `enabled` follow the instruction to disable it, otherwise continue to the next section.
     
+    Edit the SELinux configuration file.
+    ```
+    $ sudo nano /etc/selinux/config
+    ```
+    
+    Set the `SELINUX` setting to `disabled` and save the file.
     ```
     SELINUX=disabled
     ```
 
-    Save the file and reboot
-
+    Reboot.
     ```
     $ sudo shutdown -r now
     ```
 
-    Check SELinux status
+    Check SELinux status, it is expect to be `disabled`.
 
     ```
     $ sestatus
@@ -89,38 +67,7 @@
     SELinux status:                 disabled
     ```
 
-- #### Install Docker and Docker Compose
-
-    ```
-    $ sudo yum remove docker \
-                      docker-client \
-                      docker-client-latest \
-                      docker-common \
-                      docker-latest \
-                      docker-latest-logrotate \
-                      docker-logrotate \
-                      docker-engine
-    
-    $ sudo yum install -y yum-utils \
-      device-mapper-persistent-data \
-      lvm2
-
-    $ sudo yum-config-manager \
-        --add-repo \
-        https://download.docker.com/linux/centos/docker-ce.repo
-
-    $ sudo yum install docker-ce docker-ce-cli containerd.io
-    $ sudo systemctl enable docker
-    $ sudo systemctl start docker
-    
-    $ sudo yum install docker-compose
-    ````
-
-    Run `sudo docker run hello-world` to verify if  Docker CE is installed successfully.
-
-    Run `docker-compose --version` to confirm that `docker-compose` is installed successfully
-    
- - #### Install Apache with mod_ssl
+- ### Apache with mod_ssl
 
     ```
     $ sudo yum install httpd
@@ -131,7 +78,7 @@
     $ sudo systemctl status httpd
     ```
 
-    If the service was started successfully the output will display `active (running)` message, otherwise check `error_log` and `access_log` at `/var/log/httpd` for troubleshooting.
+    If Apache has started successfully the output will contain `active (running)`, otherwise check `error_log` and `access_log` at `/var/log/httpd` for troubleshooting.
 
     Enable `http` and `https` traffic on the firewall.
     ```    
@@ -140,7 +87,65 @@
     $ sudo firewall-cmd --reload
     ```
 
-    Browse to your domain name (assuming the DNS record has already been set up, if the setup is successful the apache default page should be displayed in the browser.
+    If the dns record exists browse to your domain name, otherwise use teh server ip address. If the setup is successful the browser will display the apache welcome page.
+
+- #### Docker and Docker Compose
+
+    ```
+    $ sudo yum remove docker \
+                    docker-client \
+                    docker-client-latest \
+                    docker-common \
+                    docker-latest \
+                    docker-latest-logrotate \
+                    docker-logrotate \
+                    docker-engine
+    
+    $ sudo yum install -y yum-utils \
+    device-mapper-persistent-data \
+    lvm2
+
+    $ sudo yum-config-manager \
+        --add-repo \
+        https://download.docker.com/linux/centos/docker-ce.repo
+
+    $ sudo yum install docker-ce docker-ce-cli containerd.io
+    $ sudo systemctl enable docker
+    $ sudo systemctl start docker
+    $ sudo docker run hello-world # to verify if  Docker CE is successfully installed
+
+    $ sudo yum install docker-compose
+    $ sudo docker-compose --version # to confirm that `docker-compose` is successfully installed
+    ```
+
+### Environment variables
+
+> Review and modify if necessary.
+
+- ### REPO_ROOT 
+    The destination path for cloning this repository.
+
+    ```
+    $ export REPO_ROOT=/tmp/shoebox
+    $ echo $REPO_ROOT
+    ```
+
+- ### YOUR_DOMAIN 
+    The domain name for the server with hosted services.
+
+    ```
+    $ export YOUR_DOMAIN=yourdomain.com
+    $ echo $YOUR_DOMAIN
+    ```
+    > Do not forget to replace `yourdomain.com` with the actual domain name.
+
+- ### SHOEBOX_ROOT 
+    The root directory where the data and configuration files of the services are stored.
+
+    ```
+    $ export REPO_ROOT=/var/shoebox
+    $ echo $REPO_ROOT
+    ```
 
 ## TSL (SSL certificate)
 
