@@ -7,7 +7,9 @@
 > If a text editor and Git client are already installed you may skip the next section.
 
 - #### Nano
+
     Simple console-based text editor.
+
     ```
     $ sudo yum install nano
     ```
@@ -123,6 +125,7 @@
 > Review and modify if necessary.
 
 - ### REPO_ROOT 
+    
     The destination path for cloning this repository.
 
     ```
@@ -131,13 +134,16 @@
     ```
 
 - ### YOUR_DOMAIN 
+    
     The domain name for the server with hosted services.
-
+    
+    > Do not forget to replace `yourdomain.com` with the actual domain name.
+    
     ```
     $ export YOUR_DOMAIN=yourdomain.com
     $ echo $YOUR_DOMAIN
     ```
-    > Do not forget to replace `yourdomain.com` with the actual domain name.
+    
 
 - ### SHOEBOX_ROOT 
     The root directory where the data and configuration files of the services are stored.
