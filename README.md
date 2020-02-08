@@ -4,7 +4,7 @@
 
 ### Tools
 
-> If a text editor and Git client are already installed you may skip the next section.
+> If a text editor and Git client are already installed you may skip to the next section.
 
 - #### Nano
 
