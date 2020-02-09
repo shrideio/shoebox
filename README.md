@@ -28,7 +28,7 @@
 
 ### Infrastructure
 
-- ### Disable SELinux
+- #### Disable SELinux
     
     > It is highly recommended to disable SELinux for avoiding issues when setting up the infrastructure and Docker containers.
 
@@ -69,7 +69,7 @@
     SELinux status:                 disabled
     ```
 
-- ### Install Apache with mod_ssl
+- #### Install Apache with mod_ssl
 
     ```
     $ sudo yum install httpd
