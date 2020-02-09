@@ -45,17 +45,17 @@
 
     If SELinux is `enabled` follow the instruction to disable it, otherwise continue to the next section.
     
-    Edit the SELinux configuration file.
+    Edit the SELinux configuration file
     ```
     $ sudo nano /etc/selinux/config
     ```
     
-    Set the `SELINUX` setting to `disabled` and save the file.
+    Set the `SELINUX` setting to `disabled` and save the file
     ```
     SELINUX=disabled
     ```
 
-    Reboot.
+    Reboot
     ```
     $ sudo shutdown -r now
     ```
@@ -69,7 +69,7 @@
     SELinux status:                 disabled
     ```
 
-- ### Apache with mod_ssl
+- ### Install Apache with mod_ssl
 
     ```
     $ sudo yum install httpd
@@ -91,7 +91,7 @@
 
     If the dns record exists browse to your domain name, otherwise use teh server ip address. If the setup is successful the browser will display the apache welcome page.
 
-- #### Docker and Docker Compose
+- #### Install Docker and Docker Compose
 
     ```
     $ sudo yum remove docker \
@@ -124,8 +124,8 @@
 
 > Review and modify if necessary.
 
-- ### REPO_ROOT 
-    
+- #### REPO_ROOT 
+
     The destination path for cloning this repository.
 
     ```
@@ -133,19 +133,19 @@
     $ echo $REPO_ROOT
     ```
 
-- ### YOUR_DOMAIN 
-    
+- #### YOUR_DOMAIN 
+
     The domain name for the server with hosted services.
-    
+
     > Do not forget to replace `yourdomain.com` with the actual domain name.
-    
+
     ```
     $ export YOUR_DOMAIN=yourdomain.com
     $ echo $YOUR_DOMAIN
     ```
-    
 
-- ### SHOEBOX_ROOT 
+- #### SHOEBOX_ROOT 
+
     The root directory where the data and configuration files of the services are stored.
 
     ```
@@ -153,18 +153,25 @@
     $ echo $REPO_ROOT
     ```
 
-## TSL (SSL certificate)
+## Setup TSL (SSL)
 
 1. Browse to [Apache on CentOS/RHEL 7](https://certbot.eff.org/lets-encrypt/centosrhel7-apache)
 
 2. Follow the *wildcard* instruction up to the *step 6* inclusively.
-    - On *step 2* running `yum install epel-release` should be just enough
-    - On *step 3* [EC2 region](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html). You may want to add more than one region in case one of the servers is down.
-    - On *step 6* **Cloudfalre** is chosen as a DNS provider for the dns challenge. Please consult with the [DNS providers](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438) list supporting *Let's Encrypt* and *Certbot* [DNS Plugins](https://certbot.eff.org/docs/using.html#dns-plugins) integration. 
+
+    - On *Step 2* - running the following command is sufficient.
+
+        ```
+        $ sudo yum install epel-release
+        ``` 
+
+    - On *Step 3* - [EC2 region](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html). You may want to add more than one region in case one of the servers is down.
+
+    - On *Step 6* - [Cloudflare](https://www.cloudflare.com/) is a DNS provider for the dns challenge. Please check the [DNS providers](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438) list supporting *Let's Encrypt* and *Certbot* [DNS Plugins](https://certbot.eff.org/docs/using.html#dns-plugins) integrations.
 
 3. Setup *Cloudflare* credentials
 
-    - Create a [Cloudflare account](https://dash.cloudflare.com/sign-up), the basic plan is free of charge, and get the api key
+    - Create a [Cloudflare account](https://dash.cloudflare.com/sign-up) and receive an API key. The basic plan is free of charge, 
 
     - Change the name servers at your domain name provider control panel to the Cloudflare's name servers
 
@@ -226,7 +233,7 @@
         $ sudo nano /etc/httpd/conf/httpd.conf
         ```
 
-        Copy-paste the following lines of configuration to the end of file and save changes.
+        Copy-paste the following lines of configuration to the end of the file and save changes.
 
         ```
         # Enable https traffic on port 443
@@ -248,28 +255,34 @@
 7. Create a unified configuration file for enabling ssl on virtual hosts
 
     - Check if `options-ssl-apache.conf` was successfully created. This file is required for enabling ssl on virtual hosts and referenced by the virtual host configuration files
+
         ```
         $ sudo ls /etc/letsencrypt
         ```
+
         The output should contain the file name
 
     - Append the file with certificate references
+
         ```
         $ sudo nano /etc/letsencrypt/options-ssl-apache.conf
         ```
 
-    - Copy-paste to the end of the file and save changes
+    - Copy-paste the following fragment to the end of the file and save changes.
+
         ```
         # SSL certificate files references
-        SSLCertificateFile /etc/letsencrypt/live/yourdomain.com/cert.pem
-        SSLCertificateKeyFile /etc/letsencrypt/live/yourdomain.com/privkey.pem
-        SSLCertificateChainFile /etc/letsencrypt/live/yourdomain.com/chain.pem
+        SSLCertificateFile /etc/letsencrypt/live/@YOUR_DOMAIN/cert.pem
+        SSLCertificateKeyFile /etc/letsencrypt/live/@YOUR_DOMAIN/privkey.pem
+        SSLCertificateChainFile /etc/letsencrypt/live/@YOUR_DOMAIN/chain.pem
         ```
 
-    - Replace `yourdomain.com` with the actual domain name in `letsencrypt.conf`
+    - Replace the placeholder with the actual domain name in `letsencrypt.conf`
+
         ```
-        $ sudo sed -i -e 's|yourdomain.com|'"$YOUR_DOMAIN"'|g' /etc/letsencrypt/options-ssl-apache.conf
+        $ sudo sed -i 's|@YOUR_DOMAIN|'"$YOUR_DOMAIN"'|g' /etc/letsencrypt/options-ssl-apache.conf
         ```
+
         Verify the result
         ```
         $ sudo cat /etc/letsencrypt/options-ssl-apache.conf
@@ -280,10 +293,10 @@
 1. Configure subdomain records.
 
     - Create _CNAME_ aliases (bolded) matching the following names
-        - **git**.yourdomain.com (git server)
+        - **git**.yourdomain.com (Git server)
         - **registry**.yourdomain.com (Docker registry)
         - **registryui**.yourdomain.com (Docker registry ui)
-        - **packages**.yourdomain.com (package registry)
+        - **packages**.yourdomain.com (packages registry)
         - **vault**.yourdomain.com (secret/key vault server)
         - **ci**.yourdomain.com (continues integration/build server)
         - **project**.yourdomain.com (project management tool)
@@ -297,7 +310,7 @@
     $ echo $REPO_ROOT
     ```
 
-    if absent check the [Prerequisites](#Prerequisites) section.
+    if absent check the [Environment variables](#Environment-variables) section.
 
 3. Run `setup_virtual_hosts.sh` for creating virtual host configuration files.
 
@@ -379,18 +392,17 @@
     5. [Continuous Integration (Drone)](/src/ci/README.md)
     6. [Project Management (Taiga)](/src/project/README.md)
 
-
 ## Misc
 
-- #### SMTP relay
+### SMTP relay
 
-    The majority of the services of the dev environment setup require an SMTP relay for sending email notifications. If your domain name service includes a free email address you may want to use the provider's SMTP server, otherwise, 
-    there are a few email services providing free accounts with the limited number of message sent per day/month (at least 100 emails a day).
+A few services require an SMTP relay for sending email notifications. If your domain name service includes a free email address you may want to use the provider's SMTP server, otherwise, there are a few free emailing services with the limited number of message sent per day/month (at least 100 emails a day).
 
-    - [SendPulse](https://sendpulse.com/prices/smtp) (12,000/month)
-    - [Mailgun](https://www.mailgun.com/pricing-options) (10,000/month)
-    - [Mailjet](https://www.mailjet.com/pricing/) (6,000/month, 200/day)
-    - [SendGrid](https://sendgrid.com/marketing/sendgrid-services-cro/#pricing-app) (100/day)
+- [SendPulse](https://sendpulse.com/prices/smtp) (12,000/month)
+- [Mailgun](https://www.mailgun.com/pricing-options) (10,000/month)
+- [Mailjet](https://www.mailjet.com/pricing/) (6,000/month, 200/day)
+- [SendGrid](https://sendgrid.com/marketing/sendgrid-services-cro/#pricing-app) (100/day)
 
-- #### Backup
-    :see_no_evil: :hear_no_evil: :speak_no_evil:
+### Backup
+
+:see_no_evil: :hear_no_evil: :speak_no_evil:
