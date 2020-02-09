@@ -1,0 +1,13 @@
+FROM alpine:latest AS build
+WORKDIR /build
+COPY release/. ./release
+
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-alpine AS runtime
+WORKDIR /app
+COPY --from=build /build/release ./
+
+ARG HELLO_WORLD
+ENV HELLO_WORLD=${HELLO_WORLD}
+
+EXPOSE 80
+ENTRYPOINT ["dotnet", "ci.build.sample.dll"]

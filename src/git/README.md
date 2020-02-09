@@ -2,7 +2,7 @@
 Check [Gogs Documentation](https://gogs.io/docs) and  [Gogs on Docker Hub](https://hub.docker.com/r/gogs/gogs/) for more information.
 > Run `echo $REPO_ROOT` to verify if the environment variable is set before continuing.
 
-1. Stage Gogs (git) and MySQL (git-db) containers.
+1. Stage Gogs (git) and PostgreSQL (git-db) containers.
 
     The following commands will navigate to the directory containing `git_docker_compose.yml` and run the containers in the background.
 
@@ -25,11 +25,11 @@ Check [Gogs Documentation](https://gogs.io/docs) and  [Gogs on Docker Hub](https
 
       | Database Settings |                                                                                           |
       | :---------------- | :---------------------------------------------------------------------------------------- |
-      | Database Type     | **MySQL**                                                                                 |
-      | Host              | _services:git-db:hostname_ from `git_docker_compose.yml`, leave the number port unchanged |
-      | User              | _GOGS_MYSQL_USER_ from `.env`                                                             |
-      | Password          | _GOGS_MYSQL_USER_PASSWORD_ from `.env`                                                    |
-      | Database Name     | _GOGS_MYSQL_DATABASE_ from `.env`                                                         |
+      | Database Type     | **PostgreSQL**                                                                            |
+      | Host              | _services:git-db:hostname_ from `git_docker_compose.yml`, leave the port number unchanged |
+      | User              | _GOGS_POSTGRESQL_USER_ from `.env`                                                        |
+      | Password          | _GOGS_POSTGRESQL_PASSWORD_ from `.env`                                                    |
+      | Database Name     | _GOGS_POSTGRESQL_DATABASE_ from `.env`                                                    |
       
       | Application General Settings |                            |
       | :--------------------------- | :--------------------------|
@@ -51,7 +51,7 @@ Check [Gogs Documentation](https://gogs.io/docs) and  [Gogs on Docker Hub](https
       | Username                                 | i.e. gitadmin                        |
       | Admin Email                              | i.e. git@yourdomain.com              |
 
-3. Press **Install Gogs**. If Gogs is installed successfuly it will create an `app.ini` configuration file at `$GOGS_ROOT/data/gogs/conf` (see `setup_volume_mounts.sh` for the `$GOGS_ROOT` value). Check [Googs Configuration Cheat Sheet](https://gogs.io/docs/advanced/configuration_cheat_sheet) for post installation configuration.
+3. Press **Install Gogs**. If Gogs is installed successfully it will create an `app.ini` configuration file at `$GOGS_ROOT/data/gogs/conf` (see `setup_volume_mounts.sh` for the `$GOGS_ROOT` value). Check [Googs Configuration Cheat Sheet](https://gogs.io/docs/advanced/configuration_cheat_sheet) for post installation configuration.
 
     > Do not forget to restart the `git` container after modifying `app.ini`, otherwise new configuration settings will not be applied.
 

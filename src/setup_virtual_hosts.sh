@@ -1,11 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 
-export REPO_ROOT=$1
-export YOUR_DOMAIN=$2
+YOUR_DOMAIN=$1
+SRC_ROOT=$(dirname "$0")
 
 HTTPD_CONFD=/etc/httpd/conf.d
-HTTPD_SRC=$REPO_ROOT/src/httpd
+HTTPD_SRC=$SRC_ROOT/httpd
 HTTPD_SRC_CONFD=$HTTPD_SRC/confg.d
 VHOST_CONF_TMPL=$HTTPD_SRC/ssl.conf.tmpl
 
@@ -15,7 +15,7 @@ echo
 
 mkdir -p $HTTPD_SRC_CONFD
 
-source ports_prefix.ini
+source $SRC_ROOT/ports_prefix.ini
 
 declare -A SERVICES=(
   [git]=${GIT_PORTS_PREFIX}80
@@ -24,7 +24,7 @@ declare -A SERVICES=(
   [registry]=${REGISTRY_PORTS_PREFIX}50
   [vault]=${VAULT_PORTS_PREFIX}80
   [ci]=${CI_PORTS_PREFIX}80
-  [project]=${PROJETC_PORTS_PREFIX}80
+  [project]=${PROJECT_PORTS_PREFIX}80
 )
 
 for SRV in "${!SERVICES[@]}"
@@ -33,11 +33,11 @@ do
   SVC_PORT=${SERVICES[$SRV]}
 
   cp $VHOST_CONF_TMPL $CONF_FILE
- 
-  sed -i -e 's|@YOUR_DOMAIN|'"$YOUR_DOMAIN"'|g' $CONF_FILE
-  sed -i -e 's|@SUBDOMAIN|'"$SRV"'|g' $CONF_FILE
-  sed -i -e 's|@SVC_PORT|'"$SVC_PORT"'|g' $CONF_FILE
-  
+
+  sed -i 's|@YOUR_DOMAIN|'"$YOUR_DOMAIN"'|g' $CONF_FILE
+  sed -i 's|@SUBDOMAIN|'"$SRV"'|g' $CONF_FILE
+  sed -i 's|@SVC_PORT|'"$SVC_PORT"'|g' $CONF_FILE
+
   echo "Created a virtual host configuration file for '$SRV.$YOUR_DOMAIN' with a revers proxy at 'http://localhost:$SVC_PORT'."
 done;
 

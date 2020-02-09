@@ -1,41 +1,89 @@
 kind: pipeline
+type: docker
 name: build
 
 steps:
 
-- name: restore
-  image: mcr.microsoft.com/dotnet/core/sdk
+- name: build
+  image: mcr.microsoft.com/dotnet/core/sdk:2.2
   pull: always
   volumes:
   - name: nuget
     path: /root/.nuget
   commands:
-    - "for file in $(find . -name '*.fsproj'); do dotnet restore $file --verbosity normal; done"
+  - dotnet build src/**/*.fsproj --verbosity normal --configuration Release
+  - dotnet build tests/**/*.fsproj --verbosity normal --configuration Release
   when:
     event:
     - push
     - pull_request
     - tag
 
-- name: build
-  image: mcr.microsoft.com/dotnet/core/sdk
-  pull: always
-  volumes:
-  - name: nuget
-    path: /root/.nuget
-  commands:
-    - dotnet build src/**/*.fsproj --no-restore --verbosity normal
-    - dotnet build tests/**/*.fsproj --no-restore --verbosity normal
-
 - name: test
-  image: mcr.microsoft.com/dotnet/core/sdk
+  image: mcr.microsoft.com/dotnet/core/sdk:2.2
   pull: always
   volumes:
   - name: nuget
     path: /root/.nuget
   commands:
-    - dotnet test tests/**/*.fsproj --no-build --no-restore --verbosity normal
+  - dotnet test tests/**/*.fsproj --no-build --no-restore --verbosity normal --configuration Release
+
+- name: publish
+  image: mcr.microsoft.com/dotnet/core/sdk:2.2
+  pull: always
+  volumes:
+  - name: nuget
+    path: /root/.nuget
+  - name: release
+    path: /drone/src/release
+  commands:
+  - dotnet publish src/ci.build.sample --no-build --no-restore --verbosity normal --configuration Release --output=/drone/src/release
+
+- name: containerize
+  image: plugins/docker
+  pull: always
+  volumes:
+  - name: release
+    path: /drone/src/release
+  environment:
+    HELLO_WORLD:
+      from_secret: hello_world
+  settings:
+    registry: registry.@YOUR_DOMAIN
+    repo: registry.@YOUR_DOMAIN/ci.test/ci.build.sample
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    build_args_from_env:
+      - HELLO_WORLD
+    dockerfile: Dockerfile.publish
+    auto_tag: true
 
 volumes:
 - name: nuget
   temp: {}
+
+- name: release
+  temp: {}
+
+---
+kind: secret
+name: docker_password
+get:
+  path: secrets/data/ci.docker
+  name: docker_password
+
+---
+kind: secret
+name: docker_username
+get:
+  path: secrets/data/ci.docker
+  name: docker_username
+
+---
+kind: secret
+name: hello_world
+get:
+  path: secrets/data/ci.build.sample
+  name: hello_world
