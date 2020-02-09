@@ -144,7 +144,7 @@
     $ echo $YOUR_DOMAIN
     ```
 
-- #### SHOEBOX_ROOT 
+- #### SHOEBOX_ROOT
 
     The root directory where the data and configuration files of the services are stored.
 
@@ -152,6 +152,7 @@
     $ export REPO_ROOT=/var/shoebox
     $ echo $REPO_ROOT
     ```
+
 
 ## Setup TSL (SSL)
 
