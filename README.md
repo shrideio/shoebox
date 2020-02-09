@@ -153,8 +153,64 @@
     $ echo $REPO_ROOT
     ```
 
+## Network
 
-## Setup TSL (SSL)
+### Setup Cloudflare credentials
+
+1. Create a [Cloudflare account](https://dash.cloudflare.com/sign-up), The basic plan is free of charge. Add your domain name as a website and complete the verification process for proving the ownership.
+
+2. Change the name servers at the control panel of your domain name provider to the Cloudflare's name servers. To get the name servers navigate to `DNS -> Cloudflare nameservers`. Depending on the TTL set in the domain name provider control panel it may take some time for the change to take effect, keep `ping`ing the domain name periodically.
+
+3. <a name="turn-off-http-proxy"></a> :warning: Turn off the HTTP proxy for main and subdomain names. click the cloud icon ![Alt text](/resources/img/http_proxy_on.png?raw=true "HTTP proxy - ON") next to each domain/subdomain name to gray it out ![Alt text](/resources/img/http_proxy_off.png?raw=true "HTTP proxy - OFF").
+
+    > If you forget to disable the http proxy you may receive an obscure error such as `ERR_TOO_MANY_REDIRECTS`.
+
+4. Create an ini file for the Cloudflare DNS API client,
+
+    ```
+    $ sudo mkdir -p /etc/letsencrypt/renewal/dns
+    $ sudo nano /etc/letsencrypt/renewal/dns/cloudflare.ini
+    ```
+
+    and copy-paste the following fragment.
+
+    ```
+    # Cloudflare API credentials used by Certbot
+    dns_cloudflare_email = @CLOUDFLARE_EMAIL
+    dns_cloudflare_api_key = @CLOUDFLARE_API_KEY
+    ```
+
+5. Replace the placeholders with matching values.
+
+    - [cloudflare_email] - the email used for creating the Cloudflare account
+    - [cloudflare_api_key] - Login to [Cloudflare](https://dash.cloudflare.com/login), click on your domain name and then browse to `Overview -> Get your API key -> API Tokens -> Global API Key [View]` to get the API key.
+
+    ```
+    $ sudo sed -i 's|@CLOUDFLARE_EMAIL|'[cloudflare_email]'|g' /etc/letsencrypt/renewal/dns/cloudflare.ini
+    $ sudo sed -i 's|@CLOUDFLARE_API_KEY|'[cloudflare_api_key]'|g' /etc/letsencrypt/renewal/dns/cloudflare.ini
+    ```
+
+    Run `$ sudo cat /etc/letsencrypt/renewal/dns/cloudflare.ini` to verify the result.
+
+### Create subdomain records
+
+1. Login to [Cloudflare](https://dash.cloudflare.com/login), click on your domain name and then navigate to `DNS`. Click the `+Add record` button to open the record input form.
+
+2. Create _CNAME_ aliases (bolded) matching the following names
+
+    - **git**.yourdomain.com (Git server)
+    - **registry**.yourdomain.com (Docker registry)
+    - **registryui**.yourdomain.com (Docker registry ui)
+    - **packages**.yourdomain.com (packages registry)
+    - **vault**.yourdomain.com (secret/key vault server)
+    - **ci**.yourdomain.com (continues integration/build server)
+    - **project**.yourdomain.com (project management tool)
+
+    > Do not forget to disable the http proxy for all of the subdomains as it is described [here](#turn-off-http-proxy)
+
+    Depending on the TTL it may take some time for the change to take effect, kep `ping`ing the subdomains periodically to verify the result.
+
+### Setup TSL (SSL)
 
 1. Browse to [Apache on CentOS/RHEL 7](https://certbot.eff.org/lets-encrypt/centosrhel7-apache)
 
@@ -170,31 +226,8 @@
 
     - On *Step 6* - [Cloudflare](https://www.cloudflare.com/) is a DNS provider for the dns challenge. Please check the [DNS providers](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438) list supporting *Let's Encrypt* and *Certbot* [DNS Plugins](https://certbot.eff.org/docs/using.html#dns-plugins) integrations.
 
-3. Setup *Cloudflare* credentials
-
-    - Create a [Cloudflare account](https://dash.cloudflare.com/sign-up) and receive an API key. The basic plan is free of charge, 
-
-    - Change the name servers at your domain name provider control panel to the Cloudflare's name servers
-
-    - <a name="turn-off-http-proxy"></a>Turn off the HTTP proxy for main and subdomain names. click the cloud icon ![Alt text](/resources/img/http_proxy_on.png?raw=true "HTTP proxy - ON") next to each domain/subdomain name to gray it out ![Alt text](/resources/img/http_proxy_off.png?raw=true "HTTP proxy - OFF").
-        > If you forget to disable the http proxy you may receive an obscure error such as `ERR_TOO_MANY_REDIRECTS`
-
-    - Create an ini file for the Cloudflare DNS API client.
-        ```
-        $ sudo mkdir -p /etc/letsencrypt/renewal/dns
-        $ sudo nano /etc/letsencrypt/renewal/dns/cloudflare.ini
-        ```
-
-    - Get the API key. Browse `Overview -> Get your API key -> API Tokens -> Global API Key [View]`
-    - Replace **email** and **API key** with the actual values and save the file    
-        ```
-        # Cloudflare API credentials used by Certbot
-        dns_cloudflare_email = cloudflare@example.com
-        dns_cloudflare_api_key = 0123456789abcdef0123456789abcdef01234567
-        ```
-
 4. Run `certbot` with the following parameters to acquire a certificate. The default awaiting value for the `NAME` record to update is 10 seconds. You may want to increase the delay using the `--dns-cloudflare-propagation-seconds` flag
-    
+
     ```
     $ sudo certbot certonly -i apache \
         --dns-cloudflare \
@@ -214,12 +247,12 @@
     ```
 
 5. Letsencrypt certificates are issued for 90 days. To keep your certificate up to date you need to configure auto-renewal
-    
+
     - Test the renewal process
         ```
         $ sudo certbot renew --dry-run
         ```
-    
+
     - If the dry run completed successfully create a cron job 
         ```
         $ echo "0 0,12 * * * root python -c 'import random; import time; time.sleep(random.random() * 3600)' && certbot renew" | sudo tee -a /etc/crontab > /dev/null
@@ -324,7 +357,7 @@
         ```
 
     - Run `sudo ls /etc/httpd/conf.d` to check if the virtual host configurations files have been created. The output should contain the following files:
-        
+
         - git.ssl.conf
         - registry.ssl.conf
         - registryui.ssl.conf
