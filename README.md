@@ -1,5 +1,28 @@
 # Shoebox - minimalistic dev environment on CentOS 7
 
+## Outline
+
+- [Prerequisites](#prerequisites)
+    - [Tools](#tools)
+        - [Nano](#nano)
+        - [Git client](#git-client)
+    - [Infrastructure](#infrastructure)
+        - [Disable SELinux](#disable-selinux)
+        - [Install Apache with mod_ssl](#install-apache-with-mod_ssl)
+        - [Install Docker and Docker Compose](#install-docker-and-docker-compose)
+        - [Environment variables](#environment-variables)
+            - [REPO_ROOT](#REPO_ROOT)
+            - [YOUR_DOMAIN](#YOUR_DOMAIN)
+            - [SHOEBOX_ROOT](#SHOEBOX_ROOT)
+    - [Network](#network)
+        - [Setup Cloudflare credentials](#setup-cloudflare-credentials)
+            1. [Account setup](#cloudflare-account-setup)
+            2. [Name server](#cloudflare-name-servers)
+            4. [Turn off the HTTP proxy](#turn-off-http-proxy)
+            5. [DNS API Client](#cloudflare-dns-api-client)
+        - [Create subdomain records](#create-subdomain-records)
+
+
 ## Prerequisites
 
 ### Tools
@@ -157,15 +180,15 @@
 
 ### Setup Cloudflare credentials
 
-1. Create a [Cloudflare account](https://dash.cloudflare.com/sign-up), The basic plan is free of charge. Add your domain name as a website and complete the verification process for proving the ownership.
+1. <a name="cloudflare-account-setup"></a> Create a [Cloudflare account](https://dash.cloudflare.com/sign-up), The basic plan is free of charge. Add your domain name as a website and complete the verification process for proving the ownership.
 
-2. Change the name servers at the control panel of your domain name provider to the Cloudflare's name servers. To get the name servers navigate to `DNS -> Cloudflare nameservers`. Depending on the TTL set in the domain name provider control panel it may take some time for the change to take effect, keep `ping`ing the domain name periodically.
+2. <a name="cloudflare-name-servers"></a> Change the name servers at the control panel of your domain name provider to the Cloudflare's name servers. To get the name servers navigate to `DNS -> Cloudflare nameservers`. Depending on the TTL set in the domain name provider control panel it may take some time for the change to take effect, keep `ping`ing the domain name periodically.
 
-3. <a name="turn-off-http-proxy"></a> :warning: Turn off the HTTP proxy for main and subdomain names. click the cloud icon ![Alt text](/resources/img/http_proxy_on.png?raw=true "HTTP proxy - ON") next to each domain/subdomain name to gray it out ![Alt text](/resources/img/http_proxy_off.png?raw=true "HTTP proxy - OFF").
+3. <a name="turn-off-http-proxy"></a> Turn off the HTTP proxy for main and subdomain names. click the cloud icon ![Alt text](/resources/img/http_proxy_on.png?raw=true "HTTP proxy - ON") next to each domain/subdomain name to gray it out ![Alt text](/resources/img/http_proxy_off.png?raw=true "HTTP proxy - OFF").
 
     > If you forget to disable the http proxy you may receive an obscure error such as `ERR_TOO_MANY_REDIRECTS`.
 
-4. Create an ini file for the Cloudflare DNS API client,
+4. <a name="cloudflare-dns-api-client"></a> Create an ini file for the Cloudflare DNS API client,
 
     ```
     $ sudo mkdir -p /etc/letsencrypt/renewal/dns
@@ -180,7 +203,7 @@
     dns_cloudflare_api_key = @CLOUDFLARE_API_KEY
     ```
 
-5. Replace the placeholders with matching values.
+    Replace the placeholders with matching values.
 
     - [cloudflare_email] - the email used for creating the Cloudflare account
     - [cloudflare_api_key] - Login to [Cloudflare](https://dash.cloudflare.com/login), click on your domain name and then browse to `Overview -> Get your API key -> API Tokens -> Global API Key [View]` to get the API key.
@@ -194,21 +217,21 @@
 
 ### Create subdomain records
 
-1. Login to [Cloudflare](https://dash.cloudflare.com/login), click on your domain name and then navigate to `DNS`. Click the `+Add record` button to open the record input form.
+Login to [Cloudflare](https://dash.cloudflare.com/login), click on your domain name and then navigate to `DNS`. Click the `+Add record` button to open the record input form.
 
-2. Create _CNAME_ aliases (bolded) matching the following names
+Create _CNAME_ aliases (bolded) matching the following names
 
-    - **git**.yourdomain.com (Git server)
-    - **registry**.yourdomain.com (Docker registry)
-    - **registryui**.yourdomain.com (Docker registry ui)
-    - **packages**.yourdomain.com (packages registry)
-    - **vault**.yourdomain.com (secret/key vault server)
-    - **ci**.yourdomain.com (continues integration/build server)
-    - **project**.yourdomain.com (project management tool)
+- **git**.yourdomain.com (Git server)
+- **registry**.yourdomain.com (Docker registry)
+- **registryui**.yourdomain.com (Docker registry ui)
+- **packages**.yourdomain.com (packages registry)
+- **vault**.yourdomain.com (secret/key vault server)
+- **ci**.yourdomain.com (continues integration/build server)
+- **project**.yourdomain.com (project management tool)
 
-    > Do not forget to disable the http proxy for all of the subdomains as it is described [here](#turn-off-http-proxy)
+> Do not forget to disable the http proxy for all of the subdomains as it is described [here](#turn-off-http-proxy)
 
-    Depending on the TTL it may take some time for the change to take effect, kep `ping`ing the subdomains periodically to verify the result.
+Depending on the TTL value it may take certain time for the change to take effect, keep `ping`ing the subdomains periodically to verify the result.
 
 ### Setup TSL (SSL)
 
@@ -216,11 +239,7 @@
 
 2. Follow the *wildcard* instruction up to the *step 6* inclusively.
 
-    - On *Step 2* - running the following command is sufficient.
-
-        ```
-        $ sudo yum install epel-release
-        ``` 
+    - On *Step 2* - running the following command is sufficient `$ sudo yum install epel-release`.
 
     - On *Step 3* - [EC2 region](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html). You may want to add more than one region in case one of the servers is down.
 
