@@ -8,19 +8,25 @@
         - [Git client](#git-client)
     - [Infrastructure](#infrastructure)
         - [Disable SELinux](#disable-selinux)
-        - [Install Apache with mod_ssl](#install-apache-with-mod_ssl)
-        - [Install Docker and Docker Compose](#install-docker-and-docker-compose)
+        - [Apache and mod_ssl](#install-apache-with-mod_ssl)
+        - [Docker and Docker Compose](#install-docker-and-docker-compose)
         - [Environment variables](#environment-variables)
             - [REPO_ROOT](#REPO_ROOT)
             - [YOUR_DOMAIN](#YOUR_DOMAIN)
             - [SHOEBOX_ROOT](#SHOEBOX_ROOT)
-    - [Network](#network)
-        - [Setup Cloudflare credentials](#setup-cloudflare-credentials)
-            1. [Account setup](#cloudflare-account-setup)
-            2. [Name server](#cloudflare-name-servers)
-            4. [Turn off the HTTP proxy](#turn-off-http-proxy)
-            5. [DNS API Client](#cloudflare-dns-api-client)
-        - [Create subdomain records](#create-subdomain-records)
+- [Network](#network)
+    - [Setup Cloudflare credentials](#setup-cloudflare-credentials)
+        - [Account setup](#cloudflare-account-setup)
+        - [Name servers](#cloudflare-name-servers)
+        - [Disable HTTP proxy](#turn-off-http-proxy)
+        - [DNS API Client](#cloudflare-dns-api-client)
+    - [Create subdomain records](#create-subdomain-records)
+- [Virtual hosts](#virtual-hosts)
+    - [Configuration files](#create-vhost-configs)
+    - [Docker registry vhost](#modify-registry-vhost-config)
+    - [Verify http to https redirect](#vhost-config-very-result)
+- [Services](#services)
+    - 
 
 
 ## Prerequisites
@@ -296,6 +302,7 @@ Depending on the TTL value it may take certain time for the change to take effec
         ```
 
     - Disable the default ssl configuration
+
         ```
         $ sudo mv /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf_
         ```
@@ -307,21 +314,21 @@ Depending on the TTL value it may take certain time for the change to take effec
 
 7. Create a unified configuration file for enabling ssl on virtual hosts
 
-    - Check if `options-ssl-apache.conf` was successfully created. This file is required for enabling ssl on virtual hosts and referenced by the virtual host configuration files
+    - Check if `options-ssl-apache.conf` was successfully created. This file is required for enabling SSL on virtual hosts and referenced by virtual host configuration files.
 
         ```
         $ sudo ls /etc/letsencrypt
         ```
 
-        The output should contain the file name
+        The output should contain the file name.
 
-    - Append the file with certificate references
+    - Append the file,
 
         ```
         $ sudo nano /etc/letsencrypt/options-ssl-apache.conf
         ```
 
-    - Copy-paste the following fragment to the end of the file and save changes.
+        and copy-paste the following fragment to the end of the file and save changes.
 
         ```
         # SSL certificate files references
@@ -343,39 +350,22 @@ Depending on the TTL value it may take certain time for the change to take effec
 
 ## Virtual hosts
 
-1. Configure subdomain records.
-
-    - Create _CNAME_ aliases (bolded) matching the following names
-        - **git**.yourdomain.com (Git server)
-        - **registry**.yourdomain.com (Docker registry)
-        - **registryui**.yourdomain.com (Docker registry ui)
-        - **packages**.yourdomain.com (packages registry)
-        - **vault**.yourdomain.com (secret/key vault server)
-        - **ci**.yourdomain.com (continues integration/build server)
-        - **project**.yourdomain.com (project management tool)
-
-    > Do not forget to disable the http proxy for all of the subdomains as it is described [here](#turn-off-http-proxy)
-
-2. Check if `$YOUR_DOMAIN` and `$REPO_ROOT` are set,
+1. <a id="create-vhost-configs"></a> Check if `$YOUR_DOMAIN` and `$REPO_ROOT` environment variables are set, if empty check the [Environment variables](#Environment-variables) section.
 
     ```
     $ echo $YOUR_DOMAIN
     $ echo $REPO_ROOT
     ```
 
-    if absent check the [Environment variables](#Environment-variables) section.
+    > `ports_prefix.ini` contains virtual host to underlying service port mappings, review and modify if necessary.
 
-3. Run `setup_virtual_hosts.sh` for creating virtual host configuration files.
+    Run the following command for creating virtual host configuration files for the [subdomains](#create-subdomain-records) mentioned previously.
 
-    > `ports_prefix.ini` contains virtual host to underlying service port mappings. Review and modify if necessary.
+    ```
+    $ sudo $REPO_ROOT/src/setup_virtual_hosts.sh $YOUR_DOMAIN
+    ```
 
-    - The following commands will create and copy virtual host configuration files to `/etc/httpd/conf.d`
-
-        ```
-        $ sudo $REPO_ROOT/src/setup_virtual_hosts.sh $YOUR_DOMAIN
-        ```
-
-    - Run `sudo ls /etc/httpd/conf.d` to check if the virtual host configurations files have been created. The output should contain the following files:
+    Run `$ sudo ls /etc/httpd/conf.d` to check if virtual host configuration files have been created, the output is expected to contain the following file names:
 
         - git.ssl.conf
         - registry.ssl.conf
@@ -385,26 +375,27 @@ Depending on the TTL value it may take certain time for the change to take effec
         - ci.ssl.conf
         - project.ssl.conf
 
-    - <a id="modify-registry-vhost-config"></a>Modify `registry.ssl.conf` to avoid `docker push` from failing.
-        
-        Open `registry.ssl.conf` for editing.
-        ```
-        $ sudo nano /etc/httpd/conf.d/registry.ssl.conf
-        ```
-        
-        Copy-paste the following lines of configuration anywhere in the _<VirtualHost *:443>_ section and save changes.
-        ```
-        Header add X-Forwarded-Proto "https"
-        RequestHeader add X-Forwarded-Proto "https"
-        ```
+2. <a id="modify-registry-vhost-config"></a> Modify `registry.ssl.conf` to prevent `docker push` from failing.
+    
+    Open `registry.ssl.conf` for editing,
 
-    - Restart Apache `sudo systemctl restart httpd`, and proceed if no error is reported, otherwise, check `error_log` and `access_log` for troubleshooting. Verify if the http server is serving https traffic by browsing to any of the created subdomains.
+    ```
+    $ sudo nano /etc/httpd/conf.d/registry.ssl.conf
+    ```
+    
+    then copy-paste the text given below anywhere in the _<VirtualHost *:443>...</VirtualHost *:443>_ section and save changes.
+    ```
+    Header add X-Forwarded-Proto "https"
+    RequestHeader add X-Forwarded-Proto "https"
+    ```
 
-        Follow the check list:
-        - [x] Redirected from `http` to `https`
-        - [x] Response is `503 Service Unavailable`
+3. <a id="vhost-config-very-result"></a> Restart Apache `$ sudo systemctl restart httpd`, and proceed if no error is reported, otherwise, check `error_log` and `access_log` for troubleshooting. Verify if the http server is serving https traffic by browsing to any of the created subdomains.
 
-        Proceed if the checks are passed, otherwise, check `error_log` and `access_log` for troubleshooting.
+    Follow the check list:
+    - [x] Redirected from `http` to `https`
+    - [x] Response is `503 Service Unavailable`
+
+    Proceed if the checks are passed, otherwise, check `error_log` and `access_log` for troubleshooting.
 
 ## Services
 
