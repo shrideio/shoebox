@@ -2,62 +2,37 @@
 
 ## Prerequisites
 
-- #### Install Nano (simple console-based text editor)
-    
+### Tools
+
+> If a text editor and Git client are already installed you may skip to the next section.
+
+- #### Nano
+
+    Simple console-based text editor.
+
     ```
     $ sudo yum install nano
     ```
-    
+
     Shortcuts:
     - Save changes: `ctrl` + `x`, `y`
     - Discard changes: `ctrl` + `x`, `n`
     - Cancel: `ctrl` + `x`, `ctrl` + `c`
 
- - #### Install git and clone this repository
+- #### Git client
 
     ```
     $ sudo yum install git
-    ```
-    
-    Run `git --version` to confirm that `git` was successfully installed.
-
-    Export the path of the directory where the repository will be cloned as an environment variable (`/tmp/shoebox` is used as default, can be changed if necessary).
-    ```
-    export REPO_ROOT=/tmp/shoebox
-    ```
-    Run `echo $REPO_ROOT` to verify if the variable is set.
-
-    Clone this repository.
-    ```
-    $ sudo git clone --depth=1 https://github.com/shrideio/shoebox $REPO_ROOT
+    $ sudo git --version # to confirm `git` is successfully installed
     ```
 
-    Change the file mode to `execute` for all of the `*.sh` scripts in the source root.
-    ```
-    $ sudo find $REPO_ROOT -type f -name "*.sh" -exec chmod +x {} \;
-    ```
-
-- #### Export your domain name as an environment variable
-
-    > Do not forget to replace `yourdomain.com` with the actual domain name.
-
-    ```
-    $ export YOUR_DOMAIN=yourdomain.com
-    ```
-    Run `echo $YOUR_DOMAIN` to verify if the variable is set.
-
-- #### Export setup root path
-    ```
-    $ export SHOEBOX_ROOT=/var/shoebox
-    ```
-    > This variable is used in the containers setup and volumes backup scripts
-
-## Infrastructure
+### Infrastructure
 
 - #### Disable SELinux
+    
+    > It is highly recommended to disable SELinux for avoiding issues when setting up the infrastructure and Docker containers.
 
-    Check SELinux status. It is recommended to disable SELinux for the ease of use of Docker, and the ease of setting up other auxiliary services
-
+    Check SELinux status.
     ```
     $ sestatus
 
@@ -68,19 +43,24 @@
     Current mode:                   enforcing
     ```
 
-    Disable SELinux permanently by modifying `/etc/selinux/config`
+    If SELinux is `enabled` follow the instruction to disable it, otherwise continue to the next section.
     
+    Edit the SELinux configuration file
+    ```
+    $ sudo nano /etc/selinux/config
+    ```
+    
+    Set the `SELINUX` setting to `disabled` and save the file
     ```
     SELINUX=disabled
     ```
 
-    Save the file and reboot
-
+    Reboot
     ```
     $ sudo shutdown -r now
     ```
 
-    Check SELinux status
+    Check SELinux status, it is expect to be `disabled`.
 
     ```
     $ sestatus
@@ -89,38 +69,7 @@
     SELinux status:                 disabled
     ```
 
-- #### Install Docker and Docker Compose
-
-    ```
-    $ sudo yum remove docker \
-                      docker-client \
-                      docker-client-latest \
-                      docker-common \
-                      docker-latest \
-                      docker-latest-logrotate \
-                      docker-logrotate \
-                      docker-engine
-    
-    $ sudo yum install -y yum-utils \
-      device-mapper-persistent-data \
-      lvm2
-
-    $ sudo yum-config-manager \
-        --add-repo \
-        https://download.docker.com/linux/centos/docker-ce.repo
-
-    $ sudo yum install docker-ce docker-ce-cli containerd.io
-    $ sudo systemctl enable docker
-    $ sudo systemctl start docker
-    
-    $ sudo yum install docker-compose
-    ````
-
-    Run `sudo docker run hello-world` to verify if  Docker CE is installed successfully.
-
-    Run `docker-compose --version` to confirm that `docker-compose` is installed successfully
-    
- - #### Install Apache with mod_ssl
+- #### Install Apache with mod_ssl
 
     ```
     $ sudo yum install httpd
@@ -131,7 +80,7 @@
     $ sudo systemctl status httpd
     ```
 
-    If the service was started successfully the output will display `active (running)` message, otherwise check `error_log` and `access_log` at `/var/log/httpd` for troubleshooting.
+    If Apache has started successfully the output will contain `active (running)`, otherwise check `error_log` and `access_log` at `/var/log/httpd` for troubleshooting.
 
     Enable `http` and `https` traffic on the firewall.
     ```    
@@ -140,42 +89,145 @@
     $ sudo firewall-cmd --reload
     ```
 
-    Browse to your domain name (assuming the DNS record has already been set up, if the setup is successful the apache default page should be displayed in the browser.
+    If the dns record exists browse to your domain name, otherwise use teh server ip address. If the setup is successful the browser will display the apache welcome page.
 
-## TSL (SSL certificate)
+- #### Install Docker and Docker Compose
+
+    ```
+    $ sudo yum remove docker \
+                    docker-client \
+                    docker-client-latest \
+                    docker-common \
+                    docker-latest \
+                    docker-latest-logrotate \
+                    docker-logrotate \
+                    docker-engine
+    
+    $ sudo yum install -y yum-utils \
+    device-mapper-persistent-data \
+    lvm2
+
+    $ sudo yum-config-manager \
+        --add-repo \
+        https://download.docker.com/linux/centos/docker-ce.repo
+
+    $ sudo yum install docker-ce docker-ce-cli containerd.io
+    $ sudo systemctl enable docker
+    $ sudo systemctl start docker
+    $ sudo docker run hello-world # to verify if  Docker CE is successfully installed
+
+    $ sudo yum install docker-compose
+    $ sudo docker-compose --version # to confirm that `docker-compose` is successfully installed
+    ```
+
+### Environment variables
+
+> Review and modify if necessary.
+
+- #### REPO_ROOT 
+
+    The destination path for cloning this repository.
+
+    ```
+    $ export REPO_ROOT=/tmp/shoebox
+    $ echo $REPO_ROOT
+    ```
+
+- #### YOUR_DOMAIN 
+
+    The domain name for the server with hosted services.
+
+    > Do not forget to replace `yourdomain.com` with the actual domain name.
+
+    ```
+    $ export YOUR_DOMAIN=yourdomain.com
+    $ echo $YOUR_DOMAIN
+    ```
+
+- #### SHOEBOX_ROOT
+
+    The root directory where the data and configuration files of the services are stored.
+
+    ```
+    $ export REPO_ROOT=/var/shoebox
+    $ echo $REPO_ROOT
+    ```
+
+## Network
+
+### Setup Cloudflare credentials
+
+1. Create a [Cloudflare account](https://dash.cloudflare.com/sign-up), The basic plan is free of charge. Add your domain name as a website and complete the verification process for proving the ownership.
+
+2. Change the name servers at the control panel of your domain name provider to the Cloudflare's name servers. To get the name servers navigate to `DNS -> Cloudflare nameservers`. Depending on the TTL set in the domain name provider control panel it may take some time for the change to take effect, keep `ping`ing the domain name periodically.
+
+3. <a name="turn-off-http-proxy"></a> :warning: Turn off the HTTP proxy for main and subdomain names. click the cloud icon ![Alt text](/resources/img/http_proxy_on.png?raw=true "HTTP proxy - ON") next to each domain/subdomain name to gray it out ![Alt text](/resources/img/http_proxy_off.png?raw=true "HTTP proxy - OFF").
+
+    > If you forget to disable the http proxy you may receive an obscure error such as `ERR_TOO_MANY_REDIRECTS`.
+
+4. Create an ini file for the Cloudflare DNS API client,
+
+    ```
+    $ sudo mkdir -p /etc/letsencrypt/renewal/dns
+    $ sudo nano /etc/letsencrypt/renewal/dns/cloudflare.ini
+    ```
+
+    and copy-paste the following fragment.
+
+    ```
+    # Cloudflare API credentials used by Certbot
+    dns_cloudflare_email = @CLOUDFLARE_EMAIL
+    dns_cloudflare_api_key = @CLOUDFLARE_API_KEY
+    ```
+
+5. Replace the placeholders with matching values.
+
+    - [cloudflare_email] - the email used for creating the Cloudflare account
+    - [cloudflare_api_key] - Login to [Cloudflare](https://dash.cloudflare.com/login), click on your domain name and then browse to `Overview -> Get your API key -> API Tokens -> Global API Key [View]` to get the API key.
+
+    ```
+    $ sudo sed -i 's|@CLOUDFLARE_EMAIL|'[cloudflare_email]'|g' /etc/letsencrypt/renewal/dns/cloudflare.ini
+    $ sudo sed -i 's|@CLOUDFLARE_API_KEY|'[cloudflare_api_key]'|g' /etc/letsencrypt/renewal/dns/cloudflare.ini
+    ```
+
+    Run `$ sudo cat /etc/letsencrypt/renewal/dns/cloudflare.ini` to verify the result.
+
+### Create subdomain records
+
+1. Login to [Cloudflare](https://dash.cloudflare.com/login), click on your domain name and then navigate to `DNS`. Click the `+Add record` button to open the record input form.
+
+2. Create _CNAME_ aliases (bolded) matching the following names
+
+    - **git**.yourdomain.com (Git server)
+    - **registry**.yourdomain.com (Docker registry)
+    - **registryui**.yourdomain.com (Docker registry ui)
+    - **packages**.yourdomain.com (packages registry)
+    - **vault**.yourdomain.com (secret/key vault server)
+    - **ci**.yourdomain.com (continues integration/build server)
+    - **project**.yourdomain.com (project management tool)
+
+    > Do not forget to disable the http proxy for all of the subdomains as it is described [here](#turn-off-http-proxy)
+
+    Depending on the TTL it may take some time for the change to take effect, kep `ping`ing the subdomains periodically to verify the result.
+
+### Setup TSL (SSL)
 
 1. Browse to [Apache on CentOS/RHEL 7](https://certbot.eff.org/lets-encrypt/centosrhel7-apache)
 
 2. Follow the *wildcard* instruction up to the *step 6* inclusively.
-    - On *step 2* running `yum install epel-release` should be just enough
-    - On *step 3* [EC2 region](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html). You may want to add more than one region in case one of the servers is down.
-    - On *step 6* **Cloudfalre** is chosen as a DNS provider for the dns challenge. Please consult with the [DNS providers](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438) list supporting *Let's Encrypt* and *Certbot* [DNS Plugins](https://certbot.eff.org/docs/using.html#dns-plugins) integration. 
 
-3. Setup *Cloudflare* credentials
+    - On *Step 2* - running the following command is sufficient.
 
-    - Create a [Cloudflare account](https://dash.cloudflare.com/sign-up), the basic plan is free of charge, and get the api key
-
-    - Change the name servers at your domain name provider control panel to the Cloudflare's name servers
-
-    - <a name="turn-off-http-proxy"></a>Turn off the HTTP proxy for main and subdomain names. click the cloud icon ![Alt text](/resources/img/http_proxy_on.png?raw=true "HTTP proxy - ON") next to each domain/subdomain name to gray it out ![Alt text](/resources/img/http_proxy_off.png?raw=true "HTTP proxy - OFF").
-        > If you forget to disable the http proxy you may receive an obscure error such as `ERR_TOO_MANY_REDIRECTS`
-
-    - Create an ini file for the Cloudflare DNS API client.
         ```
-        $ sudo mkdir -p /etc/letsencrypt/renewal/dns
-        $ sudo nano /etc/letsencrypt/renewal/dns/cloudflare.ini
-        ```
+        $ sudo yum install epel-release
+        ``` 
 
-    - Get the API key. Browse `Overview -> Get your API key -> API Tokens -> Global API Key [View]`
-    - Replace **email** and **API key** with the actual values and save the file    
-        ```
-        # Cloudflare API credentials used by Certbot
-        dns_cloudflare_email = cloudflare@example.com
-        dns_cloudflare_api_key = 0123456789abcdef0123456789abcdef01234567
-        ```
+    - On *Step 3* - [EC2 region](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html). You may want to add more than one region in case one of the servers is down.
+
+    - On *Step 6* - [Cloudflare](https://www.cloudflare.com/) is a DNS provider for the dns challenge. Please check the [DNS providers](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438) list supporting *Let's Encrypt* and *Certbot* [DNS Plugins](https://certbot.eff.org/docs/using.html#dns-plugins) integrations.
 
 4. Run `certbot` with the following parameters to acquire a certificate. The default awaiting value for the `NAME` record to update is 10 seconds. You may want to increase the delay using the `--dns-cloudflare-propagation-seconds` flag
-    
+
     ```
     $ sudo certbot certonly -i apache \
         --dns-cloudflare \
@@ -195,12 +247,12 @@
     ```
 
 5. Letsencrypt certificates are issued for 90 days. To keep your certificate up to date you need to configure auto-renewal
-    
+
     - Test the renewal process
         ```
         $ sudo certbot renew --dry-run
         ```
-    
+
     - If the dry run completed successfully create a cron job 
         ```
         $ echo "0 0,12 * * * root python -c 'import random; import time; time.sleep(random.random() * 3600)' && certbot renew" | sudo tee -a /etc/crontab > /dev/null
@@ -215,7 +267,7 @@
         $ sudo nano /etc/httpd/conf/httpd.conf
         ```
 
-        Copy-paste the following lines of configuration to the end of file and save changes.
+        Copy-paste the following lines of configuration to the end of the file and save changes.
 
         ```
         # Enable https traffic on port 443
@@ -237,28 +289,34 @@
 7. Create a unified configuration file for enabling ssl on virtual hosts
 
     - Check if `options-ssl-apache.conf` was successfully created. This file is required for enabling ssl on virtual hosts and referenced by the virtual host configuration files
+
         ```
         $ sudo ls /etc/letsencrypt
         ```
+
         The output should contain the file name
 
     - Append the file with certificate references
+
         ```
         $ sudo nano /etc/letsencrypt/options-ssl-apache.conf
         ```
 
-    - Copy-paste to the end of the file and save changes
+    - Copy-paste the following fragment to the end of the file and save changes.
+
         ```
         # SSL certificate files references
-        SSLCertificateFile /etc/letsencrypt/live/yourdomain.com/cert.pem
-        SSLCertificateKeyFile /etc/letsencrypt/live/yourdomain.com/privkey.pem
-        SSLCertificateChainFile /etc/letsencrypt/live/yourdomain.com/chain.pem
+        SSLCertificateFile /etc/letsencrypt/live/@YOUR_DOMAIN/cert.pem
+        SSLCertificateKeyFile /etc/letsencrypt/live/@YOUR_DOMAIN/privkey.pem
+        SSLCertificateChainFile /etc/letsencrypt/live/@YOUR_DOMAIN/chain.pem
         ```
 
-    - Replace `yourdomain.com` with the actual domain name in `letsencrypt.conf`
+    - Replace the placeholder with the actual domain name in `letsencrypt.conf`
+
         ```
-        $ sudo sed -i -e 's|yourdomain.com|'"$YOUR_DOMAIN"'|g' /etc/letsencrypt/options-ssl-apache.conf
+        $ sudo sed -i 's|@YOUR_DOMAIN|'"$YOUR_DOMAIN"'|g' /etc/letsencrypt/options-ssl-apache.conf
         ```
+
         Verify the result
         ```
         $ sudo cat /etc/letsencrypt/options-ssl-apache.conf
@@ -269,10 +327,10 @@
 1. Configure subdomain records.
 
     - Create _CNAME_ aliases (bolded) matching the following names
-        - **git**.yourdomain.com (git server)
+        - **git**.yourdomain.com (Git server)
         - **registry**.yourdomain.com (Docker registry)
         - **registryui**.yourdomain.com (Docker registry ui)
-        - **packages**.yourdomain.com (package registry)
+        - **packages**.yourdomain.com (packages registry)
         - **vault**.yourdomain.com (secret/key vault server)
         - **ci**.yourdomain.com (continues integration/build server)
         - **project**.yourdomain.com (project management tool)
@@ -286,7 +344,7 @@
     $ echo $REPO_ROOT
     ```
 
-    if absent check the [Prerequisites](#Prerequisites) section.
+    if absent check the [Environment variables](#Environment-variables) section.
 
 3. Run `setup_virtual_hosts.sh` for creating virtual host configuration files.
 
@@ -299,7 +357,7 @@
         ```
 
     - Run `sudo ls /etc/httpd/conf.d` to check if the virtual host configurations files have been created. The output should contain the following files:
-        
+
         - git.ssl.conf
         - registry.ssl.conf
         - registryui.ssl.conf
@@ -368,18 +426,17 @@
     5. [Continuous Integration (Drone)](/src/ci/README.md)
     6. [Project Management (Taiga)](/src/project/README.md)
 
-
 ## Misc
 
-- #### SMTP relay
+### SMTP relay
 
-    The majority of the services of the dev environment setup require an SMTP relay for sending email notifications. If your domain name service includes a free email address you may want to use the provider's SMTP server, otherwise, 
-    there are a few email services providing free accounts with the limited number of message sent per day/month (at least 100 emails a day).
+A few services require an SMTP relay for sending email notifications. If your domain name service includes a free email address you may want to use the provider's SMTP server, otherwise, there are a few free emailing services with the limited number of message sent per day/month (at least 100 emails a day).
 
-    - [SendPulse](https://sendpulse.com/prices/smtp) (12,000/month)
-    - [Mailgun](https://www.mailgun.com/pricing-options) (10,000/month)
-    - [Mailjet](https://www.mailjet.com/pricing/) (6,000/month, 200/day)
-    - [SendGrid](https://sendgrid.com/marketing/sendgrid-services-cro/#pricing-app) (100/day)
+- [SendPulse](https://sendpulse.com/prices/smtp) (12,000/month)
+- [Mailgun](https://www.mailgun.com/pricing-options) (10,000/month)
+- [Mailjet](https://www.mailjet.com/pricing/) (6,000/month, 200/day)
+- [SendGrid](https://sendgrid.com/marketing/sendgrid-services-cro/#pricing-app) (100/day)
 
-- #### Backup
-    :see_no_evil: :hear_no_evil: :speak_no_evil:
+### Backup
+
+:see_no_evil: :hear_no_evil: :speak_no_evil:
