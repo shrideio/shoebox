@@ -163,7 +163,7 @@
 
 3. <a name="turn-off-http-proxy"></a> :warning: Turn off the HTTP proxy for main and subdomain names. click the cloud icon ![Alt text](/resources/img/http_proxy_on.png?raw=true "HTTP proxy - ON") next to each domain/subdomain name to gray it out ![Alt text](/resources/img/http_proxy_off.png?raw=true "HTTP proxy - OFF").
 
-    > If you forget to disable the http proxy you may receive an obscure error such as `ERR_TOO_MANY_REDIRECTS`.
+    ⚠️ If you forget to disable the http proxy you may receive an obscure error such as `ERR_TOO_MANY_REDIRECTS`. ⚠️
 
 4. Create an ini file for the Cloudflare DNS API client,
 
