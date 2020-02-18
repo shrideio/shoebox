@@ -236,14 +236,16 @@ The DNS providers a DNS API that is used by Certbot for proofing the domain name
     dns_cloudflare_api_key = @CLOUDFLARE_API_KEY
     ```
 
-    Replace the placeholders with matching values.
+    Get the API key. In the Cloudflare panel browse to `Overview -> Get your API token -> API Tokens -> Global API Key [View]`.
 
-    - [cloudflare_email] - the email used for creating the Cloudflare account
-    - [cloudflare_api_key] - Login to [Cloudflare](https://dash.cloudflare.com/login), click on your domain name and then browse to `Overview -> Get your API key -> API Tokens -> Global API Key [View]` to get the API key.
+    Replace the placeholders and run the following commands to set values.
+
+    - [cloudflare_email] - the Cloudflare login
+    - [cloudflare_api_key] - the Global API key
 
     ```
-    $ sudo sed -i 's|@CLOUDFLARE_EMAIL|'[cloudflare_email]'|g' /etc/letsencrypt/renewal/dns/cloudflare.ini
-    $ sudo sed -i 's|@CLOUDFLARE_API_KEY|'[cloudflare_api_key]'|g' /etc/letsencrypt/renewal/dns/cloudflare.ini
+    $ sudo sed -i 's|@CLOUDFLARE_EMAIL$|'[cloudflare_email]'|g' /etc/letsencrypt/renewal/dns/cloudflare.ini
+    $ sudo sed -i 's|@CLOUDFLARE_API_KEY$|'[cloudflare_api_key]'|g' /etc/letsencrypt/renewal/dns/cloudflare.ini
     ```
 
     Run `$ sudo cat /etc/letsencrypt/renewal/dns/cloudflare.ini` to verify the result.
