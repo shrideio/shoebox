@@ -217,7 +217,7 @@ The DNS providers a DNS API that is used by Certbot for proofing the domain name
 
     > WARNING: If the http proxy is not disabled it will cause an obscure error response such as `ERR_TOO_MANY_REDIRECTS`.
 
-4. <a name="cloudflare-dns-api-client"></a> Cloudflare DNS API client is used by Certbot for proofing the domain name ownership when acquiring an HTTPS certificate from [Letsencrypt](https://letsencrypt.org/).
+4. <a name="cloudflare-dns-api-client"></a> Cloudflare DNS API client is used by Certbot for proofing the domain name ownership when acquiring an HTTPS certificate from [Let’s Encrypt](https://letsencrypt.org/).
 
     > INFO: Adjust the actions accordingly if the DNS provider is not Cloudflare.
 
@@ -272,11 +272,11 @@ Depending on the TTL value it may take certain time for the change to take effec
 
 ### SSL Setup
 
-Certbot is used as the default Letsencrypt client in this setup.
+Certbot is used as the default Let’s Encrypt client in this setup.
 
 > INFO:  Check the [DNS providers](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438) list supporting *Let's Encrypt* for other options. 
 
-> IMPORTANT: If a different Letsencrypt client is selected the certificate has to be acquired independently and this section can be ignored.
+> IMPORTANT: If a different Let’s Encrypt client is selected the certificate has to be acquired independently and this section can be ignored.
 
 1. Browse to [Apache on CentOS/RHEL 7](https://certbot.eff.org/lets-encrypt/centosrhel7-apache)
 
@@ -310,7 +310,7 @@ Certbot is used as the default Letsencrypt client in this setup.
       /etc/letsencrypt/live/yourdomain.com/privkey.pem
     ```
 
-5. Letsencrypt certificates are issued for 90 days. It is recommended to configure auto-renewal to keep the certificate up-to-date.
+5. Let’s Encrypt certificates are issued for 90 days. It is recommended to configure auto-renewal to keep the certificate up-to-date.
 
     Test the renewal process.
 
