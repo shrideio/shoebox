@@ -1,6 +1,20 @@
-# Shoebox - minimalistic dev environment on CentOS 7
+# Shoebox
 
-## Outline
+- ## What?
+    
+    ### In a nutshell it is just a bundle of tutorials and scripts for setting up a collaborative software development toolbox on a dedicated server or vps
+
+ - ## Why?
+
+    ### 1. 
+
+
+
+Main reason why this exists: [Those goddamn AWS charges](https://www.youtube.com/watch?v=982wFqC03v8)
+
+
+
+## Index
 
 - [Prerequisites](#prerequisites)
     - [Tools](#tools)
@@ -514,7 +528,7 @@ $ sudo $REPO_ROOT/src/[service]_containers_setup.sh $SHOEBOX_ROOT $YOUR_DOMAIN [
 - [vault_containers_setup.sh](/src/vault/vault_containers_setup.sh) - key/secret vault
 - [packages_containers_setup.sh](/src/packages/packages_containers_setup.sh) - package registry
 - [registry_containers_setup.sh](/src/registry/registry_containers_setup.sh) - Docker registry
-- [ci_containers_setup.sh](/src/ci/ci_containers_setup.sh) - Continuous Integration and Continuous Delivery
+- [ci_containers_setup.sh](/src/ci/ci_containers_setup.sh) - continuous integration and continuous delivery
 - [project_containers_setup.sh](/src/project/project_containers_setup.sh) - project management tool
 
 ### Service Setup 
@@ -525,7 +539,7 @@ $ sudo $REPO_ROOT/src/[service]_containers_setup.sh $SHOEBOX_ROOT $YOUR_DOMAIN [
 2. [Key/Secret Vault (Vault)](/src/vault/README.md)
 3. [Packages (ProGet)](/src/packages/README.md)
 5. [Docker Registry](/src/registry/README.md)
-5. [Continuous Integration (Drone)](/src/ci/README.md)
+5. [Continuous Integration and Continuous Delivery (Drone)](/src/ci/README.md)
 6. [Project Management (Taiga)](/src/project/README.md)
 
 ### Backup Configuration
