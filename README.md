@@ -2,7 +2,20 @@
 
 - ## What?
     
-    ### In a nutshell it is just a bundle of tutorials and scripts for setting up a collaborative software development toolbox on a dedicated server or vps
+   In a nutshell Shoebox is an all-in-one bundle of tutorials and scripts for setting up a collaborative software development environment that can be hosted on dedicated server or vps with a potential to grow. The tools used in this setup are either open source or have free versions 
+
+    The tools and vendors used in this setup are listed in the table below.
+
+    | Tool             | Vendor                                | License       |
+    | :------------    | :------------                         | :------------ |
+    | Git Server       | [Gogs](https://gogs.io/)              | [MIT](https://github.com/gogs/gogs/blob/master/LICENSE)           |
+    | Key/Secret Vault | [Vault](https://www.vaultproject.io/) | [MPL-2.0](https://github.com/hashicorp/vault/blob/master/LICENSE) |
+    | Package Management | [Ideo Proget](https://inedo.com/proget) | [ProGet License Agreement](https://inedo.com/proget/license-agreement) <br /> [Free Edition Limitations](https://docs.inedo.com/docs/proget/administration/license#free-edition-limitations) |
+    | Docker Registry | [Docker Registry](https://docs.docker.com/registry/) | [Apache-2.0](https://github.com/docker/distribution/blob/master/LICENSE) |
+    | Docker Registry UI | [Joxit Docker Registry UI](https://joxit.dev/docker-registry-ui/) | [AGPL-3.0](https://github.com/Joxit/docker-registry-ui/blob/master/LICENSE) | 
+    | Continuous Integration and Delivery | [Drone CI](https://drone.io/) | [Drone Non-Commercial License](https://github.com/drone/drone/blob/master/LICENSE) <br /> [Waiver: Individual and Small Business](https://github.com/drone/drone/blob/master/LICENSE#L62) |
+    | Project Management | [Taiga](https://taiga.io/) | [Taiga Backend - AGPL-3.0](https://github.com/taigaio/taiga-back/blob/master/LICENSE) <br /> [Taiga Front - AGPL-3.0](https://github.com/taigaio/taiga-front/blob/master/LICENSE) |
+
 
  - ## Why?
 
