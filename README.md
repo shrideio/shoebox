@@ -20,16 +20,49 @@ Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose
 
 The short answer is because of [“Those goddamn AWS charges!”](https://www.youtube.com/watch?v=982wFqC03v8).
 
-On a serious note, we believe even small teams can benefit from using a fully equipped development environment without paying an extra premium purchasing infrastructural services from cloud providers. 
+On a serious note, we believe that even small teams can benefit from using a fully equipped development environment without paying an premium for purchasing infrastructural services from cloud providers.
 
->The later is less relatable to open source projects, as usually most of the tools mentioned is this setup are provided free of charge by major vendors for such projects.
+> The latter is relatable to open source projects, as usually most of the tools mentioned is this setup are provided free of charge by major vendors for such projects.
 
-And lastly, this setup has come up naturally when a good friend of mine ([mich4xD](https://github.com/mich4xD)) and ([bahram-aliyev](https://github.com/bahram-aliyev])) decided to document how to set up a development environment while working on our project, therefore this is a documentation for ourselves in the first place.
+And lastly, this setup has come up naturally when a good friend of mine ([mich4xD](https://github.com/mich4xD)) and I ([bahram-aliyev](https://github.com/bahram-aliyev])) decided to document how to set up a development environment when working on our personal project, therefore this is a documentation for ourselves in the first place.
+
 
 ### How does it work?
 
+This setup requires a Linux machine with root access and system requirements matching the ones shown below. There are a few options how that can be achieved.
 
+> IMPORTANT: None of the vendors listed below has a sponsorship or advertisement agreement with the authors, likewise the authors are not responsible or liable for any damage or inconvenience caused by actions or inactions of the vendors.
 
+- Rent a Linux VPS.
+
+    There are a few affordable options in a price range from $7 to - $15 USD per month. The vendors listed below offer solutions matching or comparable to the desirable system requirements and price range.
+
+    - [VPSDime](https://vpsdime.com/)
+    - [OVHCloud](https://www.ovh.com/)
+    - [Hostinger](https://www.hostinger.com/)
+    - [Interserver](https://www.interserver.net/)
+
+ - Rent or stage a dedicate sever on premise.
+
+    This option is significantly expensive than the former ()
+
+System requirements:
+
+- Minimal:
+
+    - OS: Linux CentOS/RHEL 7.0 (*)
+    - CPU: 2 vCPU (**)
+    - RAM: 4 GB (***)
+    - Storage: 20 GB
+    - Network: 1 static IPv4 address
+
+- Recommended:
+
+    - OS: Linux CentOS/RHEL 7.0
+    - CPU: 4 vCPU
+    - RAM: 6 GB
+    - Storage: 30 GB
+    - Network: 1 IPv4 address
 
 
 ## Index
