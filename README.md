@@ -35,7 +35,7 @@ This setup requires a Linux machine with root access and system requirements mat
 
 - Rent a Linux VPS.
 
-    There are a few affordable options in a price range from $7 to - $15 USD per month. The vendors listed below offer solutions matching or comparable to the desirable system requirements and price range.
+    There are a few affordable options in a price range of $7 to - $15 USD per month. The vendors listed below offer solutions matching or comparable to the desirable system requirements and price range.
 
     - [VPSDime](https://vpsdime.com/)
     - [OVHCloud](https://www.ovh.com/)
