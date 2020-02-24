@@ -16,43 +16,28 @@ Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose
 | Project Management | [Taiga](https://taiga.io/) | [Taiga Backend - AGPL-3.0](https://github.com/taigaio/taiga-back/blob/master/LICENSE) <br /> [Taiga Front - AGPL-3.0](https://github.com/taigaio/taiga-front/blob/master/LICENSE) |
 
 
- ### Why does this exist?
+### Why does this exist?
 
 The short answer is because of [“Those goddamn AWS charges!”](https://www.youtube.com/watch?v=982wFqC03v8).
 
-On a serious note, we believe that even small teams can benefit from using a fully equipped development environment without paying an premium for purchasing infrastructural services from cloud providers.
-
-> The latter is relatable to open source projects, as usually most of the tools mentioned is this setup are provided free of charge by major vendors for such projects.
+On a serious note, we believe that even small teams can benefit from using a fully equipped development environment without paying a premium for purchasing infrastructural services from cloud service providers (*).
 
 And lastly, this setup has come up naturally when a good friend of mine ([mich4xD](https://github.com/mich4xD)) and I ([bahram-aliyev](https://github.com/bahram-aliyev])) decided to document how to set up a development environment when working on our personal project, therefore this is a documentation for ourselves in the first place.
+
+_* The former is less relatable to open source projects as usually most of the tools mentioned is this setup are provided free of charge by major vendors for such projects._
 
 
 ### How does it work?
 
-This setup requires a Linux machine with root access and system requirements matching the ones shown below. There are a few options how that can be achieved.
+This setup requires a Linux machine with root access and system requirements matching the following:
 
-> IMPORTANT: None of the vendors listed below has a sponsorship or advertisement agreement with the authors, likewise the authors are not responsible or liable for any damage or inconvenience caused by actions or inactions of the vendors.
-
-- Rent a Linux VPS.
-
-    There are a few affordable options in a price range of $7 to - $15 USD per month. The vendors listed below offer solutions matching or comparable to the desirable system requirements and price range.
-
-    - [VPSDime](https://vpsdime.com/)
-    - [OVHCloud](https://www.ovh.com/)
-    - [Hostinger](https://www.hostinger.com/)
-    - [Interserver](https://www.interserver.net/)
-
- - Rent or stage a dedicate sever on premise.
-
-    This option is significantly expensive than the former ()
-
-System requirements:
+System requirements _(**)_.
 
 - Minimal:
 
-    - OS: Linux CentOS/RHEL 7.0 (*)
-    - CPU: 2 vCPU (**)
-    - RAM: 4 GB (***)
+    - OS: Linux CentOS/RHEL 7.0 _(***)_
+    - CPU: 2 vCPU
+    - RAM: 4 GB
     - Storage: 20 GB
     - Network: 1 static IPv4 address
 
@@ -64,8 +49,57 @@ System requirements:
     - Storage: 30 GB
     - Network: 1 IPv4 address
 
+There are three options to choose from.
 
-## Index
+> IMPORTANT: None of the vendors listed below has a sponsorship or advertisement agreement with the authors, likewise the authors are not responsible or liable for any damage or inconvenience caused by actions or inactions of the vendors.
+
+- Rent a Linux VPS.
+
+    There are a few affordable options in a price range of $7 to $15 USD per month. The vendors listed below offer solutions matching or comparable to the desirable system requirements and price range.
+
+    - [VPSDime](https://vpsdime.com/)
+    - [OVHCloud](https://www.ovh.com/)
+    - [Hostinger](https://www.hostinger.com/)
+    - [Interserver](https://www.interserver.net/)
+
+ - Rent a dedicate server.
+
+    This option is more expensive than renting a VPS, however it provides more computation power and storage capacity for the premium. There are a few affordable options in a price range of $20 to $30 USD per month. The dedicated server option can be considered as an expansion path for future growth.
+
+    - [Nocix](https://www.nocix.net/)
+    - [Wholesale Internet](https://www.wholesaleinternet.net/)
+
+- Run a server on-premises.
+
+    No comment on that, you are in charge of everything.
+
+Either way, be mindful of the law of diminishing returns. For example, the premium payed for an extra storage on a VPS may equalize the VPS rental cost with a dedicated server monthly fee. The same is true for the dedicated server option, as the cost may eventually grow to the point where it is more reasonable to purchase the services from a cloud service provider. In short, do back-of-the-napkin-math.
+
+_** Considering the low budget theme prevailing throughout this setup it is very likely that the same machine hosting the services will be used for hosting a testing environment. Therefore, take into account that factor when selecting a physical host. On a side note, even a host with the minimal system requirements should be capable enough to be moderately used for testing purposes._
+
+_*** The setup with minor adjustments applied to the scripts should work on any other popular Linux distributive. However, it was tested and staged on CentOS 7.0, that is why it is mentioned as a  requirement._
+
+### Q/A
+
+- I know a better way of doing this or that, how can I help?
+    
+    > We are no Linux gurus, Docker experts or technical writing virtuosos, therefore, you are more than welcome to contribute and we would be more than happy to receive any constructive critique or new ideas how to improve. Open a PR or file an issue ticket, we will do our best to respond as soon as possible.
+
+- Is there any downside or deficiency of this setup?
+
+    > Unfortunately, this is a single machine configuration incapable of running on a cluster. That potentially may become a problem when the host is busy with several build jobs and the rest of the services suffer from performance degradation. We are planing to solve that issue by creating a Kubernetes deployment manifest or Helm chart, hence the services can be distributed among several physical hosts.
+
+ - What are the plans for future?
+
+    > As it is mentioned above, this setup is definitely going to be modified so the services can be hosted on a Kubernetes cluster, however we need to acquaint ourselves with the technology first. We will do our best to maintain the documentation and scripts up-to-date, and add new CI configurations for different technologies as the need arises (you are more than welcome to contribute).
+
+ - Why the name "Shoebox"?
+
+    > 
+
+### TL;DR
+
+## Setup Outline
 
 - [Prerequisites](#prerequisites)
     - [Tools](#tools)
@@ -100,8 +134,6 @@ System requirements:
 ## Prerequisites
 
 ### Tools
-
-> INFO: If a text editor and Git client are already installed you may skip to the next section.
 
 - #### Nano
 
