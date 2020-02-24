@@ -81,21 +81,25 @@ _*** The setup with minor adjustments applied to the scripts should work on any 
 
 ### Q/A
 
-- I know a better way of doing this or that, how can I help?
-    
-    > We are no Linux gurus, Docker experts or technical writing virtuosos, therefore, you are more than welcome to contribute and we would be more than happy to receive any constructive critique or new ideas how to improve. Open a PR or file an issue ticket, we will do our best to respond as soon as possible.
+- I know a better way, how can I help?
+
+    We are no Linux gurus, Docker experts or technical writing virtuosos, therefore, you are more than welcome to contribute, and we would be more than happy to receive any constructive critique or new ideas how to improve. Open a PR or file an issue ticket, we will do our best to respond as soon as possible.
 
 - Is there any downside or deficiency of this setup?
 
-    > Unfortunately, this is a single machine configuration incapable of running on a cluster. That potentially may become a problem when the host is busy with several build jobs and the rest of the services suffer from performance degradation. We are planing to solve that issue by creating a Kubernetes deployment manifest or Helm chart, hence the services can be distributed among several physical hosts.
+    It is a single machine configuration incapable of running on a cluster. That potentially may become a problem when the host is busy with several build jobs and the rest of the services suffer from performance degradation. That is a high priority issue and it should be solved once the setup is made deployable on a Kubernetes cluster.
+
+    If the technology or framework of your choice does not support Docker containerization or the right tooling is not provided out of the box the CI service cannot be used as its features based on the Docker build pipeline. This maybe solved in the future by including [Jenkins CI](https://jenkins.io/) as an alternative.
 
  - What are the plans for future?
 
-    > As it is mentioned above, this setup is definitely going to be modified so the services can be hosted on a Kubernetes cluster, however we need to acquaint ourselves with the technology first. We will do our best to maintain the documentation and scripts up-to-date, and add new CI configurations for different technologies as the need arises (you are more than welcome to contribute).
+    As it is mentioned above, this setup is definitely going to be modified in order to be cable running teh services on a Kubernetes cluster, however we need to acquaint ourselves with the technology first.
 
- - Why the name "Shoebox"?
+    We will do our best to maintain the documentation and scripts up-to-date and add new CI configurations for different technologies as the need arises (you are more than welcome to contribute).
 
-    > 
+ - Why is the name "Shoebox"?
+
+    Shoebox is a symbolic name representing a simple multipurpose storage for old toys, commix books, SEGA/Nintendo cartridges, Play Station disks, board game accessories... long story short, for things that use to (or still) bring us joy. We believe that this Shoebox contains a few "toys" that might help you to bring a structure in teamwork and make developing software in collaboration with your peers more enjoyable. Not convinced, OK here is a dad joke - Shoebox cus' it has something in it to get you goin'! :older_man: :tada:
 
 ### TL;DR
 
@@ -302,7 +306,7 @@ Certain services in this setup require an SMTP relay for sending email notificat
 The DNS providers a DNS API that is used by Certbot for proofing the domain name ownership for the SSL certificate acquisition.
 [Cloudflare](https://www.cloudflare.com/) is used as the default DNS provider for this setup.
 
-> IMPORTANT: If Cloudflare is not an option there is a number of [DNS providers compatible with Certbot](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438). In this case the actions given below must be adjusted accordingly.
+> IMPORTANT: If Cloudflare is not an option there is a number of [DNS providers compatible with Certbot](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438). In this case the actions described below must be adjusted accordingly.
 
 > WARNING: If the selected DNS provider is not compatible with Certbot the **Network** section may be deemed incompatible, and certificate acquisition and renewal setup must be conducted independently.
 
