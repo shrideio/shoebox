@@ -99,7 +99,9 @@ _*** The setup with minor adjustments applied to the scripts should work on any 
 
  - Why is the name "Shoebox"?
 
-    Shoebox is a symbolic name representing a simple multipurpose storage for old toys, commix books, SEGA/Nintendo cartridges, Play Station disks, board game accessories... long story short, for things that use to (or still) bring us joy. We believe that this Shoebox contains a few "toys" that might help you to bring a structure in teamwork and make developing software in collaboration with your peers more enjoyable. Not convinced, OK here is a dad joke - Shoebox cus' it has something in it to get you goin'! :older_man: :tada:
+    ...cus' it has something in it to getcha runnin'! :cowboy_hat_face: :boom: :tada:
+
+    Shoebox is a symbolic name representing a simple multipurpose storage for old toys, commix books, SEGA/Nintendo cartridges, Play Station disks, board game accessories... in short, for things that use to (or still) bring us joy. We believe that this "shoebox" contains a few "toys" that might help you brining a structure in teamwork and make collaborative software development with your peers more enjoyable. Happy hacking fellas! :nerd_face:
 
 ### TL;DR
 
