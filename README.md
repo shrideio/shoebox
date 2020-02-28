@@ -8,7 +8,7 @@ Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose
 | Tool             | Vendor                                | License       |
 | :------------    | :------------                         | :------------ |
 | Git Server       | [Gogs](https://gogs.io/)              | [MIT](https://github.com/gogs/gogs/blob/master/LICENSE)           |
-| Key/Secret Vault | [Vault](https://www.vaultproject.io/) | [MPL-2.0](https://github.com/hashicorp/vault/blob/master/LICENSE) |
+| Secret Management | [Vault](https://www.vaultproject.io/) | [MPL-2.0](https://github.com/hashicorp/vault/blob/master/LICENSE) |
 | Package Management | [Ideo Proget](https://inedo.com/proget) | [ProGet License Agreement](https://inedo.com/proget/license-agreement) <br /> [Free Edition Limitations](https://docs.inedo.com/docs/proget/administration/license#free-edition-limitations) |
 | Docker Registry | [Docker Registry](https://docs.docker.com/registry/) | [Apache-2.0](https://github.com/docker/distribution/blob/master/LICENSE) |
 | Docker Registry UI | [Joxit Docker Registry UI](https://joxit.dev/docker-registry-ui/) | [AGPL-3.0](https://github.com/Joxit/docker-registry-ui/blob/master/LICENSE) | 
@@ -22,20 +22,20 @@ The short answer is because of [“Those goddamn AWS charges!”](https://www.yo
 
 On a serious note, we believe that even small teams can benefit from using a fully equipped development environment without paying a premium for purchasing infrastructural services from cloud service providers (*).
 
-And lastly, this setup has come up naturally when a good friend of mine ([mich4xD](https://github.com/mich4xD)) and I ([bahram-aliyev](https://github.com/bahram-aliyev])) decided to document how to set up a development environment when working on our personal project, therefore this is a documentation for ourselves in the first place.
+> INFO: The latter is less relatable to open source projects as usually most of the tools mentioned in this setup are provided free of charge by major vendors for such projects.
 
-_* The former is less relatable to open source projects as usually most of the tools mentioned is this setup are provided free of charge by major vendors for such projects._
+And lastly, this setup has come up naturally when a good friend of mine ([mich4xD](https://github.com/mich4xD)) and I ([bahram-aliyev](https://github.com/bahram-aliyev])) decided to document how to set up a development environment when working on a personal project, therefore this is a documentation for ourselves in the first place.
 
 
 ### How does it work?
 
 This setup requires a Linux machine with root access and system requirements matching the following:
 
-System requirements _(**)_.
+System requirements.
 
-- Minimal:
+- Minimum:
 
-    - OS: Linux CentOS/RHEL 7.0 _(***)_
+    - OS: Linux CentOS/RHEL 7.0
     - CPU: 2 vCPU
     - RAM: 4 GB
     - Storage: 20 GB
@@ -49,13 +49,16 @@ System requirements _(**)_.
     - Storage: 30 GB
     - Network: 1 IPv4 address
 
+> INFO: The setup with minor adjustments applied to the scripts should work on any other popular Linux distributive. However, it was tested and staged on CentOS 7.0, that is why it is mentioned as a  requirement.
+
+
 There are three options to choose from.
 
 > IMPORTANT: None of the vendors listed below has a sponsorship or advertisement agreement with the authors, likewise the authors are not responsible or liable for any damage or inconvenience caused by actions or inactions of the vendors.
 
 - Rent a Linux VPS.
 
-    There are a few affordable options in a price range of $7 to $15 USD per month. The vendors listed below offer solutions matching or comparable to the desirable system requirements and price range.
+    There are a few affordable options in a price range of $7 to $15 USD per month. The vendors listed below offer solutions matching or comparable to the desired system requirements and price range.
 
     - [VPSDime](https://vpsdime.com/)
     - [OVHCloud](https://www.ovh.com/)
@@ -64,7 +67,7 @@ There are three options to choose from.
 
  - Rent a dedicate server.
 
-    This option is more expensive than renting a VPS, however it provides more computation power and storage capacity for the premium. There are a few affordable options in a price range of $20 to $30 USD per month. The dedicated server option can be considered as an expansion path for future growth.
+    This option is more expensive than renting a VPS, however, it provides more computation power and storage capacity for the premium. There are a few affordable options in a price range of $20 to $30 USD per month. The dedicated server option can be considered as an expansion path for future growth.
 
     - [Nocix](https://www.nocix.net/)
     - [Wholesale Internet](https://www.wholesaleinternet.net/)
@@ -73,27 +76,23 @@ There are three options to choose from.
 
     No comment on that, you are in charge of everything.
 
-Either way, be mindful of the law of diminishing returns. For example, the premium payed for an extra storage on a VPS may equalize the VPS rental cost with a dedicated server monthly fee. The same is true for the dedicated server option, as the cost may eventually grow to the point where it is more reasonable to purchase the services from a cloud service provider. In short, do back-of-the-napkin-math.
-
-_** Considering the low budget theme prevailing throughout this setup it is very likely that the same machine hosting the services will be used for hosting a testing environment. Therefore, take into account that factor when selecting a physical host. On a side note, even a host with the minimal system requirements should be capable enough to be moderately used for testing purposes._
-
-_*** The setup with minor adjustments applied to the scripts should work on any other popular Linux distributive. However, it was tested and staged on CentOS 7.0, that is why it is mentioned as a  requirement._
+Either way, be mindful of the law of diminishing returns. For example, the premium paid for extra storage on a VPS may equalize the VPS rental cost with a dedicated server monthly fee. The same is true for the dedicated server option, as the cost may eventually grow to the point where it is more reasonable to purchase the services from a cloud service provider. In short, do back-of-the-napkin-math.
 
 ### Q/A
 
 - I know a better way, how can I help?
 
-    We are no Linux gurus, Docker experts or technical writing virtuosos, therefore, you are more than welcome to contribute, and we would be more than happy to receive any constructive critique or new ideas how to improve. Open a PR or file an issue ticket, we will do our best to respond as soon as possible.
+    We are no Linux gurus, Docker experts or technical writing virtuosos, therefore, you are more than welcome to contribute, and we would be more than happy to receive any constructive criticism or new ideas on how to improve. Open a PR or file an issue ticket, we will do our best to respond as soon as possible.
 
 - Is there any downside or deficiency of this setup?
 
     It is a single machine configuration incapable of running on a cluster. That potentially may become a problem when the host is busy with several build jobs and the rest of the services suffer from performance degradation. That is a high priority issue and it should be solved once the setup is made deployable on a Kubernetes cluster.
 
-    If the technology or framework of your choice does not support Docker containerization or the right tooling is not provided out of the box the CI service cannot be used as its features based on the Docker build pipeline. This maybe solved in the future by including [Jenkins CI](https://jenkins.io/) as an alternative.
+    If the technology or framework of your choice does not support Docker containerization or the right tooling is not provided out of the box the CI service cannot be used as its features based on the Docker build pipeline. This may be solved in the future by including [Jenkins CI](https://jenkins.io/) as an alternative.
 
- - What are the plans for future?
+ - What are the plans for the future?
 
-    As it is mentioned above, this setup is definitely going to be modified in order to be cable running teh services on a Kubernetes cluster, however we need to acquaint ourselves with the technology first.
+    As it is mentioned above, this setup is going to be modified in order to be a cable running the services on a Kubernetes cluster, however we need to acquaint ourselves with the technology first.
 
     We will do our best to maintain the documentation and scripts up-to-date and add new CI configurations for different technologies as the need arises (you are more than welcome to contribute).
 
@@ -101,9 +100,14 @@ _*** The setup with minor adjustments applied to the scripts should work on any 
 
     ...cus' it has something in it to getcha runnin'! :cowboy_hat_face: :boom: :tada:
 
-    Shoebox is a symbolic name representing a simple multipurpose storage for old toys, commix books, SEGA/Nintendo cartridges, Play Station disks, board game accessories... in short, for things that use to (or still) bring us joy. We believe that this "shoebox" contains a few "toys" that might help you brining a structure in teamwork and make collaborative software development with your peers more enjoyable. Happy hacking fellas! :nerd_face:
+    Shoebox is a symbolic name representing simple multipurpose storage for old toys, commix books, SEGA/Nintendo cartridges, Play Station disks, board game accessories... in short, for things that used to (or still) bring us joy. We believe that this "shoebox" contains a few "toys" that might help you brining a structure in teamwork and make collaborative software development with your peers more enjoyable. Happy hacking fellas! :nerd_face:
 
 ### TL;DR
+
+- Components: Git; CI/CD; Docker Registry; Package Management; Secrets Management; Project Management
+- Minimum requirements: CentOS/RHEL 7.0; 2 vCPUs; 4 GB RAM; 20 GB storage; 1 IPv4 address
+- Future plans: Add more build configurations; Move to K8s
+- Cons: Single machine configuration; Docker support is a MUST for the build pipeline
 
 ## Setup Outline
 
