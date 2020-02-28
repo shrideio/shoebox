@@ -106,8 +106,8 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
 
 - Components: Git; CI/CD; Docker Registry; Package Management; Secrets Management; Project Management
 - Minimum requirements: CentOS/RHEL 7.0; 2 vCPUs; 4 GB RAM; 20 GB storage; 1 IPv4 address
-- Future plans: Add more build configurations; Move to K8s
 - Cons: Single machine configuration; Docker support is a MUST for the build pipeline
+- Future plans: Add more build configurations; Move to K8s
 
 ## Setup Outline
 
