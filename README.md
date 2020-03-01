@@ -2,7 +2,7 @@
 
 ### What is it?
 
-Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose) for setting up a small and simple collaborative software development environment that can be hosted on a dedicated server or VPS with a potential to grow. Software components used in this setup are either open source or have free versions (some with limitations, please check).
+Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose) for setting up a simple collaborative software development environment hosted on a VPS or dedicated server as an inexpensive alternative for subscription based could services. Software components used in this setup are either open source or have free versions (some with limitations, please check).
 
 
 | Tool             | Vendor                                | License       |
@@ -15,23 +15,22 @@ Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose
 | Continuous Integration and Delivery | [Drone CI](https://drone.io/) | [Drone Non-Commercial License](https://github.com/drone/drone/blob/master/LICENSE) <br /> [Waiver: Individual and Small Business](https://github.com/drone/drone/blob/master/LICENSE#L62) |
 | Project Management | [Taiga](https://taiga.io/) | [Taiga Backend - AGPL-3.0](https://github.com/taigaio/taiga-back/blob/master/LICENSE) <br /> [Taiga Front - AGPL-3.0](https://github.com/taigaio/taiga-front/blob/master/LICENSE) |
 
+goto: [TL;DR](#tl;dr)
 
 ### Why does this exist?
 
 The short answer is because of [“Those goddamn AWS charges!”](https://www.youtube.com/watch?v=982wFqC03v8).
 
-On a serious note, we believe that even small teams can benefit from using a fully equipped development environment without paying a premium for purchasing infrastructural services from cloud service providers (*).
+On a serious note, we believe that even small teams can benefit from using a fully equipped development environment without paying a premium for purchasing infrastructural services from cloud service providers.
 
 > INFO: The latter is less relatable to open source projects as usually most of the tools mentioned in this setup are provided free of charge by major vendors for such projects.
 
-And lastly, this setup has come up naturally when a good friend of mine ([mich4xD](https://github.com/mich4xD)) and I ([bahram-aliyev](https://github.com/bahram-aliyev])) decided to document how to set up a development environment when working on a personal project, therefore this is a documentation for ourselves in the first place.
+And lastly, this setup has come up naturally when ([mich4xD](https://github.com/mich4xD)) and I ([bahram-aliyev](https://github.com/bahram-aliyev])) decided to document how to set up a development environment when working on a personal project, therefore this is a documentation for ourselves in the first place.
 
 
 ### How does it work?
 
 This setup requires a Linux machine with root access and system requirements matching the following:
-
-System requirements.
 
 - Minimum:
 
@@ -49,58 +48,59 @@ System requirements.
     - Storage: 30 GB
     - Network: 1 IPv4 address
 
-> INFO: The setup with minor adjustments applied to the scripts should work on any other popular Linux distributive. However, it was tested and staged on CentOS 7.0, that is why it is mentioned as a  requirement.
+> INFO: The setup with minor adjustments should work on any other popular Linux distributive. However, it was tested and staged on CentOS 7.0, that is why this OS mention as a requirement.
 
-
-There are three options to choose from.
+Considering the physical host there are three options to choose from.
 
 > IMPORTANT: None of the vendors listed below has a sponsorship or advertisement agreement with the authors, likewise the authors are not responsible or liable for any damage or inconvenience caused by actions or inactions of the vendors.
 
-- Rent a Linux VPS.
+1. Rent a Linux VPS.
 
-    There are a few affordable options in a price range of $7 to $15 USD per month. The vendors listed below offer solutions matching or comparable to the desired system requirements and price range.
+    There are a few affordable options in a price range of 7 to 15 USD per month. The vendors listed below offer solutions matching or comparable to the desired system requirements and price range.
 
     - [VPSDime](https://vpsdime.com/)
     - [OVHCloud](https://www.ovh.com/)
     - [Hostinger](https://www.hostinger.com/)
     - [Interserver](https://www.interserver.net/)
 
- - Rent a dedicate server.
+ 2. Rent a dedicate server.
 
-    This option is more expensive than renting a VPS, however, it provides more computation power and storage capacity for the premium. There are a few affordable options in a price range of $20 to $30 USD per month. The dedicated server option can be considered as an expansion path for future growth.
+    This option is usually more costly than VPS renting, however, provides extra computation power and storage capacity for the premium. There is a limited number of affordable options in a price range of 20 to 30 USD per month, as usually the price range starts at a 50 USD per month threshold. When choosing a dedicated server it is recommended to take into consideration the hardware age and refrain from using significantly outdated equipment due to potential performance degradation. The dedicated server option can be considered as an expansion path for future growth.
 
     - [Nocix](https://www.nocix.net/)
     - [Wholesale Internet](https://www.wholesaleinternet.net/)
 
-- Run a server on-premises.
+3. Run a server on-premises.
 
-    No comment on that, you are in charge of everything.
+    No comment on that, you are in full charge.
 
-Either way, be mindful of the law of diminishing returns. For example, the premium paid for extra storage on a VPS may equalize the VPS rental cost with a dedicated server monthly fee. The same is true for the dedicated server option, as the cost may eventually grow to the point where it is more reasonable to purchase the services from a cloud service provider. In short, do back-of-the-napkin-math.
+Either way, be mindful of the law of diminishing returns. For example, the premium paid for extra storage on a VPS may equalize the VPS rental cost with the dedicated server monthly fee. The same is true for the dedicated server option, as the cost may eventually grow to the point where it is more reasonable to purchase the services from a cloud service provider. In short, do back-of-the-napkin-math.
 
 ### Q/A
 
 - I know a better way, how can I help?
 
-    We are no Linux gurus, Docker experts or technical writing virtuosos, therefore, you are more than welcome to contribute, and we would be more than happy to receive any constructive criticism or new ideas on how to improve. Open a PR or file an issue ticket, we will do our best to respond as soon as possible.
+    We are no Linux gurus, Docker experts or technical writing virtuosos, therefore, you are more than welcome to contribute, and we would be more than happy to receive any constructive criticism on how to improve. Open a PR or file an issue ticket, we will do our best to respond as soon as possible.
 
 - Is there any downside or deficiency of this setup?
 
-    It is a single machine configuration incapable of running on a cluster. That potentially may become a problem when the host is busy with several build jobs and the rest of the services suffer from performance degradation. That is a high priority issue and it should be solved once the setup is made deployable on a Kubernetes cluster.
+    Yes, there is.
 
-    If the technology or framework of your choice does not support Docker containerization or the right tooling is not provided out of the box the CI service cannot be used as its features based on the Docker build pipeline. This may be solved in the future by including [Jenkins CI](https://jenkins.io/) as an alternative.
+    Firstly, it is a single machine configuration incapable of running on a cluster. The latter potentially may become a problem when simultaneously running build pipelines suffocate the performance of the rest of the services. This deficiency should be resolved once the setup is made deployable to a Kubernetes cluster.
+
+    Secondly, if the technology of your choice does not support Docker containerization or necessary tooling is not provided out of the box, the current CI/CD service is deemed unusable for your needs as its features are entirely based on the Docker infrastructure. In this case consider using alternatives such as [Jenkins CI](https://jenkins.io/) or [Concourse](https://concourse-ci.org/), which might be included in the setup in the future. 
 
  - What are the plans for the future?
 
-    As it is mentioned above, this setup is going to be modified in order to be a cable running the services on a Kubernetes cluster, however we need to acquaint ourselves with the technology first.
+    As it is mentioned earlier adding Kubernetes support is a high priory task on the list, however we need to acquaint ourselves with the technology first.
 
-    We will do our best to maintain the documentation and scripts up-to-date and add new CI configurations for different technologies as the need arises (you are more than welcome to contribute).
+    We will do our best to maintain the documentation and keep the scripts up-to-date, and continue adding new CI configurations for different technologies as the need arises (you are more than welcome to contribute).
 
  - Why is the name "Shoebox"?
 
-    ...cus' it has something in it to getcha runnin'! :cowboy_hat_face: :boom: :tada:
+    ...cus' it has something in it to getcha runnin'! :boom: :running: :checkered_flag:
 
-    Shoebox is a symbolic name representing simple multipurpose storage for old toys, commix books, SEGA/Nintendo cartridges, Play Station disks, board game accessories... in short, for things that used to (or still) bring us joy. We believe that this "shoebox" contains a few "toys" that might help you brining a structure in teamwork and make collaborative software development with your peers more enjoyable. Happy hacking fellas! :nerd_face:
+    Shoebox is a symbolic name representing simple multipurpose storage for old toys, lego bricks, commix books, SEGA/Nintendo cartridges, Play Station disks, board game accessories... in short, for things that used to (or still) bring us joy. We believe that this "shoebox" contains a few "toys" that might help you brining a structure in teamwork and make collaborative software development with your peers more enjoyable. :nerd_face: :headphones: :computer: 
 
 ### TL;DR
 
