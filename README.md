@@ -82,13 +82,13 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
 
     We are no Linux gurus, Docker experts or technical writing virtuosos, therefore, you are more than welcome to contribute, and we would be more than happy to receive any constructive criticism on how to improve. Open a PR or file an issue ticket, we will do our best to respond as soon as possible.
 
-- Is there any downside or deficiency of this setup?
+- Are there any downsides or deficiencys of this setup?
 
-    Yes, there is.
+    Yes, there are.
 
     Firstly, it is a single machine configuration incapable of running on a cluster. The latter potentially may become a problem when simultaneously running build pipelines suffocate the performance of the rest of the services. This deficiency should be resolved once the setup is made deployable to a Kubernetes cluster.
 
-    Secondly, if the technology of your choice does not support Docker containerization or necessary tooling is not provided out of the box, the current CI/CD service is deemed unusable for your needs as its features are entirely based on the Docker infrastructure. In this case consider using alternatives such as [Jenkins CI](https://jenkins.io/) or [Concourse](https://concourse-ci.org/), which might be included in the setup in the future. 
+    Secondly, if the technology of your choice does not support Docker containerization or necessary tooling is not provided out of the box, the current CI/CD service is deemed unusable for your needs as its features are entirely based on the Docker infrastructure. In this case consider using alternatives such as [Jenkins CI](https://jenkins.io/) or [Concourse](https://concourse-ci.org/), which might be included in the setup in the future.
 
  - What are the plans for the future?
 
