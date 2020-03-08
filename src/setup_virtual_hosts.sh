@@ -24,7 +24,7 @@ declare -A SERVICES=(
   [registry]=${REGISTRY_PORTS_PREFIX}50
   [vault]=${VAULT_PORTS_PREFIX}80
   [ci]=${CI_PORTS_PREFIX}80
-  [project]=${PROJETC_PORTS_PREFIX}80
+  [project]=${PROJECT_PORTS_PREFIX}80
 )
 
 for SRV in "${!SERVICES[@]}"
@@ -33,11 +33,11 @@ do
   SVC_PORT=${SERVICES[$SRV]}
 
   cp $VHOST_CONF_TMPL $CONF_FILE
- 
-  sed -i 's|@YOUR_DOMAIN$|'"$YOUR_DOMAIN"'|g' $CONF_FILE
-  sed -i 's|@SUBDOMAIN$|'"$SRV"'|g' $CONF_FILE
-  sed -i 's|@SVC_PORT$|'"$SVC_PORT"'|g' $CONF_FILE
-  
+
+  sed -i 's|@YOUR_DOMAIN|'"$YOUR_DOMAIN"'|g' $CONF_FILE
+  sed -i 's|@SUBDOMAIN|'"$SRV"'|g' $CONF_FILE
+  sed -i 's|@SVC_PORT|'"$SVC_PORT"'|g' $CONF_FILE
+
   echo "Created a virtual host configuration file for '$SRV.$YOUR_DOMAIN' with a revers proxy at 'http://localhost:$SVC_PORT'."
 done;
 

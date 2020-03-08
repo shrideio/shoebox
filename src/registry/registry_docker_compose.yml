@@ -33,6 +33,7 @@ services:
       - registry
 
 networks:
+
   registry-network:
     name: registry-network
     driver: bridge
