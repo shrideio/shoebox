@@ -106,7 +106,7 @@ Check [Drone documentation](https://docs.drone.io/), [Drone Vault plugin](https:
 
       Check if Docker registry credentials are accessible
       ```
-      $ drone plugins secret get secrets/data/ci.docker docker_username --repo ciagent/ci.build.sample
+      $ drone plugins secret get secrets/data/ci.docker registry_username --repo ciagent/ci.build.sample
       ```
 
       Check if the build argument is accessible
