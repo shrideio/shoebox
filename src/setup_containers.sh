@@ -85,8 +85,8 @@ find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@STORAGE_TAIGA_FRONT|'"
 find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@STORAGE_TAIGA_DB|'"$STORAGE_TAIGA_DB"'|g' {} \;
 find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@STORAGE_TAIGA_PROXY|'"$STORAGE_TAIGA_PROXY"'|g' {} \;
 find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_SECRET|'"$-helk"'|g' {} \;
-find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_POSTGRES_USER|'"$TAIGA_POSTGRES_USER"'|g' {} \;
-find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_POSTGRES_PASSWORD|'"$TAIGA_POSTGRES_PASSWORD"'|g' {} \;
+find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_POSTGRESQL_USER|'"$TAIGA_POSTGRESQL_USER"'|g' {} \;
+find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_POSTGRESQL_PASSWORD|'"$TAIGA_POSTGRESQL_PASSWORD"'|g' {} \;
 find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_RABBIT_USER|'"$TAIGA_RABBIT_USER"'|g' {} \;
 find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_RABBIT_PASSWORD|'"$TAIGA_RABBIT_PASSWORD"'|g' {} \;
 
