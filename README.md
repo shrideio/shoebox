@@ -88,11 +88,13 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
 
   Secondly, if the technology of your choice does not support Docker containerization or necessary tooling is not provided out of the box, the current CI/CD service is deemed unusable for your needs as its features are entirely based on the Docker infrastructure. In this case consider using alternatives such as [Jenkins CI](https://jenkins.io/) or [Concourse](https://concourse-ci.org/), which might be included in the setup in the future.
 
+  And lastly, the current build pipeline is .NET Core biased. Please feel free to contribute and add pipeline configurations for other technologies.
+
 - What are the plans for the future?
 
-  As it is mentioned earlier adding Kubernetes support is a high priory task on the list, however we need to acquaint ourselves with the technology first.
+As it is mentioned earlier adding Kubernetes support is a high priory task on the list, however we need to acquaint ourselves with the technology first.
 
-  We will do our best to maintain the documentation and keep the scripts up-to-date, and continue adding new CI configurations for different technologies as the need arises (you are more than welcome to contribute).
+We will do our best to maintain the documentation and keep the scripts up-to-date, and continue adding new CI configurations for different technologies as the need arises (you are more than welcome to contribute).
 
 - Why is the name "Shoebox"?
 
@@ -166,7 +168,7 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
 
 - #### Disable SELinux
 
-  > IMPORTANT: It is highly recommended to disable SELinux for avoiding issues when setting up the infrastructure and Docker containers.
+  > IMPORTANT: It is highly recommended to disable SELinux for avoiding issues with infrastructure services and Docker containers.
 
   Check SELinux status.
 
@@ -180,7 +182,7 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
   Current mode:                   enforcing
   ```
 
-  If SELinux is `enabled`, follow the instruction to disable it. otherwise, continue to the next section.
+  If SELinux is `enabled` follow the instruction to disable it, otherwise continue to the next section.
 
   Edit the SELinux configuration file
 
@@ -611,7 +613,12 @@ then check if the placeholders have been replaced on a sample file (i.e. git/.en
 $ sudo cat $REPO_ROOT/src/git/.env
 ```
 
-> IMPORTANT: The following information is provided for troubleshooting purposes only and is not supposed to be used in a regular circumstance.
+<<<<<<< HEAD
+
+=======
+
+> > > > > > > ab8f0a2c9634f64309a6a9cbd259e242834ca795
+> > > > > > > IMPORTANT: The following information is provided for troubleshooting purposes only and is not supposed to be used in a regular circumstance.
 
 The setup is split into a batch of scripts per service where each script can be run separately if necessary. The input for all of the scripts matches the following pattern.
 

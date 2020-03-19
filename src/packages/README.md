@@ -1,48 +1,77 @@
-## ProGet Setup
+# ProGet Setup
+
 Check [ProGet Documentation](https://docs.inedo.com/docs/proget/overview) and [ProGet Linux Installation Guide](https://docs.inedo.com/docs/proget/installation/installation-guide/linux-docker) for more information.
-> Run `echo $REPO_ROOT` to verify if the environment variable is set before continuing.
 
-1. Stage ProGet (registry) and PostgreSQL (registry-db) containers
-    > This setup uses PostgreSQL instead of Microsoft SQL Server what is different from the official ProGet guide. Check [ProGet Docker](https://hub.docker.com/r/inedo/proget/dockerfile) file for more detail.
-    
-    The following commands will navigate to the directory containing `registry_docker_compose.yml` and run the containers in the background.
+### Preliminary check list
 
-    > The `.env` file in the `/src/registry` contains environment variable values for the containers, review and modify if necessary.
+- [x] `$REPO_ROOT` and `$SHOEBOX_ROOT` environment variables are set
+
+    ```
+    $ echo $REPO_ROOT
+    $ echo $SHOEBOX_ROOT
+    ```
+
+- [x] Proget `secrets.ini` and `.env` files are generated
+
+    > WARNING: DO NOT modify assigned values in the `.env` file. If necessary modify, the `secrets.ini` file and run `packages_containers_setup.sh` to override the current values.
+
+    ```
+    $ sudo cat $SHOEBOX_ROOT/proget/secrets.ini
+    $ sudo cat $REPO_ROOT/src/packages/.env
+    ```
+
+- [x] packages._yourdomain.com_ subdomain is configured and serves https traffic
+
+Proceed if all of the checks pass, otherwise check the [landing page](/src/README.md#setup-outline) and continue when ready.
+
+### Setup
+
+1. Start ProGet (registry) and PostgreSQL (registry-db) containers.
 
     ```
     $ sudo cd $REPO_ROOT/src/registry
     $ sudo docker-compose up -d
     ```
 
-    <a name="docker-logs"></a>Run `sudo docker ps` to verify if `registry` and `registry-db` containers are up and running. Proceed if no error is detected, otherwise check the container logs for troubleshooting using the following command `sudo docker logs [container name]`.
+    Run `$ sudo docker ps` for verifying if if `registry` and `registry-db` containers are up and running. Proceed if no error is detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
+
 
 2. Configure ProGet
 
-    - Navigate to registry.yourdomain.com and login as _Admin/Admin_ as described on the login screen. If an error reported check the container logs as mentioned above.
+    Navigate to registry._yourdomain.com_ and login as _Admin/Admin_ as described on the login screen. If an error reported check the container logs as mentioned above.
 
-    - ProGet requires a license key to operate. click the cog icon ![Alt text](/resources/img/proget_cog.png?raw=true "ProGet administration console") in the top right corner to open the administration console. Browse to `Software Configuration -> License Key & Activation` and the click the **[change]** link to open a prompt dialog. Enter the license key or navigate to MyInedo by clicking on the link shown in the info message. Create a new account or use existing to acquire a perpetually free license key. When the license key is entered click *Save*. The update page will contain the **[activate]** link, click it to activate the key. After closing the popup message confirming successful activation _Activation status_ is expected to show **The license key is activated**. If the desired result was not achieved and ProGet still remains inactive check the [license documentation](https://docs.inedo.com/docs/proget/administration/license).
+    - Change the administrator's password.
+    
+        Hover onto the user icon ![Alt text](/resources/img/proget_user.png?raw=true "ProGet user") in the top right corner to open a context menu and then click _Change Password_ to open the change password dialog. After the password is changed the welcome message should disappear from the login screen.    
 
-    - Change the administrator's password. Hover onto the user icon ![Alt text](/resources/img/proget_user.png?raw=true "ProGet user") in the top right corner to open a context menu and then click **Change Password** to open the change password dialog. After the password is changed the welcome message should disappear from the login screen.
+    - Acquire a free license key for ProGet:
 
-    - Browse to the administration console, then navigate to `System Configuration -> Advanced Settings`. Set the value of `Web.BaseUrl` to the root url of the packages and containers registry (i.e. https://registry.yourdomain.com) and click **Save Changes**. The service will restart causing a `502 Proxy Error` which is expected to disappear a manual page refresh.
+        - Open the administration console. Click the cog icon ![Alt text](/resources/img/proget_cog.png?raw=true "ProGet administration console") in the top right corner.
+        
+        - Browse to `Software Configuration -> License Key & Activation` and then click the _[change]_ link to open a prompt dialog. Enter the exiting license key or navigate to MyInedo, by clicking the link shown in the info message, for creating a new one.
 
-3. Configure Security & Authentication
+        - Enter the license key and click [Save]. The update page will contain the _activate_ link, click it for activation. The _Activation status_ is expected to show **The license key is activated**. 
+        
+        If the desired result was not achieved and ProGet still remains inactive check the [license documentation](https://docs.inedo.com/docs/proget/administration/license)
 
-    - Browse to the administration console, then navigate to `Security & Authentication -> Users & Tasks`
+    - Change the packages registry url.
+    
+      Open the administration console using the cog icon ![Alt text](/resources/img/proget_cog.png?raw=true "ProGet administration console"), then navigate to `System Configuration -> Advanced Settings`. Set `Web.BaseUrl` to https://packages._yourdomain.com_ and click [Save Changes]. The ProGet service will restart automatically causing a `502 Proxy Error` response temporary.
 
-    - Create two users, one for consuming feeds `FeedConsumer` and another for publishing packages `PackagePublisher`. click **Create User** to open the _Create User_ dialog.
-        > Leave the _Group membership_ field blank.
+    - Configure authentication and access policies.
+        
+        - Open the administration console using the cog icon ![Alt text](/resources/img/proget_cog.png?raw=true "ProGet administration console"), then navigate to `System Configuration -> Advanced Settings`, then navigate to `Security & Authentication -> Users & Tasks`.
 
-    - Open the _Tasks_ tab after the users have been created.
+        - Create two users, one for consuming feeds `FeedConsumer` and another for publishing packages `PackagePublisher`. Click [Create User] for opening the _Create User_ dialog, leave the _Group membership_ field blank.
 
-    - Deprive `Anonymous` from `View & Download Packages` by removing the record from the task row.
+        - Open the _Tasks_ tab. Firstly, deprive `Anonymous` from the `View & Download Packages` task by removing the entry. Then, assign the `View & Download Packages` task to `FeedConsumer`, and the `View & Download Packages` and `Publish Packages` tasks to `PackagePublisher`. 
+        
+        - Click [Add Permission] to open the _Add Privilege_ dialog and create the associations listed below.
 
-    - Assign `View & Download Packages` to `FeedConsumer`, and `View & Download Packages` and `Publish Packages` to `PackagePublisher`. click **Add Permission** to open the _Add Privilege_ dialog and create the aforementioned associations. The users and tasks grid is expected to look as follows:
-
-        | Task                     | Scope     | Users & Groups                 |
-        | :----------------------- |:--------- | :----------------------------- |
-        | Publish Packages         | all feeds | PackagePublisher               |
-        | View & Download Packages | all feeds | FeedConsumer                   |
+            | Task                     | Scope     | Users & Groups                 |
+            | :----------------------- |:--------- | :----------------------------- |
+            | Publish Packages         | all feeds | PackagePublisher               |
+            | View & Download Packages | all feeds | FeedConsumer                   |
 
 4. Create API keys
 
