@@ -41,19 +41,19 @@ Proceed if all of the checks pass, otherwise review the [landing page](/src/READ
 
     Navigate to registry._yourdomain.com_ and login as _Admin/Admin_ as described on the login screen. If an error reported check the container logs as mentioned above.
 
-    - Change the administrator's password.
-    
-        Hover with the mouse cursor onto the user icon ![Alt text](/resources/img/proget_user.png?raw=true "ProGet user") in the top right corner to open a context menu and then click _Change Password_ to open the change password dialog. After the password is changed the welcome message should disappear from the login screen.    
-
     - Acquire a free license key for ProGet.
 
-        - Open the administration console using the cog icon ![Alt text](/resources/img/proget_cog.png?raw=true "ProGet administration console") in the top right corner. .
-        
-        - Browse to `Software Configuration -> License Key & Activation` and then click the _[change]_ link to open a prompt dialog. Enter the exiting license key or navigate to MyInedo, by clicking the link shown in the info message, for creating a new one.
+        - Open the administration console using the cog icon ![Alt text](/resources/img/proget_cog.png?raw=true "ProGet administration console") in the top right corner.
+
+        - Browse to `Software Configuration -> License Key & Activation` and then click the _[change]_ link to open a prompt dialog. Enter the exiting license key or navigate to the MyInedo website by clicking the link shown in the info message for acquiring a perpetually free licence key.
 
         - Enter the license key and click [Save]. The updated page will contain the _activate_ link, click it for activation. The _Activation status_ is expected to show 'The license key is activated'.
-        
+
         If the desired result was not achieved and ProGet still remains inactive check the [license documentation](https://docs.inedo.com/docs/proget/administration/license).
+
+    - Change the administrator password.
+    
+        Hover with the mouse cursor onto the user icon ![Alt text](/resources/img/proget_user.png?raw=true "ProGet user") in the top right corner to open a context menu and then click _Change Password_ to open the change password dialog. After the password is changed the welcome message should disappear from the login screen.        
 
     - Change the packages registry url.
 
