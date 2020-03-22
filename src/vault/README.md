@@ -2,7 +2,7 @@
 
 Check [Vault Documentation](https://www.vaultproject.io/docs/), and [Vault](https://hub.docker.com/_/vault) and [Consul](https://hub.docker.com/_/consul) Docker Hub pages for more information.
 
-> INFO: Consul was chosen over the other open source storage providers as it is officially supported by HashiCorp. Check available Vault [storage options](https://www.vaultproject.io/docs/configuration/storage/) for more detail.
+> INFO: Consul was chosen over the other open-source storage providers as it is officially supported by HashiCorp. Check available Vault [storage options](https://www.vaultproject.io/docs/configuration/storage/) for more detail.
 
 ### Preliminary checklist
 
@@ -42,7 +42,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
 2. <a id="unseal-vault"></a>Unseal Vault
 
-    - Navigate to vault._yourdomain.com_ to start initial setup. It is recommended to have at least `5` _Key shares_ and `3` _Key threshold_ for the [key rotation](https://www.vaultproject.io/docs/internals/rotation.html). Set the values and click [Initialize]. 
+    - Navigate to vault._yourdomain.com_ to start the initial setup. It is recommended to have at least `5` _Key shares_ and `3` _Key threshold_ for the [key rotation](https://www.vaultproject.io/docs/internals/rotation.html). Set the values and click [Initialize]. 
 
     - After the root token and key shares are generated click the _Download keys_ link and download a json file containing the aforementioned tokens. Click [Continue to Unseal] to proceed the setup.
 
@@ -58,11 +58,11 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
     - click the _Secrets_ menu in the top right corner to navigate to the secrets management console. Then click _Enable new engine_ to proceed.
 
-    - Choose _KV_ as the secrets engine and click [Next] to proceed. Set _Path_ to `secrets` and _Version_ to `2` (default KV engine version). Check the [KV engine documentation](https://www.vaultproject.io/docs/secrets/kv/kv-v2.html) for the engine options details and modify if necessary. Click [Enable Engine] to finish the secret engine setup.
+    - Choose _KV_ as the secrets engine and click [Next] to proceed. Set _Path_ to `secrets` and _Version_ to `2` (default KV engine version). Check the [KV engine documentation](https://www.vaultproject.io/docs/secrets/kv/kv-v2.html) for the engine options details and modify it if necessary. Click [Enable Engine] to finish the secret engine setup.
 
 4. <a name="create-a-secret"></a>Create a secret
 
-    > The secret will be used by a continues integration server for a test build.
+    > The secret will be used by a continuous integration server for a test build.
 
     - Navigate to `Secrets -> secrets` to open the secret management console then click _Create secret_.
 
@@ -139,9 +139,9 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
         
         -  Find `POST /auth/approle/login/` and click on the section to expand it, then click [Try it out] to enable editing.
         
-        -  Fill in request body parameters with matching `role_id` and `secret_id` values, then click [Execute - send a request with your token to Vault] and follow the check list to verify the setup correctness.
+        -  Fill in request body parameters with matching `role_id` and `secret_id` values, then click [Execute - send a request with your token to Vault] and follow the checklist to verify the setup correctness.
 
-            - [x] `token_policies` contains the [configure polices](#acl-policy)
+            - [x] `token_policies` contains the [configured polices](#acl-policy)
             - [x] `lease_duration` is set to _2592000_ (30 days in seconds)
             - [x] `renewable` is set to _true_
             - [x] `client_token` is not empty
