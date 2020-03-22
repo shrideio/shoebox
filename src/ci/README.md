@@ -53,7 +53,7 @@ Proceed if all of the checks pass, otherwise review the [landing page](/src/READ
 
         Follow the instruction for creating secrets as described [here](/src/vault/README.md#create-a-secret).
 
-    -  Create an exclusive git user for the CI service for enabling access to repositories. Use the values of `DRONE_GIT_USERNAME` and `DRONE_GIT_PASSWORD` from the `secrets.ini` file as username and password accordingly. After the user is created login to the Git service and create a repository named `ci.build.sample`.
+    -  Create an git user for the CI service for enabling access to repositories. Use the values of `DRONE_GIT_USERNAME` and `DRONE_GIT_PASSWORD` from the `secrets.ini` file as username and password accordingly. After the user is created login to the Git service and create a repository named `ci.build.sample`.
       
         > IMPORTANT: For repositories not created under `DRONE_GIT_USERNAME` adding that user as a collaborator should enable the access for the CI service.
 
@@ -80,7 +80,7 @@ Proceed if all of the checks pass, otherwise review the [landing page](/src/READ
 
       - Create a local git repository for the sample project and push it to the Git service.
 
-        > WARNING: Do not forget to replace [yourdomain.com] and [DRONE_GIT_USERNAME]placeholders with the actual values.
+        > WARNING: Do not forget to replace [yourdomain.com] and [DRONE_GIT_USERNAME] placeholders with the actual values.
 
         ```
         $ cd $REPO_ROOT/src/ci/ci.build.sample
@@ -91,7 +91,7 @@ Proceed if all of the checks pass, otherwise review the [landing page](/src/READ
         $ sudo git push origin master
         ```
 
-        > IMPORTANT: `git push` should trigger a build, if it did not modify the `.trigger` file in the project directory then commit and push the change to the remote repository.
+        > IMPORTANT: `git push` should trigger a build, if not then modify the `.trigger` file in the project directory, and commit and push the change fro triggering a build.
 
         Navigate to ci._yourdomain.com_ and click the repository name, ci.build.sample, to open the details page and then open the _ACTIVITY FEED_ tab for checking the build status.
 
@@ -122,11 +122,9 @@ Proceed if all of the checks pass, otherwise review the [landing page](/src/READ
         $ sudo install -t /usr/local/bin drone 
         ```
 
-    - Create the Drone admin user required by Drone CLI
+    - Drone CLI requires the Drone admin user for running commands on the Drone service. The credential for the admin user can be extracted from the `DRONE_USER_CREATE` parameter from the `secrets.ini` file. Use the _username_ and _token_ parts to create a git user with matching username and password.
 
-      - Create an exclusive git user for the Drone admin in the git service. Use the _username_ and _token_ parts from the `DRONE_USER_CREATE` parameter value from the `secrets.ini`.
-
-    - Set `DRONE_TOKEN` and `DRONE_SERVER` environment variables which are used by Drone CLI for connecting to the Drone service. Conveniently, the commands to set those variables can be fetched from the Drone web interface. Use the admin user credentials to login to the Drone web interface. In the landing page click on the user icon (auto-generated icon with an abstract pattern in the top right corner), and then click _User Settings_ in the emerged context menu. In the opened page find the _Example CLI Usage_ section and copy-paste its content into the shell and run the commands.
+    - Drone CLI needs+- `DRONE_TOKEN` and `DRONE_SERVER`environment variables to befor connecting to the Drone service. Conveniently, the commands to set those variables can be fetched from the Drone web interface. Use the admin user credentials to login to the Drone web interface. In the landing page click on the user icon (auto-generated icon with an abstract pattern in the top right corner), and then click _User Settings_ in the emerged context menu. In the opened page find the _Example CLI Usage_ section and copy-paste its content into the shell and run the commands.
 
       > INFO: The commands should resemble the following piece of code
         ```
