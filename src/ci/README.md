@@ -158,7 +158,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
     - Fetching secrets from Vault using the Drone secrets plugin
 
         ```
-        $ drone plugins secret get secrets/data/ci.docker registry_username --repo ciagent/ci.docker
+        $ drone plugins secret get secrets/data/ci.docker registry_username --repo ciagent/ci.build.sample
         $ drone plugins secret get secrets/data/ci.build.sample hello_world --repo ciagent/ci.build.sample
         ```
 
