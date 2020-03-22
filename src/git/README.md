@@ -1,7 +1,7 @@
 # Gogs Setup
 Check [Gogs Documentation](https://gogs.io/docs) and  [Gogs on Docker Hub](https://hub.docker.com/r/gogs/gogs/) for more information.
 
-### Preliminary check list
+### Preliminary checklist
 
 - [x] `$REPO_ROOT` and `$SHOEBOX_ROOT` environment variables are set
 
@@ -23,7 +23,7 @@ Check [Gogs Documentation](https://gogs.io/docs) and  [Gogs on Docker Hub](https
 
 - [x] SMTP relay is configured
 
-Proceed if all of the checks pass, otherwise check the [landing page](/src/README.md#setup-outline) and continue when ready.
+Proceed if all of the checks pass, otherwise, check the [landing page](/src/README.md#setup-outline) and continue when ready.
 
 ### Setup
 
@@ -73,7 +73,7 @@ Proceed if all of the checks pass, otherwise check the [landing page](/src/READM
       | Username                                 | i.e. gitadmin                        |
       | Admin Email                              | i.e. gitadmin@_yourdomain.com_       |
 
-3. Click [Install Gogs]. If Gogs is installed successfully it will create the `app.ini` file at the path assigned to the `GOGS_DATA` parameter in `.env`. Check [Googs Configuration Cheat Sheet](https://gogs.io/docs/advanced/configuration_cheat_sheet) for post installation configuration.
+3. Click [Install Gogs]. If Gogs is installed successfully it will create the `app.ini` file at the path assigned to the `GOGS_DATA` parameter in `.env`. Check [Googs Configuration Cheat Sheet](https://gogs.io/docs/advanced/configuration_cheat_sheet) for post-installation configuration.
 
     > INFO: Do not forget to restart the `git` container after modifying `app.ini`, otherwise new configuration settings will not be applied.
 

@@ -2,7 +2,7 @@
 
 Check [ProGet Documentation](https://docs.inedo.com/docs/proget/overview) and [ProGet Linux Installation Guide](https://docs.inedo.com/docs/proget/installation/installation-guide/linux-docker) for more information.
 
-### Preliminary check list
+### Preliminary checklist
 
 - [x] `$REPO_ROOT` and `$SHOEBOX_ROOT` environment variables are set
 
@@ -22,7 +22,7 @@ Check [ProGet Documentation](https://docs.inedo.com/docs/proget/overview) and [P
 
 - [x] packages._yourdomain.com_ subdomain is configured and serves https traffic
 
-Proceed if all of the checks pass, otherwise review the [landing page](/src/README.md#setup-outline) and continue when ready.
+Proceed if all of the checks pass, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
 
 ### Setup
 
@@ -45,7 +45,7 @@ Proceed if all of the checks pass, otherwise review the [landing page](/src/READ
 
         - Open the administration console using the cog icon ![Alt text](/resources/img/proget_cog.png?raw=true "ProGet administration console") in the top right corner.
 
-        - Browse to `Software Configuration -> License Key & Activation` and then click the _[change]_ link to open a prompt dialog. Enter the exiting license key or navigate to the MyInedo website by clicking the link shown in the info message for acquiring a perpetually free licence key.
+        - Browse to `Software Configuration -> License Key & Activation` and then click the _[change]_ link to open a prompt dialog. Enter the exiting license key or navigate to the MyInedo website by clicking the link shown in the info message for acquiring a perpetually free license key.
 
         - Enter the license key and click [Save]. The updated page will contain the _activate_ link, click it for activation. The _Activation status_ is expected to show 'The license key is activated'.
 
@@ -65,7 +65,7 @@ Proceed if all of the checks pass, otherwise review the [landing page](/src/READ
 
         - Create two users, one for consuming feeds `FeedConsumer` and another for publishing packages `PackagePublisher`. Click [Create User] for opening the _Create User_ dialog, leave the _Group membership_ field blank.
 
-        - Open the _Tasks_ tab. Firstly, deprive `Anonymous` from the `View & Download Packages` task by removing the entry. Then, assign the `View & Download Packages` task to `FeedConsumer`, and the `View & Download Packages` and `Publish Packages` tasks to `PackagePublisher`.
+        - Open the _Tasks_ tab. Firstly, deprive `Anonymous` of the `View & Download Packages` task by removing the entry. Then, assign the `View & Download Packages` task to `FeedConsumer`, and the `View & Download Packages` and `Publish Packages` tasks to `PackagePublisher`.
         
         - Click [Add Permission] to open the _Add Privilege_ dialog and create the associations listed below.
 
@@ -81,16 +81,16 @@ Proceed if all of the checks pass, otherwise review the [landing page](/src/READ
 
     - Open the administration console ![Alt text](/resources/img/proget_cog.png?raw=true "ProGet administration console"), then navigate to `Integrations & Extensibility -> API Keys`. 
 
-    - Create dedicated API keys for the `FeedConsumer` and `PackagePublisher` users. Click [Create API Key] to open the _Create API Key_ dialog. Fill in the _Impersonate user_ and _Description_ fields with matching user names (the API user is not shown in the API Keys table, that is why setting _Description_ is important). click [Save API Key] to save changes and proceed.
+    - Create dedicated API keys for the `FeedConsumer` and `PackagePublisher` users. Click [Create API Key] to open the _Create API Key_ dialog. Fill in the _Impersonate user_ and _Description_ fields with matching user names (the API user is not shown in the API Keys table, that is why setting _Description_ is important). Click [Save API Key] to save changes and proceed.
 
 
 4. Create NuGet feed
 
-    > INFO: NuGet feed is required for testing the continues integration setup.
+    > INFO: NuGet feed is required for testing the continuous integration setup.
 
     - Navigate to `Feeds` and click [Create New Feed] to open the _Create Feed_ dialog. Set _Feed name_ to `v2`, then choose _Third-party package format_ and select _NuGet_ from the dropdown. Click [Create Feed] to save changes. The created feed will be exposed through the following uri: packages._yourdomain.com_/nuget/v2/
 
-        > INFO: There is no need for prefixing the feed name with `nuget` as the NuGet feeds uri root already contains that literal. `v2` stands for the NuGet protocol version, v3 support is not included into the free licence.
+        > INFO: There is no need for prefixing the feed name with `nuget` as the NuGet feeds uri root already contains that literal. `v2` stands for the NuGet protocol version, v3 support is not included into the free license.
 
     - ProGet supports feed connectors allowing to unify package feeds from different sources.
     For adding a NuGet connector for `nuget.org` click on the feed name `Feed -> v2`, and follow the breadcrumbs `[Manage Feed] -> add connector -> [Create Connector]` to open the _Create Connector_ dialog. Select `NuGet` as _Feed type_ leaving the rest of the inputs intact, then click [Save] to save changes and close the dialog. In the emerged _Select Connector_ dialog select _www.nuget.org_ as _Connector_ (should be preselected) and then click [Save] to save changes.
