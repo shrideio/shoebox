@@ -33,7 +33,17 @@ Proceed if all of the checks pass, otherwise review the [landing page](/src/READ
 
 ### Setup
 
-1. Start Drone CI (ci), Drone build agent (ci-agent), Drone Vault plugin (ci-secret) and PostgreSQL (ci-db) containers.
+1. Drone Vault plugin requires a Vault client token for accessing secrets stored in the Vault service. Fetch the cline token as described [here](/src/vault/README.md#issue-a-client-token) and then replace the placeholder in `.env` file running the following command.
+
+    > WARNING: Do not forget to replace [vault-token] with the actual value
+
+    ```
+    $ export VAULT_TOKEN=[vault-token]
+    $ sudo sed -i 's|@VAULT_TOKEN|'"$VAULT_TOKEN"'|g' $REPO_ROOT/src/ci/.env
+    $ cat $REPO_ROOT/src/ci/.env
+    ```
+
+2. Start Drone CI (ci), Drone build agent (ci-agent), Drone Vault plugin (ci-secret) and PostgreSQL (ci-db) containers.
 
       ```
       $ sudo cd $REPO_ROOT/src/ci
@@ -42,7 +52,7 @@ Proceed if all of the checks pass, otherwise review the [landing page](/src/READ
 
     Run `$ sudo docker ps` for verifying if `ci`, `ci-agent`, `ci-secret` and `ci-db`  containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
 
-2. Prepare and run a test build. The purpose of the test build is to very if secrets can be fetched from Vault and the container produced by the build pipeline can be pushed to a private Docker registry.
+3. Prepare and run a test build. The purpose of the test build is to very if secrets can be fetched from Vault and the container produced by the build pipeline can be pushed to a private Docker registry.
 
     > INFO: The sample project can be found at `$REPO_ROOT/src/ci.build.sample`
 
@@ -54,7 +64,7 @@ Proceed if all of the checks pass, otherwise review the [landing page](/src/READ
         Follow the instruction for creating secrets as described [here](/src/vault/README.md#create-a-secret).
 
     -  Create an git user for the CI service for enabling access to repositories. Use the values of `DRONE_GIT_USERNAME` and `DRONE_GIT_PASSWORD` from the `secrets.ini` file as username and password accordingly. After the user is created login to the Git service and create a repository named `ci.build.sample`.
-      
+
         > IMPORTANT: For repositories not created under `DRONE_GIT_USERNAME` adding that user as a collaborator should enable the access for the CI service.
 
 
@@ -69,7 +79,7 @@ Proceed if all of the checks pass, otherwise review the [landing page](/src/READ
 
     - Add the sample project to the repository and trigger a build.
 
-        - Replace the `@YOUR_DOMAIN` placeholder in `.drone.yml` in the project older with the actual value to form a correct link to the other services.
+        - Replace `@YOUR_DOMAIN` placeholder in `.drone.yml` in the project folder with the actual value to set correct links to the other services.
 
           > INFO: `.drone.yml` contains the build pipeline configuration for the sample project. Check the [Drone Pipeline documentation](https://docs.drone.io/configure/pipeline/) for more information.
 
@@ -124,7 +134,7 @@ Proceed if all of the checks pass, otherwise review the [landing page](/src/READ
 
     - Drone CLI requires the Drone admin user for running commands on the Drone service. The credential for the admin user can be extracted from the `DRONE_USER_CREATE` parameter from the `secrets.ini` file. Use the _username_ and _token_ parts to create a git user with matching username and password.
 
-    - Drone CLI needs+- `DRONE_TOKEN` and `DRONE_SERVER`environment variables to befor connecting to the Drone service. Conveniently, the commands to set those variables can be fetched from the Drone web interface. Use the admin user credentials to login to the Drone web interface. In the landing page click on the user icon (auto-generated icon with an abstract pattern in the top right corner), and then click _User Settings_ in the emerged context menu. In the opened page find the _Example CLI Usage_ section and copy-paste its content into the shell and run the commands.
+    - Drone CLI requires `DRONE_TOKEN` and `DRONE_SERVER`environment variables to befor connecting to the Drone service. Conveniently, the commands to set those variables can be fetched from the Drone web interface. Use the admin user credentials to login to the Drone web interface. In the landing page click on the user icon (auto-generated icon with an abstract pattern in the top right corner), and then click _User Settings_ in the emerged context menu. In the opened page find the _Example CLI Usage_ section and copy-paste its content into the shell and run the commands.
 
       > INFO: The commands should resemble the following piece of code
         ```
@@ -138,29 +148,25 @@ Proceed if all of the checks pass, otherwise review the [landing page](/src/READ
       $ sudo drone info
       ```
 
-      The output should the user information if connected or error text if failed.
+      The output should contain the user information if connected or error text if failed.
 
 - Troubleshooting
 
 
-  The most fragile step of the build pipeline is `containerize`. It depends on two operation dependent on external services
+  The most fragile step of the build pipeline is `containerize`. It consists of two operation dependent on external services
 
-    - Fetching secrets from Vault using the Drone secrets plugin 
+    - Fetching secrets from Vault using the Drone secrets plugin
+
+        ```
+        $ drone plugins secret get secrets/data/ci.docker registry_username --repo ciagent/ci.build.sample
+        $ drone plugins secret get secrets/data/ci.build.sample hello_world --repo ciagent/ci.build.sample
+        ```
+
+        If correct secret values are displayed the cause of the issue is not related to the secrets plugin or Vault configuration, otherwise check `VAULT_TOKEN` by trying to login using its value and confirm that Access Login Policy is configured correctly as described [here](/src/vault/README.md#acl-policy).
+
+
     - Pushing a resulting Docker image to the Docker registry
 
-  - For checking if secret are accessible run the following commands
+      - Check if the registry can be accessed by the provided username and password values ([here](/src/registry/README.md#docker-registry-username-and-password))
 
-    Check if Docker registry credentials are accessible
-    ```
-    $ drone plugins secret get secrets/data/ci.docker registry_username --repo ciagent/ci.build.sample
-    ```
-
-    Check if the build argument is accessible
-    ```
-    $ drone plugins secret get secrets/data/ci.build.sample hello_world --repo ciagent/ci.build.sample
-    ```
-
-    If correct secret values are displayed the cause of the issue is not related to the secrets plugin or Vault configuration, otherwise check `VAULT_TOKEN` by trying to login using its value and confirm that Access Login Policy is configured correctly as described [here](/src/vault/README.md#acl-policy).
-
-  - If secrets fetching is not an issue check if the registry can be accessed by the provided username and password values ([here](/src/registry/README.md#docker-registry-username-and-password)) and the registry virtual host file has been amended as described [here](/README.md#modify-registry-vhost-config).
-
+      - Check if the registry virtual host file has been amended as described [here](/README.md#modify-registry-vhost-config).
