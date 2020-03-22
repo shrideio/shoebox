@@ -26,14 +26,15 @@ Proceed if all of the checks pass, otherwise review the [landing page](/src/READ
 
 ### Setup
 
+
 1. Start ProGet (registry) and PostgreSQL (registry-db) containers.
 
     ```
-    $ sudo cd $REPO_ROOT/src/registry
+    $ sudo cd $REPO_ROOT/src/packages
     $ sudo docker-compose up -d
     ```
 
-    Run `$ sudo docker ps` for verifying if if `registry` and `registry-db` containers are up and running. Proceed if no error is detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
+    Run `$ sudo docker ps` for verifying if `registry` and `registry-db` containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
 
 
 2. Configure ProGet
