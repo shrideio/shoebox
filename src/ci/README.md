@@ -2,7 +2,7 @@
 
 Check [Drone documentation](https://docs.drone.io/), [Drone Vault plugin](https://readme.drone.io/extend/secrets/vault/), [Drone Docker plugin](http://plugins.drone.io/drone-plugins/drone-docker/) and [Awesome Drone](https://github.com/drone/awesome-drone) for more information.
 
-### Preliminary check list
+### Preliminary checklist
 
 - [x] `$REPO_ROOT`, `$SHOEBOX_ROOT`, `$YOUR_DOMAIN` environment variables are set
 
@@ -29,7 +29,7 @@ Check [Drone documentation](https://docs.drone.io/), [Drone Vault plugin](https:
 
 - [x] ci._yourdomain.com_ subdomain is configured and serves https traffic
 
-Proceed if all of the checks pass, otherwise review the [landing page](/src/README.md#setup-outline) and continue when ready.
+Proceed if all of the checks pass, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
 
 ### Setup
 
@@ -63,14 +63,14 @@ Proceed if all of the checks pass, otherwise review the [landing page](/src/READ
 
         Follow the instruction for creating secrets as described [here](/src/vault/README.md#create-a-secret).
 
-    -  Create an git user for the CI service for enabling access to repositories. Use the values of `DRONE_GIT_USERNAME` and `DRONE_GIT_PASSWORD` from the `secrets.ini` file as username and password accordingly. After the user is created login to the Git service and create a repository named `ci.build.sample`.
+    -  Create a git user for the CI service for enabling access to repositories. Use the values of `DRONE_GIT_USERNAME` and `DRONE_GIT_PASSWORD` from the `secrets.ini` file as username and password accordingly. After the user is created log in to the Git service and create a repository named `ci.build.sample`.
 
-        > IMPORTANT: For repositories not created under `DRONE_GIT_USERNAME` adding that user as a collaborator should enable the access for the CI service.
+        > IMPORTANT: For repositories not created under `DRONE_GIT_USERNAME` adding that user as a collaborator should enable access for the CI service.
 
 
     - Activate the repository for build
 
-      - Navigate to ci._yourdomain.com_ and login using the CI git user create earlier. If the repository is not listed click the [SYNC] button in the top right corner and wait.
+      - Navigate to ci._yourdomain.com_ and log in using the CI git user create earlier. If the repository is not listed click the [SYNC] button in the top right corner and wait.
 
         > WARNING: If the repository is still not shown after syncing use the CI git user credentials (`DRONE_GIT_USERNAME` and `DRONE_GIT_PASSWORD`) to login to the Git service and check if the repository is accessible.
 
@@ -105,7 +105,7 @@ Proceed if all of the checks pass, otherwise review the [landing page](/src/READ
 
         Navigate to ci._yourdomain.com_ and click the repository name, ci.build.sample, to open the details page and then open the _ACTIVITY FEED_ tab for checking the build status.
 
-      - If the build is successful (green (✓) check mark icon) it should create a _ci.build.sample_ Docker image in the Docker registry (check `registryiu`_.yourdomain.com_). Verify the image Create a container from the image and pulling the endpoint which should display the baked-in message from the `hello_world` secret.
+      - If the build is successful (green (✓) checkmark icon) it should create a _ci.build.sample_ Docker image in the Docker registry (check `registryiu`_.yourdomain.com_). Verify the image Create a container from the image and pulling the endpoint which should display the baked-in message from the `hello_world` secret.
 
           > WARNING: Do not forget to replace _[yourdomain.com]_ with the actual value.
 
@@ -134,7 +134,7 @@ Proceed if all of the checks pass, otherwise review the [landing page](/src/READ
 
     - Drone CLI requires the Drone admin user for running commands on the Drone service. The credential for the admin user can be extracted from the `DRONE_USER_CREATE` parameter from the `secrets.ini` file. Use the _username_ and _token_ parts to create a git user with matching username and password.
 
-    - Drone CLI requires `DRONE_TOKEN` and `DRONE_SERVER`environment variables to befor connecting to the Drone service. Conveniently, the commands to set those variables can be fetched from the Drone web interface. Use the admin user credentials to login to the Drone web interface. In the landing page click on the user icon (auto-generated icon with an abstract pattern in the top right corner), and then click _User Settings_ in the emerged context menu. In the opened page find the _Example CLI Usage_ section and copy-paste its content into the shell and run the commands.
+    - Drone CLI requires `DRONE_TOKEN` and `DRONE_SERVER`environment variables to before connecting to the Drone service. Conveniently, the commands to set those variables can be fetched from the Drone web interface. Use the admin user credentials to log in to the Drone web interface. In the landing page click on the user icon (auto-generated icon with an abstract pattern in the top right corner), and then click _User Settings_ in the emerged context menu. In the opened page find the _Example CLI Usage_ section and copy-paste its content into the shell and run the commands.
 
       > INFO: The commands should resemble the following piece of code
         ```
@@ -153,7 +153,7 @@ Proceed if all of the checks pass, otherwise review the [landing page](/src/READ
 - Troubleshooting
 
 
-  The most fragile step of the build pipeline is `containerize`. It consists of two operation dependent on external services
+  The most fragile step of the build pipeline is `containerize`. It consists of two operations dependent on external services
 
     - Fetching secrets from Vault using the Drone secrets plugin
 
