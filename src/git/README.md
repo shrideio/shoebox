@@ -23,12 +23,12 @@ Check [Gogs Documentation](https://gogs.io/docs) and  [Gogs on Docker Hub](https
 
 - [x] SMTP relay is configured
 
-Proceed if all of the checks passes, otherwise, check the [landing page](/src/README.md#setup-outline) and continue when ready.
+Proceed if all of the checks pass, otherwise, check the [landing page](/src/README.md#setup-outline) and continue when ready.
 
 ### Setup
 
 1. Start Gogs (git) and PostgreSQL (git-db) containers.
-    
+
     ```
     $ sudo cd $REPO_ROOT/src/git
     $ sudo docker-compose up -d

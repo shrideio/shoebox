@@ -22,7 +22,7 @@ Check [ProGet Documentation](https://docs.inedo.com/docs/proget/overview) and [P
 
 - [x] packages._yourdomain.com_ subdomain is configured and serves https traffic
 
-Proceed if all of the checks passes, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
+Proceed if all of the checks pass, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
 
 ### Setup
 
@@ -34,7 +34,7 @@ Proceed if all of the checks passes, otherwise, review the [landing page](/src/R
     $ sudo docker-compose up -d
     ```
 
-    Run `$ sudo docker ps` for verifying if `packages` and `packages-db` containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
+    Run `$ sudo docker ps` to verify if `packages` and `packages-db` containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
 
 
 2. Configure ProGet

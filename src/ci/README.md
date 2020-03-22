@@ -29,7 +29,7 @@ Check [Drone documentation](https://docs.drone.io/), [Drone Vault plugin](https:
 
 - [x] ci._yourdomain.com_ subdomain is configured and serves https traffic
 
-Proceed if all of the checks passes, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
+Proceed if all of the checks pass, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
 
 ### Setup
 
@@ -158,7 +158,7 @@ Proceed if all of the checks passes, otherwise, review the [landing page](/src/R
     - Fetching secrets from Vault using the Drone secrets plugin
 
         ```
-        $ drone plugins secret get secrets/data/ci.docker registry_username --repo ciagent/ci.build.sample
+        $ drone plugins secret get secrets/data/ci.docker registry_username --repo ciagent/ci.docker
         $ drone plugins secret get secrets/data/ci.build.sample hello_world --repo ciagent/ci.build.sample
         ```
 
