@@ -48,7 +48,7 @@ Proceed if all of the checks pass, otherwise check the [landing page](/src/READM
       | Database Settings |                                                                                           |
       | :---------------- | :---------------------------------------------------------------------------------------- |
       | Database Type     | **PostgreSQL**                                                                            |
-      | Host              | `git-db` (as in `git_docker_compose.yml`), leave the port number unchanged                |
+      | Host              | `git-db:5432` (as defined in `git_docker_compose.yml`),                                   |
       | User              | `GOGS_POSTGRESQL_USER` from `secrets.ini`                                                 |
       | Password          | `GOGS_POSTGRESQL_PASSWORD` from `secrets.ini`                                             |
       | Database Name     | `GOGS_POSTGRESQL_DATABASE` from `secrets.ini`                                             |

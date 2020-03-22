@@ -30,7 +30,7 @@ echo "Setting up Taiga..."
 echo "https://taiga.io/"
 echo
 
-TAIGA_ROOT=$DEV_ROOT/taiga
+TAIGA_ROOT=$SHOEBOX_ROOT/taiga
 TAIGA_SECRETS=$TAIGA_ROOT/secrets.ini
 TAIGA_DATA=$TAIGA_ROOT/data
 
@@ -57,13 +57,13 @@ echo "STORAGE_TAIGA_PROXY: $STORAGE_TAIGA_PROXY"
 
 if test ! -f "$TAIGA_SECRETS"; then
   TAIGA_SECRET=$(openssl rand 16 -hex)
-  TAIGA_POSTGRES_USER=taiga_t0iG022
-  TAIGA_POSTGRES_PASSWORD=$(openssl rand 16 -hex)
+  TAIGA_POSTGRESQL_USER=taiga_t0iG022
+  TAIGA_POSTGRESQL_PASSWORD=$(openssl rand 16 -hex)
   TAIGA_RABBIT_USER=taiga_r2bB2t
   TAIGA_RABBIT_PASSWORD=$(openssl rand 16 -hex)
   echo "TAIGA_SECRET=$TAIGA_SECRET" >> $TAIGA_SECRETS
-  echo "TAIGA_POSTGRES_USER=$TAIGA_POSTGRES_USER" >> $TAIGA_SECRETS
-  echo "TAIGA_POSTGRES_PASSWORD=$TAIGA_POSTGRES_PASSWORD" >> $TAIGA_SECRETS
+  echo "TAIGA_POSTGRESQL_USER=$TAIGA_POSTGRESQL_USER" >> $TAIGA_SECRETS
+  echo "TAIGA_POSTGRESQL_PASSWORD=$TAIGA_POSTGRESQL_PASSWORD" >> $TAIGA_SECRETS
   echo "TAIGA_RABBIT_USER=$TAIGA_RABBIT_USER" >> $TAIGA_SECRETS
   echo "TAIGA_RABBIT_PASSWORD=$TAIGA_RABBIT_PASSWORD" >> $TAIGA_SECRETS
 fi
@@ -85,8 +85,8 @@ find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@STORAGE_TAIGA_FRONT|'"
 find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@STORAGE_TAIGA_DB|'"$STORAGE_TAIGA_DB"'|g' {} \;
 find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@STORAGE_TAIGA_PROXY|'"$STORAGE_TAIGA_PROXY"'|g' {} \;
 find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_SECRET|'"$-helk"'|g' {} \;
-find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_POSTGRES_USER|'"$TAIGA_POSTGRES_USER"'|g' {} \;
-find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_POSTGRES_PASSWORD|'"$TAIGA_POSTGRES_PASSWORD"'|g' {} \;
+find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_POSTGRESQL_USER|'"$TAIGA_POSTGRESQL_USER"'|g' {} \;
+find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_POSTGRESQL_PASSWORD|'"$TAIGA_POSTGRESQL_PASSWORD"'|g' {} \;
 find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_RABBIT_USER|'"$TAIGA_RABBIT_USER"'|g' {} \;
 find $TAIGA_SRC -type f -name '*.env' -exec sed -i -e 's|@TAIGA_RABBIT_PASSWORD|'"$TAIGA_RABBIT_PASSWORD"'|g' {} \;
 

@@ -4,16 +4,15 @@
 
 Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose) for setting up a simple collaborative software development environment hosted on a VPS or dedicated server as an inexpensive alternative for subscription based could services. Software components used in this setup are either open source or have free versions (some with limitations, please check).
 
-
-| Tool             | Vendor                                | License       |
-| :------------    | :------------                         | :------------ |
-| Git Server       | [Gogs](https://gogs.io/)              | [MIT](https://github.com/gogs/gogs/blob/master/LICENSE)           |
-| Secret Management | [Vault](https://www.vaultproject.io/) | [MPL-2.0](https://github.com/hashicorp/vault/blob/master/LICENSE) |
-| Package Management | [Ideo Proget](https://inedo.com/proget) | [ProGet License Agreement](https://inedo.com/proget/license-agreement) <br /> [Free Edition Limitations](https://docs.inedo.com/docs/proget/administration/license#free-edition-limitations) |
-| Docker Registry | [Docker Registry](https://docs.docker.com/registry/) | [Apache-2.0](https://github.com/docker/distribution/blob/master/LICENSE) |
-| Docker Registry UI | [Joxit Docker Registry UI](https://joxit.dev/docker-registry-ui/) | [AGPL-3.0](https://github.com/Joxit/docker-registry-ui/blob/master/LICENSE) | 
-| Continuous Integration and Delivery | [Drone CI](https://drone.io/) | [Drone Non-Commercial License](https://github.com/drone/drone/blob/master/LICENSE) <br /> [Waiver: Individual and Small Business](https://github.com/drone/drone/blob/master/LICENSE#L62) |
-| Project Management | [Taiga](https://taiga.io/) | [Taiga Backend - AGPL-3.0](https://github.com/taigaio/taiga-back/blob/master/LICENSE) <br /> [Taiga Front - AGPL-3.0](https://github.com/taigaio/taiga-front/blob/master/LICENSE) |
+| Tool                                | Vendor                                                            | License                                                                                                                                                                                      |
+| :---------------------------------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Git Server                          | [Gogs](https://gogs.io/)                                          | [MIT](https://github.com/gogs/gogs/blob/master/LICENSE)                                                                                                                                      |
+| Secret Management                   | [Vault](https://www.vaultproject.io/)                             | [MPL-2.0](https://github.com/hashicorp/vault/blob/master/LICENSE)                                                                                                                            |
+| Package Management                  | [Ideo Proget](https://inedo.com/proget)                           | [ProGet License Agreement](https://inedo.com/proget/license-agreement) <br /> [Free Edition Limitations](https://docs.inedo.com/docs/proget/administration/license#free-edition-limitations) |
+| Docker Registry                     | [Docker Registry](https://docs.docker.com/registry/)              | [Apache-2.0](https://github.com/docker/distribution/blob/master/LICENSE)                                                                                                                     |
+| Docker Registry UI                  | [Joxit Docker Registry UI](https://joxit.dev/docker-registry-ui/) | [AGPL-3.0](https://github.com/Joxit/docker-registry-ui/blob/master/LICENSE)                                                                                                                  |
+| Continuous Integration and Delivery | [Drone CI](https://drone.io/)                                     | [Drone Non-Commercial License](https://github.com/drone/drone/blob/master/LICENSE) <br /> [Waiver: Individual and Small Business](https://github.com/drone/drone/blob/master/LICENSE#L62)    |
+| Project Management                  | [Taiga](https://taiga.io/)                                        | [Taiga Backend - AGPL-3.0](https://github.com/taigaio/taiga-back/blob/master/LICENSE) <br /> [Taiga Front - AGPL-3.0](https://github.com/taigaio/taiga-front/blob/master/LICENSE)            |
 
 goto: [TL;DR](#tl;dr)
 
@@ -27,26 +26,25 @@ On a serious note, we believe that even small teams can benefit from using a ful
 
 And lastly, this setup has come up naturally when ([mich4xD](https://github.com/mich4xD)) and I ([bahram-aliyev](https://github.com/bahram-aliyev])) decided to document how to set up a development environment when working on a personal project, therefore this is a documentation for ourselves in the first place.
 
-
 ### How does it work?
 
 This setup requires a Linux machine with root access and system requirements matching the following:
 
 - Minimum:
 
-    - OS: Linux CentOS/RHEL 7.0
-    - CPU: 2 vCPU
-    - RAM: 4 GB
-    - Storage: 20 GB
-    - Network: 1 static IPv4 address
+  - OS: Linux CentOS/RHEL 7.0
+  - CPU: 2 vCPU
+  - RAM: 4 GB
+  - Storage: 20 GB
+  - Network: 1 static IPv4 address
 
 - Recommended:
 
-    - OS: Linux CentOS/RHEL 7.0
-    - CPU: 4 vCPU
-    - RAM: 6 GB
-    - Storage: 30 GB
-    - Network: 1 IPv4 address
+  - OS: Linux CentOS/RHEL 7.0
+  - CPU: 4 vCPU
+  - RAM: 6 GB
+  - Storage: 30 GB
+  - Network: 1 IPv4 address
 
 > INFO: The setup with minor adjustments should work on any other popular Linux distributive. However, it was tested and staged on CentOS 7.0, that is why this OS mention as a requirement.
 
@@ -56,23 +54,23 @@ Considering the physical host there are three options to choose from.
 
 1. Rent a Linux VPS.
 
-    There are a few affordable options in a price range of 7 to 15 USD per month. The vendors listed below offer solutions matching or comparable to the desired system requirements and price range.
+   There are a few affordable options in a price range of 7 to 15 USD per month. The vendors listed below offer solutions matching or comparable to the desired system requirements and price range.
 
-    - [VPSDime](https://vpsdime.com/)
-    - [OVHCloud](https://www.ovh.com/)
-    - [Hostinger](https://www.hostinger.com/)
-    - [Interserver](https://www.interserver.net/)
+   - [VPSDime](https://vpsdime.com/)
+   - [OVHCloud](https://www.ovh.com/)
+   - [Hostinger](https://www.hostinger.com/)
+   - [Interserver](https://www.interserver.net/)
 
- 2. Rent a dedicate server.
+2. Rent a dedicate server.
 
-    This option is usually more costly than VPS renting, however, provides extra computation power and storage capacity for the premium. There is a limited number of affordable options in a price range of 20 to 30 USD per month, as usually the price range starts at a 50 USD per month threshold. When choosing a dedicated server it is recommended to take into consideration the hardware age and refrain from using significantly outdated equipment due to potential performance degradation. The dedicated server option can be considered as an expansion path for future growth.
+   This option is usually more costly than VPS renting, however, provides extra computation power and storage capacity for the premium. There is a limited number of affordable options in a price range of 20 to 30 USD per month, as usually the price range starts at a 50 USD per month threshold. When choosing a dedicated server it is recommended to take into consideration the hardware age and refrain from using significantly outdated equipment due to potential performance degradation. The dedicated server option can be considered as an expansion path for future growth.
 
-    - [Nocix](https://www.nocix.net/)
-    - [Wholesale Internet](https://www.wholesaleinternet.net/)
+   - [Nocix](https://www.nocix.net/)
+   - [Wholesale Internet](https://www.wholesaleinternet.net/)
 
 3. Run a server on-premises.
 
-    No comment on that, you are in full charge.
+   No comment on that, you are in full charge.
 
 Either way, be mindful of the law of diminishing returns. For example, the premium paid for extra storage on a VPS may equalize the VPS rental cost with the dedicated server monthly fee. The same is true for the dedicated server option, as the cost may eventually grow to the point where it is more reasonable to purchase the services from a cloud service provider. In short, do back-of-the-napkin-math.
 
@@ -80,29 +78,29 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
 
 - I know a better way, how can I help?
 
-    We are no Linux gurus, Docker experts or technical writing virtuosos, therefore, you are more than welcome to contribute, and we would be more than happy to receive any constructive criticism on how to improve. Open a PR or file an issue ticket, we will do our best to respond as soon as possible.
+  We are no Linux gurus, Docker experts or technical writing virtuosos, therefore, you are more than welcome to contribute, and we would be more than happy to receive any constructive criticism on how to improve. Open a PR or file an issue ticket, we will do our best to respond as soon as possible.
 
 - Are there any downsides or deficiencys of this setup?
 
-    Yes, there are.
+  Yes, there are.
 
-    Firstly, it is a single machine configuration incapable of running on a cluster. The latter potentially may become a problem when simultaneously running build pipelines suffocate the performance of the rest of the services. This deficiency should be resolved once the setup is made deployable to a Kubernetes cluster.
+  Firstly, it is a single machine configuration incapable of running on a cluster. The latter potentially may become a problem when simultaneously running build pipelines suffocate the performance of the rest of the services. This deficiency should be resolved once the setup is made deployable to a Kubernetes cluster.
 
-    Secondly, if the technology of your choice does not support Docker containerization or necessary tooling is not provided out of the box, the current CI/CD service is deemed unusable for your needs as its features are entirely based on the Docker infrastructure. In this case consider using alternatives such as [Jenkins CI](https://jenkins.io/) or [Concourse](https://concourse-ci.org/), which might be included in the setup in the future.
+  Secondly, if the technology of your choice does not support Docker containerization or necessary tooling is not provided out of the box, the current CI/CD service is deemed unusable for your needs as its features are entirely based on the Docker infrastructure. In this case consider using alternatives such as [Jenkins CI](https://jenkins.io/) or [Concourse](https://concourse-ci.org/), which might be included in the setup in the future.
 
-    And lastly, the current build pipeline is .NET Core biased. Please feel free to contribute and add pipeline configurations for other technologies.
+  And lastly, the current build pipeline is .NET Core biased. Please feel free to contribute and add pipeline configurations for other technologies.
 
- - What are the plans for the future?
+- What are the plans for the future?
 
-    As it is mentioned earlier adding Kubernetes support is a high priory task on the list, however we need to acquaint ourselves with the technology first.
+As it is mentioned earlier adding Kubernetes support is a high priory task on the list, however we need to acquaint ourselves with the technology first.
 
-    We will do our best to maintain the documentation and keep the scripts up-to-date, and continue adding new CI configurations for different technologies as the need arises (you are more than welcome to contribute).
+We will do our best to maintain the documentation and keep the scripts up-to-date, and continue adding new CI configurations for different technologies as the need arises (you are more than welcome to contribute).
 
- - Why is the name "Shoebox"?
+- Why is the name "Shoebox"?
 
-    ...cus' it has something in it to getcha runnin'! :boom: :running: :checkered_flag:
+  ...cus' it has something in it to getcha runnin'! :boom: :running: :checkered_flag:
 
-    Shoebox is a symbolic name representing simple multipurpose storage for old toys, lego bricks, commix books, SEGA/Nintendo cartridges, Play Station disks, board game accessories... in short, for things that used to (or still) bring us joy. We believe that this "shoebox" contains a few "toys" that might help you brining a structure in teamwork and make collaborative software development with your peers more enjoyable. :nerd_face: :headphones: :computer: 
+  Shoebox is a symbolic name representing simple multipurpose storage for old toys, lego bricks, commix books, SEGA/Nintendo cartridges, Play Station disks, board game accessories... in short, for things that used to (or still) bring us joy. We believe that this "shoebox" contains a few "toys" that might help you brining a structure in teamwork and make collaborative software development with your peers more enjoyable. :nerd_face: :headphones: :computer:
 
 ### TL;DR
 
@@ -114,160 +112,164 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
 ## Setup Outline
 
 - [Prerequisites](#prerequisites)
-    - [Tools](#tools)
-        - [Nano](#nano)
-        - [Git client](#git-client)
-    - [Infrastructure](#infrastructure)
-        - [Disable SELinux](#disable-selinux)
-        - [Apache and mod_ssl](#install-apache-with-mod_ssl)
-        - [Docker and Docker Compose](#install-docker-and-docker-compose)
-        - [Environment variables](#environment-variables)
-            - [REPO_ROOT](#REPO_ROOT)
-            - [YOUR_DOMAIN](#YOUR_DOMAIN)
-            - [SHOEBOX_ROOT](#SHOEBOX_ROOT)
-        - [SMTP relay](#smtp-relay)
+  - [Tools](#tools)
+    - [Nano](#nano)
+    - [Git client](#git-client)
+  - [Infrastructure](#infrastructure)
+    - [Disable SELinux](#disable-selinux)
+    - [Apache and mod_ssl](#install-apache-with-mod_ssl)
+    - [Docker and Docker Compose](#install-docker-and-docker-compose)
+    - [Environment variables](#environment-variables)
+      - [REPO_ROOT](#REPO_ROOT)
+      - [YOUR_DOMAIN](#YOUR_DOMAIN)
+      - [SHOEBOX_ROOT](#SHOEBOX_ROOT)
+    - [SMTP relay](#smtp-relay)
 - [Network](#network)
-    - [DNS Provider](#dns-Provider)
-        - [Account setup](#cloudflare-account-setup)
-        - [Name servers](#cloudflare-name-servers)
-        - [Disable HTTP proxy](#turn-off-http-proxy)
-        - [DNS API Client](#cloudflare-dns-api-client)
-    - [Subdomain Records](#subdomain-records)
-    - [SSL Setup](#ssl-setup)
- - [Services](#services)
-    - [Virtual Hosts](#virtual-hosts)
-        - [Configuration files](#create-vhost-configs)
-        - [Docker Registry vhost configuration](#amend-docker-registry-vhost)
-        - [Verify http to https redirect](#vhost-config-verify-result)
-    - [Containers Infrastructure](containers-infrastructure)
-    - [Service Setup](services-setup)
-    - [Backup Configuration](backup-configuration)
+  - [DNS Provider](#dns-Provider)
+    - [Account setup](#cloudflare-account-setup)
+    - [Name servers](#cloudflare-name-servers)
+    - [Disable HTTP proxy](#turn-off-http-proxy)
+    - [DNS API Client](#cloudflare-dns-api-client)
+  - [Subdomain Records](#subdomain-records)
+  - [SSL Setup](#ssl-setup)
+- [Services](#services)
+  - [Virtual Hosts](#virtual-hosts)
+    - [Configuration files](#create-vhost-configs)
+    - [Docker Registry vhost configuration](#amend-docker-registry-vhost)
+    - [Verify http to https redirect](#vhost-config-verify-result)
+  - [Containers Infrastructure](containers-infrastructure)
+  - [Service Setup](services-setup)
+  - [Backup Configuration](backup-configuration)
 
 ## Prerequisites
 
 ### Tools
 
-- #### Nano
+- #### Nano(Simple console-based text editor)
 
-    Simple console-based text editor.
+  ```
+  $ sudo yum install nano
+  ```
 
-    ```
-    $ sudo yum install nano
-    ```
+  Shortcuts:
 
-    Shortcuts:
-    - Save changes: `ctrl` + `x`, `y`
-    - Discard changes: `ctrl` + `x`, `n`
-    - Cancel: `ctrl` + `x`, `ctrl` + `c`
+  - Save changes: `ctrl` + `x`, `y`
+  - Discard changes: `ctrl` + `x`, `n`
+  - Cancel: `ctrl` + `x`, `ctrl` + `c`
 
 - #### Git client
 
-    ```
-    $ sudo yum install git
-    $ sudo git --version # to confirm `git` is successfully installed
-    ```
+  ```
+  $ sudo yum install git
+  $ sudo git --version # to confirm `git` is successfully installed
+  ```
 
 ### Infrastructure
 
 - #### Disable SELinux
-    
-    > IMPORTANT: It is highly recommended to disable SELinux for avoiding issues with infrastructure services and Docker containers.
 
-    Check SELinux status.
-    ```
-    $ sestatus
+  > IMPORTANT: It is highly recommended to disable SELinux for avoiding issues with infrastructure services and Docker containers.
 
-    Output
-    SELinux status:                 enabled
-    ...
-    ...
-    Current mode:                   enforcing
-    ```
+  Check SELinux status.
 
-    If SELinux is `enabled` follow the instruction to disable it, otherwise continue to the next section.
-    
-    Edit the SELinux configuration file
-    ```
-    $ sudo nano /etc/selinux/config
-    ```
-    
-    Set the `SELINUX` setting to `disabled` and save the file
-    ```
-    SELINUX=disabled
-    ```
+  ```
+  $ sestatus
 
-    Reboot
-    ```
-    $ sudo shutdown -r now
-    ```
+  Output
+  SELinux status:                 enabled
+  ...
+  ...
+  Current mode:                   enforcing
+  ```
 
-    Check SELinux status, it is expect to be `disabled`.
+  If SELinux is `enabled` follow the instruction to disable it, otherwise continue to the next section.
 
-    ```
-    $ sestatus
+  Edit the SELinux configuration file
 
-    Output
-    SELinux status:                 disabled
-    ```
+  ```
+  $ sudo nano /etc/selinux/config
+  ```
+
+  Set the `SELINUX` setting to `disabled` and save the file
+
+  ```
+  SELINUX=disabled
+  ```
+
+  Reboot
+
+  ```
+  $ sudo shutdown -r now
+  ```
+
+  Check SELinux status, it is expect to be `disabled`.
+
+  ```
+  $ sestatus
+
+  Output
+  SELinux status:                 disabled
+  ```
 
 - #### Apache and mod_ssl
 
-    Install Apache and mod_ssl and register the former as a system service.
+  Install Apache and mod_ssl and register the former as a system service.
 
-    ```
-    $ sudo yum install httpd
-    $ sudo yum install mod_ssl
-    
-    $ sudo systemctl enable httpd
-    $ sudo systemctl start httpd
-    $ sudo systemctl status httpd
-    ```
+  ```
+  $ sudo yum install httpd
+  $ sudo yum install mod_ssl
 
-    <a href="troubleshoot-apache"></a>If Apache has successfully started the `status` command  output will contain `active (running)`, otherwise check `error_log` and `access_log` at `/var/log/httpd` for troubleshooting.
+  $ sudo systemctl enable httpd
+  $ sudo systemctl start httpd
+  $ sudo systemctl status httpd
+  ```
 
-    Enable `http` and `https` traffic on the firewall.
-    ```    
-    $ sudo firewall-cmd --permanent --zone=public --add-service=http
-    $ sudo firewall-cmd --permanent --zone=public --add-service=https
-    $ sudo firewall-cmd --reload
-    ```
+  <a href="troubleshoot-apache"></a>If Apache has successfully started, the `status` command output will contain `active (running)`, otherwise, check `error_log` and `access_log` at `/var/log/httpd` for troubleshooting.
 
-    If the dns record exists browse to your domain name, otherwise use teh server ip address. If the setup is successful the browser will display the apache welcome page.
+  Enable `http` and `https` traffic on the firewall.
+
+  ```
+  $ sudo firewall-cmd --permanent --zone=public --add-service=http
+  $ sudo firewall-cmd --permanent --zone=public --add-service=https
+  $ sudo firewall-cmd --reload
+  ```
+
+  If the dns record exists, browse to your domain name; otherwise, use the server ip address. If the setup is successful, the browser will display the apache welcome page.
 
 - #### Docker and Docker Compose
 
-    Install Docker and Docker Compose.
+  Install Docker and Docker Compose.
 
-    ```
-    $ sudo yum remove docker \
-                    docker-client \
-                    docker-client-latest \
-                    docker-common \
-                    docker-latest \
-                    docker-latest-logrotate \
-                    docker-logrotate \
-                    docker-engine
-    
-    $ sudo yum install -y yum-utils \
-    device-mapper-persistent-data \
-    lvm2
+  ```
+  $ sudo yum remove docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-engine
 
-    $ sudo yum-config-manager \
-        --add-repo \
-        https://download.docker.com/linux/centos/docker-ce.repo
+  $ sudo yum install -y yum-utils \
+  device-mapper-persistent-data \
+  lvm2
 
-    $ sudo yum install docker-ce docker-ce-cli containerd.io
-    $ sudo systemctl enable docker
-    $ sudo systemctl start docker
-    $ sudo docker run hello-world # to verify if  Docker CE is successfully installed
+  $ sudo yum-config-manager \
+      --add-repo \
+      https://download.docker.com/linux/centos/docker-ce.repo
 
-    $ sudo yum install docker-compose
-    $ sudo docker-compose --version # to confirm that `docker-compose` is successfully installed
-    ```
+  $ sudo yum install docker-ce docker-ce-cli containerd.io
+  $ sudo systemctl enable docker
+  $ sudo systemctl start docker
+  $ sudo docker run hello-world # to verify if  Docker CE is successfully installed
+
+  $ sudo yum install docker-compose
+  $ sudo docker-compose --version # to confirm that `docker-compose` is successfully installed
+  ```
 
 ### SMTP relay
 
-Certain services in this setup require an SMTP relay for sending email notifications. If your DNS provider includes a free email address you may want to use the provider's SMTP server, otherwise, there are a few free emailing services with a limited number of message sent per day/month (at least 100 emails a day).
+Certain services in this setup require an SMTP relay for sending email notifications. If your DNS provider includes a free email address, you may want to use the provider's SMTP server; otherwise, there are a few free emailing services with a limited number of message sent per day/month (at least 100 emails a day).
 
 - [SendPulse](https://sendpulse.com/prices/smtp) (12,000/month)
 - [Mailgun](https://www.mailgun.com/pricing-options) (10,000/month)
@@ -278,34 +280,34 @@ Certain services in this setup require an SMTP relay for sending email notificat
 
 > INFO: Review and modify if necessary.
 
-- #### REPO_ROOT 
+- #### REPO_ROOT
 
-    The destination path for cloning this repository.
+  The destination path for cloning this repository.
 
-    ```
-    $ export REPO_ROOT=/tmp/shoebox
-    $ echo $REPO_ROOT
-    ```
+  ```
+  $ export REPO_ROOT=/tmp/shoebox
+  $ echo $REPO_ROOT
+  ```
 
-- #### YOUR_DOMAIN 
+- #### YOUR_DOMAIN
 
-    The domain name for the server with hosted services.
+  The domain name for the server with hosted services.
 
-    > IMPORTANT: Do not forget to replace `yourdomain.com` with the actual domain name.
+  > IMPORTANT: Do not forget to replace `yourdomain.com` with the actual domain name.
 
-    ```
-    $ export YOUR_DOMAIN=yourdomain.com
-    $ echo $YOUR_DOMAIN
-    ```
+  ```
+  $ export YOUR_DOMAIN=yourdomain.com
+  $ echo $YOUR_DOMAIN
+  ```
 
 - #### SHOEBOX_ROOT
 
-    The root directory where the data and configuration files of the services are stored.
+  The root directory where the data and configuration files of the services are stored.
 
-    ```
-    $ export REPO_ROOT=/var/shoebox
-    $ echo $REPO_ROOT
-    ```
+  ```
+  $ export SHOEBOX_ROOT=/var/shoebox
+  $ echo $SHOEBOX_ROOT
+  ```
 
 ## Network
 
@@ -324,40 +326,41 @@ The DNS providers a DNS API that is used by Certbot for proofing the domain name
 
 3. <a name="turn-off-http-proxy"></a> Turn off the HTTP proxy for main and subdomain names. click the cloud icon ![Alt text](/resources/img/http_proxy_on.png?raw=true "HTTP proxy - ON") next to each domain/subdomain name to gray it out ![Alt text](/resources/img/http_proxy_off.png?raw=true "HTTP proxy - OFF").
 
-    > WARNING: If the http proxy is not disabled it will cause an obscure error response such as `ERR_TOO_MANY_REDIRECTS`.
+   > WARNING: If the http proxy is not disabled it will cause an obscure error response such as `ERR_TOO_MANY_REDIRECTS`.
 
 4. <a name="cloudflare-dns-api-client"></a> Cloudflare DNS API client is used by Certbot for proofing the domain name ownership when acquiring an HTTPS certificate from [Let’s Encrypt](https://letsencrypt.org/).
 
-    > INFO: Adjust the actions accordingly if the DNS provider is not Cloudflare.
+   > INFO: Adjust the actions accordingly if the DNS provider is not Cloudflare.
 
-    Create an ini file for the Cloudflare DNS API client,
+   Create an ini file for the Cloudflare DNS API client,
 
-    ```
-    $ sudo mkdir -p /etc/letsencrypt/renewal/dns
-    $ sudo nano /etc/letsencrypt/renewal/dns/cloudflare.ini
-    ```
+   ```
+   $ sudo mkdir -p /etc/letsencrypt/renewal/dns
+   $ sudo nano /etc/letsencrypt/renewal/dns/cloudflare.ini
+   ```
 
-    and copy-paste the following fragment.
+   Copy-paste the following fragment.
 
-    ```
-    # Cloudflare API credentials used by Certbot
-    dns_cloudflare_email = @CLOUDFLARE_EMAIL
-    dns_cloudflare_api_key = @CLOUDFLARE_API_KEY
-    ```
+   ```
+   # Cloudflare API credentials used by Certbot
+   dns_cloudflare_email = @CLOUDFLARE_EMAIL
+   dns_cloudflare_api_key = @CLOUDFLARE_API_KEY
+   ```
 
-    Get the DNS API key. In the Cloudflare panel browse to `Overview -> Get your API token -> API Tokens -> Global API Key [View]`.
+   Get the DNS API key: In the Cloudflare panel browse to `Overview -> Get your API token -> API Tokens -> Global API Key [View]`.
 
-    Replace the placeholders and run the following commands to set values.
+   Replace the placeholders and run the following commands to set values.
 
-    - [cloudflare_email] - the Cloudflare login
-    - [cloudflare_api_key] - the Global API key
-    <br/><br/>
-    ```
-    $ sudo sed -i 's|@CLOUDFLARE_EMAIL$|'[cloudflare_email]'|g' /etc/letsencrypt/renewal/dns/cloudflare.ini
-    $ sudo sed -i 's|@CLOUDFLARE_API_KEY$|'[cloudflare_api_key]'|g' /etc/letsencrypt/renewal/dns/cloudflare.ini
-    ```
+   - [cloudflare_email] - the Cloudflare login
+   - [cloudflare_api_key] - the Global API key
+     <br/><br/>
 
-    Run `$ sudo cat /etc/letsencrypt/renewal/dns/cloudflare.ini` to verify the result.
+   ```
+   $ sudo sed -i 's|@CLOUDFLARE_EMAIL$|'[cloudflare_email]'|g' /etc/letsencrypt/renewal/dns/cloudflare.ini
+   $ sudo sed -i 's|@CLOUDFLARE_API_KEY$|'[cloudflare_api_key]'|g' /etc/letsencrypt/renewal/dns/cloudflare.ini
+   ```
+
+   Run `$ sudo cat /etc/letsencrypt/renewal/dns/cloudflare.ini` to verify the result.
 
 ### Subdomain Records
 
@@ -383,134 +386,133 @@ Depending on the TTL value it may take certain time for the change to take effec
 
 Certbot is used as the default Let’s Encrypt client in this setup.
 
-> INFO:  Check the [DNS providers](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438) list supporting *Let's Encrypt* for other options. 
+> INFO: Check the [DNS providers](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438) list supporting _Let's Encrypt_ for other options.
 
 > IMPORTANT: If a different Let’s Encrypt client is selected the certificate has to be acquired independently and this section can be ignored.
 
 1. Browse to [Apache on CentOS/RHEL 7](https://certbot.eff.org/lets-encrypt/centosrhel7-apache)
 
-2. Follow the **wildcard** instruction up to the *step 6* inclusively.
+2. Select the **wildcard** option from the headers on top and follow instruction up to the _step 6_ inclusively:
 
-    - On *Step 2* - running the following command is sufficient `$ sudo yum install epel-release`.
+   - On _Step 2_ - running the following command is sufficient `$ sudo yum install epel-release`.
 
-    - On *Step 3* - [EC2 region](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html). You may want to add more than one region in case one of the servers is down.
+   - On _Step 3_ - [EC2 region](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html). You may want to add more than one region in case one of the servers is down.
 
-    - On *Step 6* - If Cloudflare is not selected as a DNS provider please adjust the command accordingly to possible options given in the [DNS Plugin list](https://certbot.eff.org/docs/using.html#dns-plugins).
+   - On _Step 6_ - If Cloudflare is not selected as a DNS provider please adjust the command accordingly to possible options given in the [DNS Plugin list](https://certbot.eff.org/docs/using.html#dns-plugins).
 
-4. Run `certbot` with the following parameters to acquire a certificate. The default pending time for `NAME` record update is 10 seconds. It may be increased using the `--dns-cloudflare-propagation-seconds` if the command fails due to a timeout.
+3. Run `certbot` with the following parameters to acquire a certificate. The default pending time for `NAME` record update is 10 seconds. It may be increased using the `--dns-cloudflare-propagation-seconds` if the command fails due to a timeout.
 
-    > INFO: Do not forget to adjust the command if the DNS provider is not Cloudflare.
+   > INFO: Do not forget to adjust the command if the DNS provider is not Cloudflare.
 
-    ```
-    $ sudo certbot certonly -i apache \
-        --dns-cloudflare \
-        --dns-cloudflare-credentials /etc/letsencrypt/renewal/dns/cloudflare.ini \
-        --dns-cloudflare-propagation-seconds 30 \
-        -d $YOUR_DOMAIN \
-        -d *.$YOUR_DOMAIN
-    ```
+   ```
+   $ sudo certbot certonly -i apache \
+       --dns-cloudflare \
+       --dns-cloudflare-credentials /etc/letsencrypt/renewal/dns/cloudflare.ini \
+       --dns-cloudflare-propagation-seconds 30 \
+       -d $YOUR_DOMAIN \
+       -d *.$YOUR_DOMAIN
+   ```
 
-    Certbot will display the path to the acquired certificate and key files as shown below if the command succeeded.
+   Certbot will display the path to the acquired certificate and key files as shown below if the command succeeded.
 
-    ```
-    - Congratulations! Your certificate and chain have been saved at:
-      /etc/letsencrypt/live/yourdomain.com/fullchain.pem
-      Your key file has been saved at:
-      /etc/letsencrypt/live/yourdomain.com/privkey.pem
-    ```
+   ```
+   - Congratulations! Your certificate and chain have been saved at:
+     /etc/letsencrypt/live/yourdomain.com/fullchain.pem
+     Your key file has been saved at:
+     /etc/letsencrypt/live/yourdomain.com/privkey.pem
+   ```
 
-5. Let’s Encrypt certificates are issued for 90 days. It is recommended to configure auto-renewal to keep the certificate up-to-date.
+4. Let’s Encrypt certificates are issued for 90 days. It is recommended to configure auto-renewal to keep the certificate up-to-date.
 
-    Test the renewal process.
+   Test the renewal process.
 
-    ```
-    $ sudo certbot renew --dry-run
-    ```
+   ```
+   $ sudo certbot renew --dry-run
+   ```
 
-    If dry run completed successfully configure a cron job.
+   If dry run completed successfully configure a cron job.
 
-    ```
-    $ echo "0 0,12 * * * root python -c 'import random; import time; time.sleep(random.random() * 3600)' && certbot renew" | sudo tee -a /etc/crontab > /dev/null
-    ```
+   ```
+   $ echo "0 0,12 * * * root python -c 'import random; import time; time.sleep(random.random() * 3600)' && certbot renew" | sudo tee -a /etc/crontab > /dev/null
+   ```
 
-6. Enable https traffic on port _443_
+5. Enable https traffic on port _443_
 
-    Configure Apache to listen port 443, open `httpd.conf` for editing,
+   Configure Apache to listen port 443, open `httpd.conf` for editing,
 
-    ```
-    $ sudo nano /etc/httpd/conf/httpd.conf
-    ```
+   ```
+   $ sudo nano /etc/httpd/conf/httpd.conf
+   ```
 
-    then copy-paste the following lines of configuration to the end of the file and save changes.
+   then copy-paste the following lines of configuration to the end of the file and save changes.
 
-    ```
-    # Enable https traffic on port 443
-    <IfModule mod_ssl.c>
-    Listen 443
-    </IfModule>
-    ```
+   ```
+   # Enable https traffic on port 443
+   <IfModule mod_ssl.c>
+   Listen 443
+   </IfModule>
+   ```
 
-    Disable the default ssl configuration
+   Disable the default ssl configuration
 
-    ```
-    $ sudo mv /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf_
-    ```
+   ```
+   $ sudo mv /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf_
+   ```
 
-    and restart Apache. 
-    
-    ```
-    $ sudo systemctl restart httpd
-    ```
+   and restart Apache.
 
-    Proceed if no error is reported, otherwise check `error_log` and `access_log` for troubleshooting.
+   ```
+   $ sudo systemctl restart httpd
+   ```
 
+   Proceed if no error is reported; otherwise, check `error_log` and `access_log` for troubleshooting.
 
-7. Create a unified configuration file for enabling ssl on virtual hosts
+6. Create a unified configuration file for enabling ssl on virtual hosts
 
-    Check if `options-ssl-apache.conf` was successfully created. This file is required for enabling SSL on virtual hosts and referenced by virtual host configuration files.
+   Check if `options-ssl-apache.conf` was successfully created. This file is required for enabling SSL on virtual hosts and referenced by virtual host configuration files.
 
-    ```
-    $ sudo ls /etc/letsencrypt
-    ```
+   ```
+   $ sudo ls /etc/letsencrypt
+   ```
 
-    The output should contain the file name.
+   The output should contain the file name.
 
-    Append the file,
+   Append the file,
 
-    ```
-    $ sudo nano /etc/letsencrypt/options-ssl-apache.conf
-    ```
+   ```
+   $ sudo nano /etc/letsencrypt/options-ssl-apache.conf
+   ```
 
-    and copy-paste the following fragment to the end of the file and save changes.
+   and copy-paste the following fragment to the end of the file and save changes.
 
-    ```
-    # SSL certificate files references
-    SSLCertificateFile /etc/letsencrypt/live/@YOUR_DOMAIN/cert.pem
-    SSLCertificateKeyFile /etc/letsencrypt/live/@YOUR_DOMAIN/privkey.pem
-    SSLCertificateChainFile /etc/letsencrypt/live/@YOUR_DOMAIN/chain.pem
-    ```
+   ```
+   # SSL certificate files references
+   SSLCertificateFile /etc/letsencrypt/live/@YOUR_DOMAIN/cert.pem
+   SSLCertificateKeyFile /etc/letsencrypt/live/@YOUR_DOMAIN/privkey.pem
+   SSLCertificateChainFile /etc/letsencrypt/live/@YOUR_DOMAIN/chain.pem
+   ```
 
-    Replace the placeholder with the actual domain name in `letsencrypt.conf`
+   Replace the placeholder with the actual domain name in `letsencrypt.conf`
 
-    ```
-    $ sudo sed -i 's|@YOUR_DOMAIN|'"$YOUR_DOMAIN"'|g' /etc/letsencrypt/options-ssl-apache.conf
-    ```
+   ```
+   $ sudo sed -i 's|@YOUR_DOMAIN|'"$YOUR_DOMAIN"'|g' /etc/letsencrypt/options-ssl-apache.conf
+   ```
 
-    and verify the result.
+   and verify the result.
 
-    ```
-    $ sudo cat /etc/letsencrypt/options-ssl-apache.conf
-    ```
+   ```
+   $ sudo cat /etc/letsencrypt/options-ssl-apache.conf
+   ```
 
 ## Services
 
-Shallow clone this repository,
+Shallow clone this repository:
 
 ```
 $ sudo git clone --depth=1 https://github.com/shrideio/shoebox $REPO_ROOT
 ```
 
-and change the the `*.sh` scripts file mode to `execute`.
+Change the the `*.sh` scripts file mode to `execute`:
 
 ```
 $ sudo find $REPO_ROOT -type f -name "*.sh" -exec chmod +x {} \;
@@ -518,69 +520,69 @@ $ sudo find $REPO_ROOT -type f -name "*.sh" -exec chmod +x {} \;
 
 ### Virtual Hosts
 
-Create virtual host configuration files matching the [subdomains](#subdomain-records) for redirecting the http traffic to underlying services.
+Create virtual host configuration files matching the [subdomains](#subdomain-records) for redirecting the http traffic to underlying services:
 
-1. <a id="create-vhost-configs"></a> `setup_virtual_hosts.sh` generates virtual host configuration files and copies them to `/etc/httpd/conf.d`. 
+1. <a id="create-vhost-configs"></a> `setup_virtual_hosts.sh` generates virtual host configuration files and copies them to `/etc/httpd/conf.d`.
 
-    The script requires a domain name as a parameter, check if `$YOUR_DOMAIN` is set before running it.
+   The script requires a domain name as a parameter, check if `$YOUR_DOMAIN` is set before running it.
 
-    ```
-    $ echo $YOUR_DOMAIN
-    ```
+   ```
+   $ echo $YOUR_DOMAIN
+   ```
 
-    Run the following command to create virtual host configuration files for the [subdomains](#create-subdomain-records).
+   Run the following command to create virtual host configuration files for the [subdomains](#create-subdomain-records).
 
-    > INFO: `ports_prefix.ini` contains virtual host to underlying service port mappings, review and modify if necessary.
+   > INFO: `ports_prefix.ini` contains virtual host to underlying service port mappings, review and modify if necessary.
 
-    ```
-    $ sudo $REPO_ROOT/src/setup_virtual_hosts.sh $YOUR_DOMAIN
-    ```
+   ```
+   $ sudo $REPO_ROOT/src/setup_virtual_hosts.sh $YOUR_DOMAIN
+   ```
 
-    Check if the virtual host configuration files have been created.
-    
-    ```
-    $ sudo ls /etc/httpd/conf.d
-    ```
+   Check if the virtual host configuration files have been created.
 
-    The output is expected to contain the following file names:
+   ```
+   $ sudo ls /etc/httpd/conf.d
+   ```
 
-    ```
-    - git.ssl.conf
-    - registry.ssl.conf
-    - registryui.ssl.conf
-    - packages.ssl.conf
-    - vault.ssl.conf
-    - ci.ssl.conf
-    - project.ssl.conf
-    ```
+   The output is expected to contain the following file names:
+
+   ```
+   - git.ssl.conf
+   - registry.ssl.conf
+   - registryui.ssl.conf
+   - packages.ssl.conf
+   - vault.ssl.conf
+   - ci.ssl.conf
+   - project.ssl.conf
+   ```
 
 2. <a id="amend-docker-registry-vhost"></a> Modify `registry.ssl.conf` to prevent `docker push` from failing.
 
-    Open the configuration file for editing for editing,
+   Open the configuration file for editing for editing,
 
-    ```
-    $ sudo nano /etc/httpd/conf.d/registry.ssl.conf
-    ```
+   ```
+   $ sudo nano /etc/httpd/conf.d/registry.ssl.conf
+   ```
 
-    then copy-paste the text given below anywhere in between the _<VirtualHost *:443>...</VirtualHost *:443>_ section and save changes.
+   then copy-paste the text given below anywhere in between the _<VirtualHost *:443>...</VirtualHost *:443>_ section and save changes.
 
-    ```
-    Header add X-Forwarded-Proto "https"
-    RequestHeader add X-Forwarded-Proto "https"
-    ```
+   ```
+   Header add X-Forwarded-Proto "https"
+   RequestHeader add X-Forwarded-Proto "https"
+   ```
 
 3. <a id="vhost-config-verify-result"></a> Restart Apache,
 
-    ```
-    $ sudo systemctl restart httpd
-    ```
-    
-    Verify if the http server is serving https traffic by browsing to any of the created subdomains and following the check list:
+   ```
+   $ sudo systemctl restart httpd
+   ```
 
-    - [x] Redirect from `http` to `https` works
-    - [x] Response is `503 Service Unavailable`
+   Verify if the http server is serving https traffic by browsing to any of the created subdomains and following the check list:
 
-    Proceed if the checks are passed, otherwise, check the service status and logs as described [here](#troubleshoot-apache).
+   - [x] Redirect from `http` to `https` works
+   - [x] Response is `503 Service Unavailable`
+
+   Proceed if the checks are passed; otherwise, check the service status and logs as described [here](#troubleshoot-apache).
 
 ### Containers Infrastructure
 
@@ -601,15 +603,22 @@ $ sudo $REPO_ROOT/src/setup_containers.sh $SHOEBOX_ROOT $YOUR_DOMAIN
 
 Verifying the created directories structure,
 
-``` 
+```
 $ sudo ls -R $SHOEBOX_ROOT
-``` 
+```
+
 then check if the placeholders have been replaced on a sample file (i.e. git/.env).
 
 ```
 $ sudo cat $REPO_ROOT/src/git/.env
 ```
-> IMPORTANT: The following information is provided for troubleshooting purposes only and is not supposed to be used in a regular circumstance.
+
+<<<<<<< HEAD
+
+=======
+
+> > > > > > > ab8f0a2c9634f64309a6a9cbd259e242834ca795
+> > > > > > > IMPORTANT: The following information is provided for troubleshooting purposes only and is not supposed to be used in a regular circumstance.
 
 The setup is split into a batch of scripts per service where each script can be run separately if necessary. The input for all of the scripts matches the following pattern.
 
@@ -626,14 +635,14 @@ $ sudo $REPO_ROOT/src/[service]_containers_setup.sh $SHOEBOX_ROOT $YOUR_DOMAIN [
 - [ci_containers_setup.sh](/src/ci/ci_containers_setup.sh) - continuous integration and continuous delivery
 - [project_containers_setup.sh](/src/project/project_containers_setup.sh) - project management tool
 
-### Service Setup 
+### Service Setup
 
 > IMPORTANT: Order matters
 
 1. [Git (Gogs)](/src/git/README.md)
 2. [Key/Secret Vault (Vault)](/src/vault/README.md)
 3. [Packages (ProGet)](/src/packages/README.md)
-5. [Docker Registry](/src/registry/README.md)
+4. [Docker Registry](/src/registry/README.md)
 5. [Continuous Integration and Continuous Delivery (Drone)](/src/ci/README.md)
 6. [Project Management (Taiga)](/src/project/README.md)
 
