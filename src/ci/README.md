@@ -79,16 +79,16 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
     - Add the sample project to the repository and trigger a build.
 
-        - Replace `@YOUR_DOMAIN` placeholder in `.drone.yml` in the project folder with the actual value to set correct links to the other services.
+        - Run the following commands to replace the `@YOUR_DOMAIN` placeholder in `.drone.yml` file with the actual value to set correct links to external services.
 
-          > INFO: `.drone.yml` contains the build pipeline configuration for the sample project. Check the [Drone Pipeline documentation](https://docs.drone.io/configure/pipeline/) for more information.
+          > INFO: `.drone.yml` contains a build pipeline configuration for the sample project. Check the [Drone Pipeline documentation](https://docs.drone.io/configure/pipeline/) for more information.
 
           ```
           $ sudo sed -i 's|@YOUR_DOMAIN|'"$YOUR_DOMAIN"'|g' $REPO_ROOT/src/ci/ci.build.sample/.drone.yml
           $ cat $REPO_ROOT/src/ci/ci.build.sample/.drone.yml
           ```
 
-      - Create a local git repository for the sample project and push it to the Git service.
+      - Create a local git repository for the sample project and push its content to the Git service.
 
         > WARNING: Do not forget to replace [yourdomain.com] and [DRONE_GIT_USERNAME] placeholders with the actual values.
 
@@ -101,11 +101,11 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
         $ sudo git push origin master
         ```
 
-        > IMPORTANT: `git push` should trigger a build, if not then modify the `.trigger` file in the project directory, and commit and push the change fro triggering a build.
+        > IMPORTANT: `git push` should trigger a build, otherwise, modify the `.trigger` file in the project directory and commit and push the change for triggering a build.
 
-        Navigate to ci._yourdomain.com_ and click the repository name, ci.build.sample, to open the details page and then open the _ACTIVITY FEED_ tab for checking the build status.
+      - Navigate to ci._yourdomain.com_ and click the repository name, ci.build.sample, to open the details page and then open the _ACTIVITY FEED_ tab for checking the build status.
 
-      - If the build is successful (green (✓) checkmark icon) it should create a _ci.build.sample_ Docker image in the Docker registry (check `registryiu`_.yourdomain.com_). Verify the image Create a container from the image and pulling the endpoint which should display the baked-in message from the `hello_world` secret.
+        - If the build is successful (green (✓) checkmark icon) it should create a _ci.build.sample_ Docker image in the Docker registry (check `registryiu`_.yourdomain.com_). Verify the image Create a container from the image and pulling the endpoint which should display the baked-in message from the `hello_world` secret.
 
           > WARNING: Do not forget to replace _[yourdomain.com]_ with the actual value.
 
@@ -114,9 +114,9 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
           $ curl http://localhost:9080/api/hello
           ```
 
-        If the expected output is not shown consult with the troubleshooting section given further to investigate the issue in detail.
+          If the expected output is not shown consult with the troubleshooting section given further to investigate the issue in detail.
 
-      - If the build is failed (red (X) icon) then click on the build record to open the build-log and inspect it for troubleshooting. If the failure cannot be inferred from the logs consult with the troubleshooting section given further to investigate the issue in detail
+        - If the build is failed (red (X) icon) open and inspect the build log for troubleshooting. The build-log can be accessed by clicking on the build record. If the failure cannot be inferred from the logs, then check the troubleshooting section given further to investigate the issue in detail.
 
 ### Build failures troubleshooting
 

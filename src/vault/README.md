@@ -149,7 +149,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
             Proceed if the checks pass, otherwise consult with the Vault documentation.
 
         - Extract and save the `client_token` value, it will be used further for configuring the integration between the ci and vault servers.
-            
+
             > WARNING: Replace `[client_token]` with the actual vault token value.
 
             ```
