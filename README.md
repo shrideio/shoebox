@@ -14,7 +14,7 @@ Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose
 | Continuous Integration and Delivery | [Drone CI](https://drone.io/)                                     | [Drone Non-Commercial License](https://github.com/drone/drone/blob/master/LICENSE) <br /> [Waiver: Individual and Small Business](https://github.com/drone/drone/blob/master/LICENSE#L62)    |
 | Project Management                  | [Taiga](https://taiga.io/)                                        | [Taiga Backend - AGPL-3.0](https://github.com/taigaio/taiga-back/blob/master/LICENSE) <br /> [Taiga Front - AGPL-3.0](https://github.com/taigaio/taiga-front/blob/master/LICENSE)            |
 
-goto: [TL;DR](#tl;dr)
+goto: [TL;DR](#tldr)
 
 ### Why does this exist?
 
