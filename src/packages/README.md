@@ -45,13 +45,13 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
         - Open the administration console using the cog icon ![Alt text](/resources/img/proget_cog.png?raw=true "ProGet administration console") in the top right corner.
 
-        - Browse to `Software Configuration -> License Key & Activation` and then click the _[change]_ link to open a prompt dialog. Enter the exiting license key or navigate to the MyInedo website by clicking the link shown in the info message for acquiring a perpetually free license key.
+        - Browse to `Software Configuration -> License Key & Activation` and then click the _[change]_ link to open a prompt dialog. Enter the existing license key or navigate to the MyInedo website by clicking the link shown in the info message for acquiring a perpetually free license key.
 
         - Enter the license key and click [Save]. The updated page will contain the _activate_ link, click it for activation. The _Activation status_ is expected to show 'The license key is activated'.
 
         If the desired result was not achieved and ProGet still remains inactive check the [license documentation](https://docs.inedo.com/docs/proget/administration/license).
 
-    - Change the administrator password.
+    - Change the administrator password:
     
         Hover with the mouse cursor onto the user icon ![Alt text](/resources/img/proget_user.png?raw=true "ProGet user") in the top right corner to open a context menu and then click _Change Password_ to open the change password dialog. After the password is changed the welcome message should disappear from the login screen.        
 
@@ -65,9 +65,9 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
         - Create two users, one for consuming feeds `FeedConsumer` and another for publishing packages `PackagePublisher`. Click [Create User] for opening the _Create User_ dialog, leave the _Group membership_ field blank.
 
-        - Open the _Tasks_ tab. Firstly, deprive `Anonymous` of the `View & Download Packages` task by removing the entry. Then, assign the `View & Download Packages` task to `FeedConsumer`, and the `View & Download Packages` and `Publish Packages` tasks to `PackagePublisher`.
+        - Open the _Tasks_ tab. Firstly, deprive `Anonymous` of the `View & Download Packages` task by removing the entry. Then, in under the Add Permission: assign the `View & Download Packages` task to `FeedConsumer`, and the `View & Download Packages` and `Publish Packages` tasks to `PackagePublisher`.
         
-        - Click [Add Permission] to open the _Add Privilege_ dialog and create the associations listed below.
+        - After Clicking [Add Permission] to open the _Add Privilege_ dialog, and creating the associations, the result should look as follows:
 
             | Task                     | Scope     | Users & Groups                 |
             | :----------------------- |:--------- | :----------------------------- |
@@ -95,4 +95,4 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
     - ProGet supports feed connectors allowing to unify package feeds from different sources.
     For adding a NuGet connector for `nuget.org` click on the feed name `Feed -> v2`, and follow the breadcrumbs `[Manage Feed] -> add connector -> [Create Connector]` to open the _Create Connector_ dialog. Select `NuGet` as _Feed type_ leaving the rest of the inputs intact, then click [Save] to save changes and close the dialog. In the emerged _Select Connector_ dialog select _www.nuget.org_ as _Connector_ (should be preselected) and then click [Save] to save changes.
 
-> IMPORTANT: Inspire of Proget advertising the Docker registry feature, it does not function properly when the service is hosted in a Linux container due to the following issue [Docker Push to Proget Container Registry fails](https://forums.inedo.com/topic/2788/docker-push-to-proget-container-registry-fails).
+> IMPORTANT: Despite of Proget advertising the Docker registry feature, it does not function properly when the service is hosted in a Linux container due to the following issue [Docker Push to Proget Container Registry fails](https://forums.inedo.com/topic/2788/docker-push-to-proget-container-registry-fails).
