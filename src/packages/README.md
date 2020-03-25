@@ -61,7 +61,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
     - Configure authentication and access policies.
         
-        - Open the administration console using the cog icon ![Alt text](/resources/img/proget_cog.png?raw=true "ProGet administration console"), then navigate to `System Configuration -> Advanced Settings`, then navigate to `Security & Authentication -> Users & Tasks`.
+        - Open the administration console using the cog icon ![Alt text](/resources/img/proget_cog.png?raw=true "ProGet administration console"), then navigate to `Security & Authentication -> Users & Tasks`.
 
         - Create two users, one for consuming feeds `FeedConsumer` and another for publishing packages `PackagePublisher`. Click [Create User] for opening the _Create User_ dialog, leave the _Group membership_ field blank.
 
