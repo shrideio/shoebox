@@ -56,9 +56,11 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
     > INFO: There is a variety of [secret engines](https://www.vaultproject.io/docs/secrets/index.html) supported by Vault designated for different use cases. KVv2 (key/value) secret engine is used for storing arbitrary secrets within the configured physical storage for Vault.
 
-    - click the _Secrets_ menu in the top right corner to navigate to the secrets management console. Then click _Enable new engine_ to proceed.
+    - click the _Secrets_ menu in the top left corner to navigate to the secrets management console. Then click _Enable new engine_ to proceed.
 
-    - Choose _KV_ as the secrets engine and click [Next] to proceed. Set _Path_ to `secrets` and _Version_ to `2` (default KV engine version). Check the [KV engine documentation](https://www.vaultproject.io/docs/secrets/kv/kv-v2.html) for the engine options details and modify it if necessary. Click [Enable Engine] to finish the secret engine setup.
+    - Choose _KV_ as the secrets engine and click [Next] to proceed. Set _Path_ to `secrets` and _Version_ to `2` (default KV engine version). Click [Enable Engine] to finish the secret engine setup.
+
+     Check the [KV engine documentation](https://www.vaultproject.io/docs/secrets/kv/kv-v2.html) for the engine options details and modify it if necessary.
 
 4. <a name="create-a-secret"></a>Create a secret
 
@@ -72,10 +74,10 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
     > INFO: Check [AppRole Pull Authentication](https://learn.hashicorp.com/vault/identity-access-management/iam-authentication) for more information.
 
-    - Enable the AppRole authentication method
-        - Navigate to the `Access` menu, then choose the _AppRole_ option from the list and click [Next] to continue. 
+    - Enable the AppRole authentication method:
+        - Navigate to the `Access` menu > Enable new method, then choose the _AppRole_ option from the list and click [Next] to continue. 
     
-        - Click the `Expand Method` link to expand the options section and set _Default Lease TTL_ and  _Max Lease TTL_ to `30 days`, leave the _Path_ value (expected to be `approle`) intact. Click [Enable Method] to finish the authentication method setup.
+        - Click the `Method Options` link to expand the options section and set _Default Lease TTL_ and  _Max Lease TTL_ to `30 days`, leave the _Path_ value (expected to be `approle`) intact. Click [Enable Method] to finish the authentication method setup.
 
     - <a id="acl-policy"></a>Create a policy for authenticating and accessing secrets
     
@@ -95,7 +97,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
         }
         ```
     
-    -  Create a role linked with the policy and generate a secret id for that role. 
+    -  Create a role linked with the policy and generate a secret id for that role:
     
         Click the Vault CLI shell icon (![Alt text](/resources/img/vault_shell.png?raw=true "Vault shell")) in the top right corner to open the command shell and execute the following commands:
 
@@ -133,7 +135,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
         Generate a new Secret ID as described in the [previous](#generate-secret-id) step.
 
-    - <a name="issue-a-client-token"></a> Issue a client token
+    - <a name="issue-a-client-token"></a> Issue a client token:
 
         - Type `api` in the UI shell  (![Alt text](/resources/img/vault_shell.png?raw=true "Vault shell")) and press the `Enter` key to open _Vault API explorer_. 
         
@@ -148,9 +150,9 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
             Proceed if the checks pass, otherwise consult with the Vault documentation.
 
-        - Extract and save the `client_token` value, it will be used further for configuring the integration between the ci and vault servers.
+        - Save and export as a envirnoment variable the the `client_token` value, it will be used further for configuring the integration between the ci and vault servers.
             
-            > WARNING: Replace `[client_token]` with the actual vault token value.
+            > Make sure to replace `[client_token]` with the actual vault token value.
 
             ```
             export VAULT_TOKEN=[client_token]
