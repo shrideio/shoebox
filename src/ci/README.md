@@ -33,7 +33,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
 ### Setup
 
-1. Drone Vault plugin requires a Vault client token for accessing secrets stored in the Vault service. Fetch the cline token as described [here](/src/vault/README.md#issue-a-client-token) and then replace the placeholder in `.env` file running the following command.
+1. Drone Vault plugin requires a Vault client token for accessing secrets stored in the Vault service. Fetch the client token as described [here](/src/vault/README.md#issue-a-client-token) and then replace the placeholder in `.env` file running the following command.
 
     > WARNING: Do not forget to replace [vault-token] with the actual value
 
@@ -56,16 +56,16 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
     > INFO: The sample project can be found at `$REPO_ROOT/src/ci.build.sample`
 
-    -  Create a secret for storing build arguments for the container. The secret should be created as follows:
+    -  Using the secret `ci.build.sample` with the key value pair we already create in the vault setup, we are going to be pulling the value for `hello_world` for the ci sample project.
 
         - Secret path (_Path for this secret_ field): `ci.build.sample`
         - Secret key/value: `hello_world`/`Hello world!`
 
-        Follow the instruction for creating secrets as described [here](/src/vault/README.md#create-a-secret).
+        The part describing the setup of the `ci.build.sample` secret can be found [here](/src/vault/README.md#create-a-secret).
 
-    -  Create a git user for the CI service for enabling access to repositories. Use the values of `DRONE_GIT_USERNAME` and `DRONE_GIT_PASSWORD` from the `secrets.ini` file as username and password accordingly. After the user is created log in to the Git service and create a repository named `ci.build.sample`.
+    -  Create a git user for the CI service for enabling access to repositories. Use the values of `DRONE_GIT_USERNAME` and `DRONE_GIT_PASSWORD` from the `secrets.ini` file as username and password accordingly. After the user is created, make sure that the user has the setting: "This account has permissions to create Git Hooks" enabled. log in to the Git service and create a repository named `ci.build.sample`.
 
-        > IMPORTANT: For repositories not created under `DRONE_GIT_USERNAME` adding that user as a collaborator should enable access for the CI service.
+        > IMPORTANT: For repositories not created under `DRONE_GIT_USERNAME` adding that user as a admin collaborator should enable access for the CI service.
 
 
     - Activate the repository for build
