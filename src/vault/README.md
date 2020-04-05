@@ -66,7 +66,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
     - Navigate to `Secrets -> secrets` to open the secret management console then click _Create secret_.
 
-    - Set _Path for this secret_ to `ci.build.sample` and create a single entry version data with the following key/value pair `HELLO_WORLD`/`Hello world!`, then click [Save] to save changes.
+    - Set _Path for this secret_ to `ci.build.sample` and create a single entry version data with the following key/value pair `hello_world`/`Hello world!`, then click [Save] to save changes.
 
 5. Configure machine identity access
 
@@ -119,16 +119,16 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
     - Reissue new Secret ID   
 
-        If the Secret ID value was not captured or lost the only way to restore it is to create a new one. Run the following command to list available *secret_id_accessor*s.
+        If the Secret ID value was not captured or lost the only way to restore it is to create a new one. Run the following command to list available secret-id keys.
 
         ```
         > vault list auth/approle/role/ciagent/secret-id
         ```
 
-        Use the _secret_id_accessor_ value from the output to replace the `[secret-id]` placeholder and run the following command to remove the current Secret ID.
+        Use the secret-id key from the output to replace the `[secret_id_accessor]` placeholder and run the following command to remove the current Secret ID.
 
         ```
-        > vault write auth/approle/role/ciagent/secret-id/destroy secret_id="[secret-id]"
+        > vault write /auth/approle/role/ciagent/secret-id-accessor/destroy secret_id_accessor="[secret_id_accessor]"
         ```
 
         Generate a new Secret ID as described in the [previous](#generate-secret-id) step.

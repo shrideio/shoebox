@@ -39,7 +39,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
     ```
     $ export VAULT_TOKEN=[vault-token]
-    $ sudo sed -i 's|@VAULT_TOKEN|'"$VAULT_TOKEN"'|g' $REPO_ROOT/src/ci/.env
+    $ sudo sed -i 's|@VAULT_TOKEN$|'"$VAULT_TOKEN"'|g' $REPO_ROOT/src/ci/.env
     $ cat $REPO_ROOT/src/ci/.env
     ```
 
@@ -110,13 +110,14 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
           > WARNING: Do not forget to replace _[yourdomain.com]_ with the actual value.
 
           ```
-          $ sudo docker run -d -p 9080:80 --name ci.build.sample registry.[yourdomain.com]/ci.test/ci.build.sample
+          $ sudo docker run -d -p 9080:80 --name ci.build.sample registry.$YOUR_DOMAIN/ci.test/ci.build.sample
           $ curl http://localhost:9080/api/hello
           ```
 
-          If the expected output is not shown consult with the troubleshooting section given further to investigate the issue in detail.
+          If the expected output is not shown consult with the troubleshooting section further for investigating the issue in detail.
 
-        - If the build is failed (red (X) icon) open and inspect the build log for troubleshooting. The build-log can be accessed by clicking on the build record. If the failure cannot be inferred from the logs, then check the troubleshooting section given further to investigate the issue in detail.
+        - If the build is failed (red (X) icon) open and inspect the build log for troubleshooting. The build-log can be accessed by clicking on the build record. If the failure cannot be inferred from the logs check the troubleshooting section further for investigating the issue in detail.
+
 
 ### Build failures troubleshooting
 
@@ -127,9 +128,8 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
     - Install Drone CLI
 
         ```
-        $ curl -L https://github.com/drone/drone-cli/releases/latest/download/
-        $ drone_linux_amd64.tar.gz | tar zx
-        $ sudo install -t /usr/local/bin drone 
+        $ curl -L https://github.com/drone/drone-cli/releases/latest/download/drone_linux_amd64.tar.gz | tar zx
+        $ sudo install -t /usr/local/bin drone
         ```
 
     - Drone CLI requires the Drone admin user for running commands on the Drone service. The credential for the admin user can be extracted from the `DRONE_USER_CREATE` parameter from the `secrets.ini` file. Use the _username_ and _token_ parts to create a git user with matching username and password.
@@ -137,6 +137,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
     - Drone CLI requires `DRONE_TOKEN` and `DRONE_SERVER`environment variables to before connecting to the Drone service. Conveniently, the commands to set those variables can be fetched from the Drone web interface. Use the admin user credentials to log in to the Drone web interface. In the landing page click on the user icon (auto-generated icon with an abstract pattern in the top right corner), and then click _User Settings_ in the emerged context menu. In the opened page find the _Example CLI Usage_ section and copy-paste its content into the shell and run the commands.
 
       > INFO: The commands should resemble the following piece of code
+
         ```
         $ export DRONE_SERVER=https://ci.[yourdomain.com]
         $ export DRONE_TOKEN=[ci-agent-token]
@@ -152,17 +153,18 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
 - Troubleshooting
 
+  The most fragile step of the build pipeline is `containerize`. It consists of two operations depending on external services.
 
-  The most fragile step of the build pipeline is `containerize`. It consists of two operations dependent on external services
+    - Fetching secrets from Vault using the Drone Vault plugin
 
-    - Fetching secrets from Vault using the Drone secrets plugin
+        Check if the secrets value can be fetched through the Drone Vault plugin. If the secret values are displayed correctly the cause of the issue is not related to the Drone Vault plugin or Vault configuration.
 
         ```
         $ drone plugins secret get secrets/data/ci.docker registry_username --repo ciagent/ci.build.sample
         $ drone plugins secret get secrets/data/ci.build.sample hello_world --repo ciagent/ci.build.sample
         ```
 
-        If correct secret values are displayed the cause of the issue is not related to the secrets plugin or Vault configuration, otherwise check `VAULT_TOKEN` by trying to login using its value and confirm that Access Login Policy is configured correctly as described [here](/src/vault/README.md#acl-policy).
+        Otherwise, check the vault is accesible when logging in using the  `VAULT_TOKEN` value by trying to login using its value and confirm that Access Login Policy is configured correctly as described [here](/src/vault/README.md#acl-policy).
 
 
     - Pushing a resulting Docker image to the Docker registry
