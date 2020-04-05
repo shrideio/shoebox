@@ -153,18 +153,35 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
 - Troubleshooting
 
-  The most fragile step of the build pipeline is `containerize`. It consists of two operations depending on external services.
+  The most fragile step of the build pipeline is `containerize` as it depends on external services - Vault and Docker Registry.  
 
-    - Fetching secrets from Vault using the Drone Vault plugin
+    - Check if the secret values can be fetched through the Drone Vault plugin.
 
-        Check if the secrets value can be fetched through the Drone Vault plugin. If the secret values are displayed correctly the cause of the issue is not related to the Drone Vault plugin or Vault configuration.
+        Replace the placeholders with matching values from `$REPO_ROOT/src/ci/.env` an set the environment values as follows. 
+
+        ```
+        $ export DRONE_SECRET_ENDPOINT=http://localhost:[DRONE_VAULT_PLUGIN_PORT]
+        $ export DRONE_SECRET_SECRET=[DRONE_SECRET]
+        ```
+
+        > IMPORTANT: Be aware not to confuse the CLI to secret plugin communication or configurations errors with the real secret access issues. The later is reported via _secret key not found_ or _secret not found_ error messages.
+
+        Check if Docker registry credentials are accessible.
 
         ```
         $ drone plugins secret get secrets/data/ci.docker registry_username --repo ciagent/ci.build.sample
+        $ drone plugins secret get secrets/data/ci.docker registry_password --repo ciagent/ci.build.sample
+        ```
+
+        Check if the build argument is accessible.
+
+        ```
         $ drone plugins secret get secrets/data/ci.build.sample hello_world --repo ciagent/ci.build.sample
         ```
 
-        Otherwise, check the vault is accesible when logging in using the  `VAULT_TOKEN` value by trying to login using its value and confirm that Access Login Policy is configured correctly as described [here](/src/vault/README.md#acl-policy).
+        If the secret values are displayed correctly proceed to  
+
+        Otherwise, check the vault is accesible when logging in using the `VAULT_TOKEN` value by trying to login using its value and confirm that Access Login Policy is configured correctly as described [here](/src/vault/README.md#acl-policy).
 
 
     - Pushing a resulting Docker image to the Docker registry
