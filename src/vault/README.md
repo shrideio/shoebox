@@ -29,7 +29,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
 ### Setup
 
-1. Start Vault (vault) and Consul (vault-db) containers.
+1. Start Vault (`vault`) and Consul (`vault-db`) containers.
 
     > WARNING: DO NOT modify assigned values in the `.env` file. If necessary,modify the `secrets.ini` file and run `vault_containers_setup.sh` to override the current values.
 
@@ -38,7 +38,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
     $ sudo docker-compose up -d
     ```
 
-    Run `sudo docker ps` to verify if `vault` and `vault-db` containers are up and running. Proceed if no error is detected, otherwise check the container logs for troubleshooting using the following command `sudo docker logs [container name]`.
+    Run `$ sudo docker ps` to verify if the listed containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
 
 2. <a id="unseal-vault"></a>Unseal Vault
 

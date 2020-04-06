@@ -1,32 +1,40 @@
 ## Taiga Setup
 
-Check [Taiga Documentation](https://taigaio.github.io/taiga-doc/dist/), [Taiga Support page](https://tree.taiga.io/support/) for more information.
+Check [Taiga Documentation](https://taigaio.github.io/taiga-doc/dist/) and [Taiga Support page](https://tree.taiga.io/support/) for more information. Sample project can be discovered [here](https://tree.taiga.io/discover).
 
-Check [existing taiga projects](https://tree.taiga.io/discover) to get acquainted with sample projects.
+> INFORMATION: The Taiga setup is based on the community maintained project [docker-taiga](https://github.com/docker-taiga/) provided by [w1ck3dg0ph3r](https://github.com/w1ck3dg0ph3r). Docker images can be found in the [docker-taiga Docker Hub](https://hub.docker.com/u/dockertaiga) repository.
 
-⚠️ATTENTION: The default login credentials are **admin**:**123123**. It should be changed on first login for security reasons.⚠️
 
-> Run `echo $REPO_ROOT` to verify if the environment variable is set before continuing.
+### Preliminary checklist
 
-Stage Taiga (project-*) containers.
+- [x] `$REPO_ROOT` and `$SHOEBOX_ROOT` environment variables are set
 
-The following commands will navigate to the directory containing `project_docker_compose.yml` and run the containers in the background.
+    ```
+    $ echo $REPO_ROOT
+    $ echo $SHOEBOX_ROOT
+    ```
 
-> The `.env` file in the `/src/project` directory contains environment variable values for the containers, review and modify if necessary.
+- [x] Taiga `secrets.ini` and `.env` files are generated
 
-```
-$ sudo cd $REPO_ROOT/src/project
-$ sudo docker-compose up -d
-```
+    > WARNING: DO NOT modify assigned values in the `.env` file. If necessary,modify the `secrets.ini` file and run `project_containers_setup.sh` to override the current values.
 
-Run `sudo docker ps` to verify that the following containers are up and running.
-  - `project-back`
-  - `project-front`
-  - `project-db`
-  - `project-messaging`
-  - `project-events`
-  - `project-proxy`
+    ```
+    $ sudo cat $SHOEBOX_ROOT/taiga/secrets.ini
+    $ sudo cat $REPO_ROOT/src/project/.env
+    ```
 
-Proceed if no errors are detected, otherwise run `sudo docker logs [container name]` to check the logs for troubleshooting.
+- [x] project._yourdomain.com_ subdomain is configured and serves https traffic.
 
-> The docker-compose file for taiga is a modified version of [@w1ck3dg0ph3r's](https://github.com/docker-taiga/taiga/commits?author=w1ck3dg0ph3r) docker-compose that can be found [here](https://github.com/docker-taiga/taiga)
+
+### Setup
+
+ 1. Start Taiga backend (`project-backend`), Taiga frontend (`project-frontend`), RabbitMQ server (`project-messaging`), Taiga events (`project-events`), Nginx reverse proxy (`project-proxy`), and PostgreSQL (`project-db`) containers.
+
+    ```
+    $ sudo cd $REPO_ROOT/src/project
+    $ sudo docker-compose up -d
+    ```
+
+    Run `$ sudo docker ps` to verify if the listed containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
+
+2. Change the default Taiga administrator password after first login. Use the following user name and password: _admin_ and _123123_.

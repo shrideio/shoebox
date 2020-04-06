@@ -2,10 +2,10 @@ version: '3.5'
 
 services:
 
-  project-back:
+  project-backend:
     image: dockertaiga/back
-    container_name: project-back
-    hostname: project-back
+    container_name: project-backend
+    hostname: project-backend
     restart: unless-stopped
     depends_on:
       - project-db
@@ -13,8 +13,8 @@ services:
     networks:
       - project-network
     volumes:
-      - project-back-media:/taiga-media
-      - project-back-conf:/taiga-conf
+      - project-backend-media:/taiga-media
+      - project-backend-conf:/taiga-conf
     environment:
       - RABBIT_PORT=5672
       - TAIGA_HOST=${TAIGA_HOST}
@@ -30,15 +30,15 @@ services:
       - RABBIT_VHOST=${TAIGA_RABBIT_VHOST}
       - STARTUP_TIMEOUT=${TAIGA_STARTUP_TIMEOUT}
 
-  project-front:
+  project-frontend:
     image: dockertaiga/front
-    container_name: project-front
-    hostname: project-front
+    container_name: project-frontend
+    hostname: project-frontend
     restart: unless-stopped
     networks:
       - project-network
     volumes:
-      - project-front-conf:/taiga-conf
+      - project-frontend-conf:/taiga-conf
     environment:
       - TAIGA_HOST=${TAIGA_HOST}
       - TAIGA_SCHEME=${TAIGA_SCHEME}
@@ -101,8 +101,8 @@ services:
     hostname: project-proxy
     restart: unless-stopped
     depends_on:
-      - project-back
-      - project-front
+      - project-backend
+      - project-frontend
       - project-events
     networks:
       - project-network
@@ -112,8 +112,8 @@ services:
       - project-proxy-conf:/taiga-conf
     environment:
       - TAIGA_HOST=${TAIGA_HOST}
-      - TAIGA_BACK_HOST=project-back
-      - TAIGA_FRONT_HOST=project-front
+      - TAIGA_BACK_HOST=project-backend
+      - TAIGA_FRONT_HOST=project-frontend
       - EVENTS_HOST=project-events
       - ENABLE_SSL=no
 
@@ -126,19 +126,19 @@ networks:
 
 volumes:
 
-  project-back-conf:
+  project-backend-conf:
     driver_opts:
       type: none
       device: ${TAIGA_BACK_CONF}
       o: bind
 
-  project-back-media:
+  project-backend-media:
     driver_opts:
       type: none
       device: ${TAIGA_BACK_MEDIA}
       o: bind
 
-  project-front-conf:
+  project-frontend-conf:
     driver_opts:
       type: none
       device: ${TAIGA_FRONT_CONF}

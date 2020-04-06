@@ -43,14 +43,14 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
     $ cat $REPO_ROOT/src/ci/.env
     ```
 
-2. Start Drone CI (ci), Drone build agent (ci-agent), Drone Vault plugin (ci-secret) and PostgreSQL (ci-db) containers.
+2. Start Drone CI (`ci`), Drone build agent (`ci-agent`), Drone Vault plugin (`ci-secret-plugin`) and PostgreSQL (`ci-db`) containers.
 
       ```
       $ sudo cd $REPO_ROOT/src/ci
       $ sudo docker-compose up -d
       ```
 
-    Run `$ sudo docker ps` for verifying if `ci`, `ci-agent`, `ci-secret` and `ci-db`  containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
+    Run `$ sudo docker ps` to verify if the listed containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
 
 3. Prepare and run a test build. The purpose of the test build is to very if secrets can be fetched from Vault and the container produced by the build pipeline can be pushed to a private Docker registry.
 
@@ -94,6 +94,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
         ```
         $ cd $REPO_ROOT/src/ci/ci.build.sample
+        $ sudo git init
         $ sudo git add .
         $ sudo git commit -m "Adding ci.build.sample"
         $ sudo git remote add origin https://git.[yourdomain.com]/[DRONE_GIT_USERNAME]/ci.build.sample
