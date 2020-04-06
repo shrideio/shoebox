@@ -29,7 +29,7 @@ Check [Drone documentation](https://docs.drone.io/), [Drone Vault plugin](https:
 
 - [x] ci._yourdomain.com_ subdomain is configured and serves https traffic
 
-Proceed if all of the checks pass, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
+Proceed if all of the checks passes, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
 
 ### Setup
 
@@ -165,7 +165,11 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
         $ export DRONE_SECRET_SECRET=[DRONE_SECRET]
         ```
 
-        > IMPORTANT: Be aware not to confuse the CLI to secret plugin communication or configurations errors with the real secret access issues. The later is reported via _secret key not found_ or _secret not found_ error messages.
+        Check if the build argument is accessible.
+
+        ```
+        $ drone plugins secret get secrets/data/ci.build.sample hello_world --repo ciagent/ci.build.sample
+        ```
 
         Check if Docker registry credentials are accessible.
 
@@ -174,18 +178,11 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
         $ drone plugins secret get secrets/data/ci.docker registry_password --repo ciagent/ci.build.sample
         ```
 
-        Check if the build argument is accessible.
+        > WARNING: Be aware not to confuse the CLI to secret plugin communication or configurations errors with the real secret access issues reported as via _secret key not found_ or _secret not found_ error messages.
 
-        ```
-        $ drone plugins secret get secrets/data/ci.build.sample hello_world --repo ciagent/ci.build.sample
-        ```
+        If the secret values cannot check if the secrets are accessible by the generated token (`VAULT_TOKEN`) as described [here](/src/vault/README.md#read-secret).
 
-        If the secret values are displayed correctly proceed to  
-
-        Otherwise, check the vault is accesible when logging in using the `VAULT_TOKEN` value by trying to login using its value and confirm that Access Login Policy is configured correctly as described [here](/src/vault/README.md#acl-policy).
-
-
-    - Pushing a resulting Docker image to the Docker registry
+    - Check Docker registry
 
       - Check if the registry can be accessed by the provided username and password values ([here](/src/registry/README.md#docker-registry-username-and-password))
 

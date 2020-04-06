@@ -22,7 +22,7 @@ Check [ProGet Documentation](https://docs.inedo.com/docs/proget/overview) and [P
 
 - [x] packages._yourdomain.com_ subdomain is configured and serves https traffic
 
-Proceed if all of the checks pass, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
+Proceed if all of the checks passes, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
 
 
 ### Setup

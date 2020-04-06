@@ -24,7 +24,7 @@ Check [Docker Registry](https://docs.docker.com/registry/) and [Joxit Docker Reg
 
 - [x] [Vault](/src/vault/README.md) service is up and running and the vault is configured and [unsealed](/src/vault/README.md#unseal-vault) (vault._yourdomain.com_)
 
-Proceed if all of the checks pass, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
+Proceed if all of the checks passes, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
 
 
 ### Setup

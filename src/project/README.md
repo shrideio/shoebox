@@ -2,7 +2,7 @@
 
 Check [Taiga Documentation](https://taigaio.github.io/taiga-doc/dist/) and [Taiga Support page](https://tree.taiga.io/support/) for more information. Sample project can be discovered [here](https://tree.taiga.io/discover).
 
-> INFORMATION: The Taiga setup is based on the community maintained project [docker-taiga](https://github.com/docker-taiga/) provided by [w1ck3dg0ph3r](https://github.com/w1ck3dg0ph3r). Docker images can be found in the [docker-taiga Docker Hub](https://hub.docker.com/u/dockertaiga) repository.
+> INFO: The Taiga setup is based on the community maintained project [docker-taiga](https://github.com/docker-taiga/) provided by [w1ck3dg0ph3r](https://github.com/w1ck3dg0ph3r). Docker images can be found in the [docker-taiga Docker Hub](https://hub.docker.com/u/dockertaiga) repository.
 
 
 ### Preliminary checklist
