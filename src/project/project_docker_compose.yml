@@ -105,6 +105,7 @@ services:
       - project-front
       - project-events
     networks:
+      - proxy-network
       - project-network
     ports:
       - ${TAIGA_PROXY_PORT}:80
@@ -116,9 +117,20 @@ services:
       - TAIGA_FRONT_HOST=project-front
       - EVENTS_HOST=project-events
       - ENABLE_SSL=no
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy-network"
+      - "traefik.http.routers.project.service=project"
+      - "traefik.http.routers.project.rule=Host(`project.${YOUR_DOMAIN}`)"
+      - "traefik.http.routers.project.entrypoints=websecure"
+      - "traefik.http.routers.project.tls.certresolver=myresolver"
+      - "traefik.http.services.project.loadbalancer.server.port=80"
 
 
 networks:
+   
+   proxy-network:
+      external: true
 
     project-network:
       driver: bridge

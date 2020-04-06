@@ -46,7 +46,16 @@ services:
         - /var/run/docker.sock:/var/run/docker.sock
         - ci-data:/data
       depends_on:
+        - proxy-network
         - ci-db
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=proxy-network"
+        - "traefik.http.routers.ci.service=ci"
+        - "traefik.http.routers.ci.rule=Host(`ci.${YOUR_DOMAIN}`)"
+        - "traefik.http.routers.ci.entrypoints=websecure"
+        - "traefik.http.routers.ci.tls.certresolver=myresolver"
+        - "traefik.http.services.ci.loadbalancer.server.port=80"
 
     ci-secret:
       image: drone/vault
@@ -88,10 +97,14 @@ services:
 
 
 networks:
+    
+    proxy-network:
+      external: true
+      
     ci-network:
       name: ci-network
       driver: bridge
-
+      
 
 volumes:
 

@@ -28,12 +28,24 @@ services:
       - DELETE_IMAGES=true
       - REGISTRY_TITLE=Docker Registry
     networks:
+      - proxy-network
       - registry-network
     depends_on:
       - registry
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy-network"
+      - "traefik.http.routers.registry.service=registry"
+      - "traefik.http.routers.registry.rule=Host(`registry.${YOUR_DOMAIN}`)"
+      - "traefik.http.routers.registry.entrypoints=websecure"
+      - "traefik.http.routers.registry.tls.certresolver=myresolver"
+      - "traefik.http.services.registry.loadbalancer.server.port=80"
 
 networks:
 
+   proxy-network:
+      external: true
+      
   registry-network:
     name: registry-network
     driver: bridge

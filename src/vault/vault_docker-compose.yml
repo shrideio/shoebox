@@ -33,16 +33,28 @@ services:
       - 8600:8600/udp
       - ${VAULT_PORT}:8200
     networks:
+      - proxy-network
       - vault-network
     cap_add:
       - IPC_LOCK
     command: server
     depends_on:
       - vault-db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy-network"
+      - "traefik.http.routers.vault.service=vault"
+      - "traefik.http.routers.vault.rule=Host(`vault.${YOUR_DOMAIN}`)"
+      - "traefik.http.routers.vault.entrypoints=websecure"
+      - "traefik.http.routers.vault.tls.certresolver=myresolver"
+      - "traefik.http.services.vault.loadbalancer.server.port=8200"
 
 
 networks:
-
+   
+   proxy-network:
+      external: true
+      
     vault-network:
       name: vault-network
       driver: bridge

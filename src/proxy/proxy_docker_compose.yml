@@ -1,0 +1,37 @@
+version: "3.5"
+
+services:
+
+  proxy:
+    image: "traefik:v2.2"
+    container_name: "proxy"
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.dnschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.dnschallenge.provider=cloudflare"
+      #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - "--certificatesresolvers.myresolver.acme.email=${LETS_ENCRYPT_EMAIL}"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    networks:
+      - proxy-network
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    environment:
+      - "CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}"
+      - "CLOUDFLARE_API_KEY=${CLOUDFLARE_API_KEY}"
+    volumes:
+      - "${PROXY_LETSENCRYPT}:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+
+networks:
+  proxy-network:
+    name: proxy-network
+    driver: bridge
