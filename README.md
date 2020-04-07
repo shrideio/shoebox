@@ -2,7 +2,7 @@
 
 ### What is it?
 
-Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose) for setting up a simple collaborative software development environment hosted on a VPS or dedicated server as an inexpensive alternative for subscription based could services. Software components used in this setup are either open source or have free versions (some with limitations, please check).
+Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose) for setting up a simple collaborative software development environment. I can be hosted on a VPS or dedicated server as an inexpensive alternative for subscription based could services. Software components used in this setup are either open source or have free versions (some with limitations, please check).
 
 | Tool                                | Vendor                                                            | License                                                                                                                                                                                      |
 | :---------------------------------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -20,11 +20,11 @@ goto: [TL;DR](#tldr)
 
 The short answer is because of [“Those goddamn AWS charges!”](https://www.youtube.com/watch?v=982wFqC03v8).
 
-On a serious note, we believe that even small teams can benefit from using a fully equipped development environment without paying a premium for purchasing infrastructural services from cloud service providers.
+On a serious note, we believe that even small teams can benefit from using a fully equipped development environment without paying a premium for infrastructural services from cloud service providers.
 
-> INFO: The latter is less relatable to open source projects as usually most of the tools mentioned in this setup are provided free of charge by major vendors for such projects.
+> INFO: The latter is less actual for open source projects. Usually, most of the tools mentioned in this setup are provided free of charge by major vendors.
 
-And lastly, this setup has come up naturally when ([mich4xD](https://github.com/mich4xD)) and I ([bahram-aliyev](https://github.com/bahram-aliyev])) decided to document how to set up a development environment when working on a personal project, therefore this is a documentation for ourselves in the first place.
+And lastly, this setup is a result of our ([mich4xD](https://github.com/mich4xD) and [bahram-aliyev](https://github.com/bahram-aliyev])) "valor" attempt to document and automate the deployment of essential services for a development environment when working on a personal project.
 
 ### How does it work?
 
@@ -46,11 +46,11 @@ This setup requires a Linux machine with root access and system requirements mat
   - Storage: 30 GB
   - Network: 1 IPv4 address
 
-> INFO: The setup with minor adjustments should work on any other popular Linux distributive. However, it was tested and staged on CentOS 7.0, that is why this OS mention as a requirement.
+> INFO: This setup was tested and staged on CentOS 7.0, that is why this OS mention as a requirement. However, with minor adjustments (if any) it should work on any other popular Linux distributive.
 
-Considering the physical host there are three options to choose from.
+Considering the physical host, there are three options to choose from.
 
-> IMPORTANT: None of the vendors listed below has a sponsorship or advertisement agreement with the authors, likewise the authors are not responsible or liable for any damage or inconvenience caused by actions or inactions of the vendors.
+> IMPORTANT: None of the vendors listed below have a sponsorship or advertisement agreement with the authors. Likewise the authors are not responsible or liable for any damage or inconvenience caused by actions or inactions of the vendors.
 
 1. Rent a Linux VPS.
 
@@ -61,9 +61,11 @@ Considering the physical host there are three options to choose from.
    - [Hostinger](https://www.hostinger.com/)
    - [Interserver](https://www.interserver.net/)
 
-2. Rent a dedicate server.
+2. Rent a dedicated server.
 
-   This option is usually more costly than VPS renting, however, provides extra computation power and storage capacity for the premium. There is a limited number of affordable options in a price range of 20 to 30 USD per month, as usually the price range starts at a 50 USD per month threshold. When choosing a dedicated server it is recommended to take into consideration the hardware age and refrain from using significantly outdated equipment due to potential performance degradation. The dedicated server option can be considered as an expansion path for future growth.
+   This option is usually more costly than renting a VPS, however, it provides extra computation power and storage capacity for the premium. There is a limited number of affordable options in a price range of 20 to 30 USD per month. Usually, the price range starts at a 50 USD per month threshold. The dedicated server option can be considered as an expansion path for future growth.
+   
+   > WARNING: When choosing a dedicated server it is recommended to avoid renting significantly outdated hardware. Old hardware can potentially yield less performance than a VPS with lesser cost.
 
    - [Nocix](https://www.nocix.net/)
    - [Wholesale Internet](https://www.wholesaleinternet.net/)
@@ -72,29 +74,27 @@ Considering the physical host there are three options to choose from.
 
    No comment on that, you are in full charge.
 
-Either way, be mindful of the law of diminishing returns. For example, the premium paid for extra storage on a VPS may equalize the VPS rental cost with the dedicated server monthly fee. The same is true for the dedicated server option, as the cost may eventually grow to the point where it is more reasonable to purchase the services from a cloud service provider. In short, do back-of-the-napkin-math.
+Either way, be mindful of the law of diminishing returns. For example, the premium paid for the extra storage on a VPS may equalize the VPS rental cost with the dedicated server monthly fee. The same is true for the dedicated server option, as the cost may eventually grow to the point where it is more reasonable to purchase services from a cloud service provider. Long story short, do back-of-the-napkin-math.
 
 ### Q/A
 
 - I know a better way, how can I help?
 
-  We are no Linux gurus, Docker experts or technical writing virtuosos, therefore, you are more than welcome to contribute, and we would be more than happy to receive any constructive criticism on how to improve. Open a PR or file an issue ticket, we will do our best to respond as soon as possible.
+  We are no Linux gurus, Docker experts, or technical writing virtuosos, so you are more than welcome to contribute! File an issue ticket or even better open a pull requests, we will do our best to respond as soon as possible. Constructive criticism is very appreciated. 
 
-- Are there any downsides or deficiencys of this setup?
-
-  Yes, there are.
+- What is the downside or deficiency of this setup?  
 
   Firstly, it is a single machine configuration incapable of running on a cluster. The latter potentially may become a problem when simultaneously running build pipelines suffocate the performance of the rest of the services. This deficiency should be resolved once the setup is made deployable to a Kubernetes cluster.
 
-  Secondly, if the technology of your choice does not support Docker containerization or necessary tooling is not provided out of the box, the current CI/CD service is deemed unusable for your needs as its features are entirely based on the Docker infrastructure. In this case consider using alternatives such as [Jenkins CI](https://jenkins.io/) or [Concourse](https://concourse-ci.org/), which might be included in the setup in the future.
+  Secondly, if the technology of your choice does not support Docker containerization or necessary tooling is not provided out of the box, the current CI/CD service is deemed unusable for your needs as its features are entirely based on the Docker infrastructure. In this case, consider using alternatives such as [Jenkins CI](https://jenkins.io/) or [Concourse](https://concourse-ci.org/) which might be included in the future.
 
   And lastly, the current build pipeline is .NET Core biased. Please feel free to contribute and add pipeline configurations for other technologies.
 
 - What are the plans for the future?
 
-As it is mentioned earlier adding Kubernetes support is a high priory task on the list, however we need to acquaint ourselves with the technology first.
+  As it is mentioned earlier, adding Kubernetes support is a high priory task on the list, however, we need to acquaint ourselves with the technology first.
 
-We will do our best to maintain the documentation and keep the scripts up-to-date, and continue adding new CI configurations for different technologies as the need arises (you are more than welcome to contribute).
+  We will do our best to maintain the documentation and keep the scripts up-to-date, and continue adding new CI configurations for different technologies as the need arises (you are more than welcome to contribute).
 
 - Why is the name "Shoebox"?
 
@@ -182,7 +182,7 @@ We will do our best to maintain the documentation and keep the scripts up-to-dat
   Current mode:                   enforcing
   ```
 
-  If SELinux is `enabled` follow the instruction to disable it, otherwise continue to the next section.
+  If SELinux is `enabled` follow the instruction to disable it, otherwise, continue to the next section.
 
   Edit the SELinux configuration file
 
@@ -316,7 +316,7 @@ Certain services in this setup require an SMTP relay for sending email notificat
 The DNS providers a DNS API that is used by Certbot for proofing the domain name ownership for the SSL certificate acquisition.
 [Cloudflare](https://www.cloudflare.com/) is used as the default DNS provider for this setup.
 
-> IMPORTANT: If Cloudflare is not an option there is a number of [DNS providers compatible with Certbot](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438). In this case the actions described below must be adjusted accordingly.
+> IMPORTANT: If Cloudflare is not an option, there a few more [DNS providers compatible with Certbot](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438). In this case the actions described below must be adjusted accordingly.
 
 > WARNING: If the selected DNS provider is not compatible with Certbot the **Network** section may be deemed incompatible, and certificate acquisition and renewal setup must be conducted independently.
 
