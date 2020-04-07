@@ -27,7 +27,7 @@ services:
       - "CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}"
       - "CLOUDFLARE_API_KEY=${CLOUDFLARE_API_KEY}"
     volumes:
-      - "${PROXY_LETSENCRYPT}:/letsencrypt"
+      - "${PROXY_LETSENCRYPT_DIR}:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
 

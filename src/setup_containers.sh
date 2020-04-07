@@ -3,6 +3,7 @@ set -euo pipefail
 
 SHOEBOX_ROOT=$1
 YOUR_DOMAIN=$2
+LETSENCRYPT_EMAIL=$3
 SRC_ROOT=$(dirname "$0")
 
 echo
@@ -16,12 +17,14 @@ echo
 
 source $SRC_ROOT/ports_prefix.ini
 
+bash $SRC_ROOT/proxy/proxy_containers_setup.sh "$SHOEBOX_ROOT" "$YOUR_DOMAIN" "$LETSENCRYPT_EMAIL"
 bash $SRC_ROOT/git/git_containers_setup.sh "$SHOEBOX_ROOT" "$YOUR_DOMAIN" "$GIT_PORTS_PREFIX"
 bash $SRC_ROOT/vault/vault_containers_setup.sh "$SHOEBOX_ROOT" "$YOUR_DOMAIN" "$VAULT_PORTS_PREFIX"
 bash $SRC_ROOT/packages/packages_containers_setup.sh "$SHOEBOX_ROOT" "$YOUR_DOMAIN" "$PACKAGES_PORTS_PREFIX"
 bash $SRC_ROOT/registry/registry_containers_setup.sh "$SHOEBOX_ROOT" "$YOUR_DOMAIN" "$REGISTRY_PORTS_PREFIX"
 bash $SRC_ROOT/ci/ci_containers_setup.sh "$SHOEBOX_ROOT" "$YOUR_DOMAIN" "$CI_PORTS_PREFIX"
 bash $SRC_ROOT/project/project_containers_setup.sh "$SHOEBOX_ROOT" "$YOUR_DOMAIN" "$PROJECT_PORTS_PREFIX"
+
 
 echo "Completed containers setup."
 echo
