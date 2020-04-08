@@ -613,12 +613,7 @@ then check if the placeholders have been replaced on a sample file (i.e. git/.en
 $ sudo cat $REPO_ROOT/src/git/.env
 ```
 
-<<<<<<< HEAD
-
-=======
-
-> > > > > > > ab8f0a2c9634f64309a6a9cbd259e242834ca795
-> > > > > > > IMPORTANT: The following information is provided for troubleshooting purposes only and is not supposed to be used in a regular circumstance.
+> IMPORTANT: The following information is provided for troubleshooting purposes only and is not supposed to be used in a regular circumstance.
 
 The setup is split into a batch of scripts per service where each script can be run separately if necessary. The input for all of the scripts matches the following pattern.
 
