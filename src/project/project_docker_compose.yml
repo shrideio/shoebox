@@ -1,0 +1,157 @@
+version: '3.5'
+
+services:
+
+  project-backend:
+    image: dockertaiga/back
+    container_name: project-backend
+    hostname: project-backend
+    restart: unless-stopped
+    depends_on:
+      - project-db
+      - project-events
+    networks:
+      - project-network
+    volumes:
+      - project-backend-media:/taiga-media
+      - project-backend-conf:/taiga-conf
+    environment:
+      - RABBIT_PORT=5672
+      - TAIGA_HOST=${TAIGA_HOST}
+      - TAIGA_SECRET=${TAIGA_SECRET}
+      - TAIGA_SCHEME=${TAIGA_SCHEME}
+      - POSTGRES_HOST=project-db
+      - POSTGRES_DB=${TAIGA_POSTGRESQL_DB}
+      - POSTGRES_USER=${TAIGA_POSTGRESQL_USER}
+      - POSTGRES_PASSWORD=${TAIGA_POSTGRESQL_PASSWORD}
+      - RABBIT_HOST=project-messaging
+      - RABBIT_USER=${TAIGA_RABBIT_USER}
+      - RABBIT_PASSWORD=${TAIGA_RABBIT_PASSWORD}
+      - RABBIT_VHOST=${TAIGA_RABBIT_VHOST}
+      - STARTUP_TIMEOUT=${TAIGA_STARTUP_TIMEOUT}
+
+  project-frontend:
+    image: dockertaiga/front
+    container_name: project-frontend
+    hostname: project-frontend
+    restart: unless-stopped
+    networks:
+      - project-network
+    volumes:
+      - project-frontend-conf:/taiga-conf
+    environment:
+      - TAIGA_HOST=${TAIGA_HOST}
+      - TAIGA_SCHEME=${TAIGA_SCHEME}
+
+  project-db:
+    image: postgres:11-alpine
+    container_name: project-db
+    hostname: project-db
+    restart: unless-stopped
+    networks:
+      - project-network
+    ports:
+    - ${TAIGA_POSTGRESQL_PORT}:5432
+    volumes:
+      - project-posgresql-db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_HOST=project-db
+      - POSTGRES_DB=${TAIGA_POSTGRESQL_DB}
+      - POSTGRES_USER=${TAIGA_POSTGRESQL_USER}
+      - POSTGRES_PASSWORD=${TAIGA_POSTGRESQL_PASSWORD}
+      - RABBIT_HOST=project-messaging
+      - RABBIT_USER=${TAIGA_RABBIT_USER}
+      - RABBIT_PASSWORD=${TAIGA_RABBIT_PASSWORD}
+      - RABBIT_VHOST=${TAIGA_RABBIT_VHOST}
+      - STARTUP_TIMEOUT=${TAIGA_STARTUP_TIMEOUT}
+
+  project-messaging:
+    image: dockertaiga/rabbit
+    container_name: project-messaging
+    hostname: project-messaging
+    restart: unless-stopped
+    networks:
+      - project-network
+    environment:
+      - RABBIT_HOST=project-messaging
+      - RABBIT_USER=${TAIGA_RABBIT_USER}
+      - RABBIT_PASSWORD=${TAIGA_RABBIT_PASSWORD}
+      - RABBIT_VHOST=${TAIGA_RABBIT_VHOST}
+      - STARTUP_TIMEOUT=${TAIGA_STARTUP_TIMEOUT}
+
+  project-events:
+    image: dockertaiga/events
+    container_name: project-events
+    hostname: project-events
+    restart: unless-stopped
+    depends_on:
+      - project-messaging
+    networks:
+      - project-network
+    environment:
+      - RABBIT_HOST=project-messaging
+      - RABBIT_USER=${TAIGA_RABBIT_USER}
+      - RABBIT_PASSWORD=${TAIGA_RABBIT_PASSWORD}
+      - RABBIT_VHOST=${TAIGA_RABBIT_VHOST}
+      - TAIGA_SECRET=${TAIGA_SECRET}
+
+  project-proxy:
+    image: dockertaiga/proxy
+    container_name: project-proxy
+    hostname: project-proxy
+    restart: unless-stopped
+    depends_on:
+      - project-backend
+      - project-frontend
+      - project-events
+    networks:
+      - project-network
+    ports:
+      - ${TAIGA_PROXY_PORT}:80
+    volumes:
+      - project-proxy-conf:/taiga-conf
+    environment:
+      - TAIGA_HOST=${TAIGA_HOST}
+      - TAIGA_BACK_HOST=project-backend
+      - TAIGA_FRONT_HOST=project-frontend
+      - EVENTS_HOST=project-events
+      - ENABLE_SSL=no
+
+
+networks:
+
+    project-network:
+      driver: bridge
+
+
+volumes:
+
+  project-backend-conf:
+    driver_opts:
+      type: none
+      device: ${TAIGA_BACK_CONF}
+      o: bind
+
+  project-backend-media:
+    driver_opts:
+      type: none
+      device: ${TAIGA_BACK_MEDIA}
+      o: bind
+
+  project-frontend-conf:
+    driver_opts:
+      type: none
+      device: ${TAIGA_FRONT_CONF}
+      o: bind
+
+  project-posgresql-db:
+    driver_opts:
+      type: none
+      device: ${TAIGA_POSTGRESQL_DATA}
+      o: bind
+
+  project-proxy-conf:
+    driver_opts:
+      type: none
+      device: ${TAIGA_PROXY_CONF}
+      o: bind

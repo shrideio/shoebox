@@ -52,9 +52,9 @@ steps:
     registry: registry.@YOUR_DOMAIN
     repo: registry.@YOUR_DOMAIN/ci.test/ci.build.sample
     username:
-      from_secret: docker_username
+      from_secret: registry_username
     password:
-      from_secret: docker_password
+      from_secret: registry_password
     build_args_from_env:
       - HELLO_WORLD
     dockerfile: Dockerfile.publish
@@ -69,17 +69,17 @@ volumes:
 
 ---
 kind: secret
-name: docker_password
+name: registry_password
 get:
   path: secrets/data/ci.docker
-  name: docker_password
+  name: registry_password
 
 ---
 kind: secret
-name: docker_username
+name: registry_username
 get:
   path: secrets/data/ci.docker
-  name: docker_username
+  name: registry_username
 
 ---
 kind: secret

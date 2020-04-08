@@ -2,129 +2,188 @@
 
 Check [Drone documentation](https://docs.drone.io/), [Drone Vault plugin](https://readme.drone.io/extend/secrets/vault/), [Drone Docker plugin](http://plugins.drone.io/drone-plugins/drone-docker/) and [Awesome Drone](https://github.com/drone/awesome-drone) for more information.
 
-> Run `echo $REPO_ROOT` and `echo $YOUR_DOMAIN` to verify if the environment variables are set before continuing.
+### Preliminary checklist
 
-1. Drone Vault plugin requires a Vault client token for fetching secrets from the Vault service (the token can be acquired as it is described [here](/src/vault/README.md#issue-a-client-token)).
+- [x] `$REPO_ROOT`, `$SHOEBOX_ROOT`, `$YOUR_DOMAIN` environment variables are set
 
-      Run the following command to replace the placeholder.
+    ```
+    $ echo $REPO_ROOT
+    $ echo $SHOEBOX_ROOT
+    $ echo $YOUR_DOMAIN
+    ```
 
-      ```
-      $ sudo find $REPO_ROOT/src/ci -type f -name '.env' -exec sed -i -e 's|@VAULT_TOKEN|'"$VAULT_TOKEN"'|g' {} \;
-      ```
+- [x] Drone `secrets.ini` and `.env` files are generated
 
-      Output the content of the `.env` file and visually verify if the placeholder was successfully replaced by the actual value.
+    > WARNING: DO NOT modify assigned values in the `.env` file. If necessary, modify the `secrets.ini` file and run `ci_containers_setup.sh` to override the current values.
 
-      ```
-      $ sudo cat $REPO_ROOT/src/ci/.env
-      ```
+    ```
+    $ sudo cat $SHOEBOX_ROOT/drone/secrets.ini
+    $ sudo cat $REPO_ROOT/src/ci/.env
+    ```
 
-2. Stage Drone CI (ci), Drone build agent (ci-agent), Drone Vault plugin (ci-secret) and PostgreSQL (ci-db) containers.
+- [x] [Git](/src/git/README.md) service is up and running (git._yourdomain.com_)
 
-    The following commands will navigate to the directory containing `ci_docker_compose.yml` and run the containers in the background.
+- [x] [Docker](/src/registry/README.md) registry is up and running (registryui._yourdomain.com_)
+
+- [x] [Vault](/src/vault/README.md) service is up and running and the vault is configured and [unsealed](/src/vault/README.md#unseal-vault) (vault._yourdomain.com_)
+
+- [x] ci._yourdomain.com_ subdomain is configured and serves https traffic
+
+Proceed if all of the checks passes, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
+
+### Setup
+
+1. Drone Vault plugin requires a Vault client token for accessing secrets stored in the Vault service. Fetch the client token as described [here](/src/vault/README.md#issue-a-client-token) and then replace the placeholder in `.env` file running the following command.
+
+    > WARNING: Do not forget to replace [vault-token] with the actual value
+
+    ```
+    $ export VAULT_TOKEN=[vault-token]
+    $ sudo sed -i 's|@VAULT_TOKEN$|'"$VAULT_TOKEN"'|g' $REPO_ROOT/src/ci/.env
+    $ cat $REPO_ROOT/src/ci/.env
+    ```
+
+2. Start Drone CI (`ci`), Drone build agent (`ci-agent`), Drone Vault plugin (`ci-secret-plugin`) and PostgreSQL (`ci-db`) containers.
 
       ```
       $ sudo cd $REPO_ROOT/src/ci
       $ sudo docker-compose up -d
       ```
 
-    > The `.env` file in the `/src/ci` directory contains environment variable values for the containers, review and modify if necessary.
+    Run `$ sudo docker ps` to verify if the listed containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
 
-    > Drone admin user and git user passwords are auto-generated and can be changed if necessary.
+3. Prepare and run a test build. The purpose of the test build is to very if secrets can be fetched from Vault and the container produced by the build pipeline can be pushed to a private Docker registry.
 
-    Run `sudo docker ps` to verify if `ci`, `ci-secret` and `ci-db` containers are up and running. Proceed if no error is detected, otherwise run `sudo docker logs [container name]` to check the logs for troubleshooting.
+    > INFO: The sample project can be found at `$REPO_ROOT/src/ci.build.sample`
 
-3. Prepare a test build. The purpose of the test build is to very if secrets can be fetch from the vault service and if a container produced by the build pipeline can be pushed to the private Docker registry. The `/src/ci` directory contains a sample project `ci.build.sample` which is to run a test build.
+    -  Using the secret `ci.build.sample` with the key value pair we already create in the vault setup, we are going to be pulling the value for `hello_world` for the ci sample project.
 
-    -  Create a secret entry for storing a build argument for the container. Follow the instruction for adding new secrets as described [here](/src/vault/README.md#create-a-secret). Set _Path for this secret_ to `ci.build.sample` and create the following key/value pair `hello_world`/`Hello world!`.
+        - Secret path (_Path for this secret_ field): `ci.build.sample`
+        - Secret key/value: `hello_world`/`Hello world!`
 
-    -  Create a git user for the CI service to access the repository. Use the values of `DRONE_GIT_USERNAME` and `DRONE_GIT_PASSWORD` as user name and password accordingly. Create a repository named `ci.build.sample` under the drone git user.
-      
-        > For repositories not created under `DRONE_GIT_USERNAME` add that user as a collaborator to show all builds under a single entity, or use the personal git credentials for running affiliated builds.
+        The part describing the setup of the `ci.build.sample` secret can be found [here](/src/vault/README.md#create-a-secret).
 
-    - Create a git user for the Drone admin user using the _username_ and _token_ values from the `DRONE_USER_CREATE` variable from the `.env` file mentioned above. The admin user is required when using Drone CLI for managing the service. Check the [Drone CLI documentation](https://docs.drone.io/cli/) for more information.
+    -  Create a git user for the CI service for enabling access to repositories. Use the values of `DRONE_GIT_USERNAME` and `DRONE_GIT_PASSWORD` from the `secrets.ini` file as username and password accordingly. After the user is created, make sure that the user has the setting: "This account has permissions to create Git Hooks" enabled. log in to the Git service and create a repository named `ci.build.sample`.
 
-4. Active the repository for build. Navigate to `ci`.yourdomain.com and login using the git user create earlier. If the reposit is not shown click the **SYNC** button in the top right corner and wait. For activating the repository click the repository name or **ACTIVATE** which opens the _SETTINGS_ tab, then click **ACTIVATE REPOSITORY** for activation. Check *Trusted*  for _Project settings_ and click **SAVE** to save changes.
+        > IMPORTANT: For repositories not created under `DRONE_GIT_USERNAME` adding that user as a admin collaborator should enable access for the CI service.
 
-    > If the repository is not shown check if the git user (`DRONE_GIT_USERNAME`) is created and it can be logged in using the password (`DRONE_GIT_PASSWORD`). When logged in check if the repository is accessible for the user.
 
-5. Add the sample project to the git repository and trigger a build.
+    - Activate the repository for build
 
-      Replace the domain name placeholder with the actual value.
-      > `.drone.yml` contains a build configuration for the sample project. Check the [Drone Pipeline](https://docs.drone.io/configure/pipeline/) documentation for more information.
-      
-      ```
-      $ sudo sed -i 's|@YOUR_DOMAIN|'"$YOUR_DOMAIN"'|g' $REPO_ROOT/src/ci/ci.build.sample/.drone.yml
-      $ cat $REPO_ROOT/src/ci/ci.build.sample/.drone.yml
-      ```
+      - Navigate to ci._yourdomain.com_ and log in using the CI git user create earlier. If the repository is not listed, click the [SYNC] button in the top right corner and wait.
 
-      > Make sure that Vault is unsealed (check [here](/src/vault/README.md#unseal-vault)) before triggering a build, otherwise secrets will not be fetched successfully which result result in a failed build.
+        > WARNING: If the repository is still not shown after syncing use the CI git user credentials (`DRONE_GIT_USERNAME` and `DRONE_GIT_PASSWORD`) to login to the Git service and check if the repository is accessible.
 
-      > Do not forget to replace _yourdomain.com_ and _DRONE_GIT_USERNAME_ with the actual values.
+      - For activating the repository click the repository name or [ACTIVATE], that should open the _SETTINGS_ tab, then click [ACTIVATE REPOSITORY] for activation. Check _Trusted_ in the _Project settings_ section and click [SAVE] to save changes.
 
-      ```
-      $ cd $REPO_ROOT/src/ci/ci.build.sample
-      $ sudo git add .
-      $ sudo git commit -m "Adding ci.build.sample"
-      $ sudo git remote add origin https://git.yourdomain.com/DRONE_GIT_USERNAME/ci.build.sample
-      $ sudo git remote -v
-      $ sudo git push origin master
-      ```
 
-      `git push` will trigger a build. Open the repository details and check the latest build in the _ACTIVITY FEED_ tab. If build is successful (green (✓) check mark icon) it should create a _ci.build.sample_ Docker image with in the private registry (check `registryiu`.yourdomain.com). If the build is failed (red (X) icon) then click on the build record to open the build log and inspect the build log for trouble shooting.
+    - Add the sample project to the repository and trigger a build.
 
-6. Build failures troubleshooting
+        - Run the following commands to replace the `@YOUR_DOMAIN` placeholder in `.drone.yml` file with the actual value to set correct links to external services.
 
-      The most fragile step of the build pipeline is `containerize`. It involves fetching secrets from Vault using the Drone secrets plugin and pushing the resulting image to the Docker registry. Drone CLI is used for checking secrets accessibility.
-      
-      - Install Drone CLI
+          > INFO: `.drone.yml` contains a build pipeline configuration for the sample project. Check the [Drone Pipeline documentation](https://docs.drone.io/configure/pipeline/) for more information.
+
+          ```
+          $ sudo sed -i 's|@YOUR_DOMAIN|'"$YOUR_DOMAIN"'|g' $REPO_ROOT/src/ci/ci.build.sample/.drone.yml
+          $ cat $REPO_ROOT/src/ci/ci.build.sample/.drone.yml
+          ```
+
+      - Create a local git repository for the sample project and push its content to the Git service.
+
+        > WARNING: Do not forget to replace [yourdomain.com] and [DRONE_GIT_USERNAME] placeholders with the actual values.
 
         ```
-        $ curl -L https://github.com/drone/drone-cli/releases/latest/download/
-        $ drone_linux_amd64.tar.gz | tar zx
-        $ sudo install -t /usr/local/bin drone 
+        $ cd $REPO_ROOT/src/ci/ci.build.sample
+        $ sudo git init
+        $ sudo git add .
+        $ sudo git commit -m "Adding ci.build.sample"
+        $ sudo git remote add origin https://git.[yourdomain.com]/[DRONE_GIT_USERNAME]/ci.build.sample
+        $ sudo git remote -v
+        $ sudo git push origin master
         ```
 
-      - For connecting to the Drone service the CLI uses the `DRONE_TOKEN` and `DRONE_SERVER` environment variables. For extracting the variable values login to the Drone web interface and click the user avatar (generated abstract pattern) in the top right corner and then navigate to _User settings_ link in the popup menu to open the _User Settings_ page (Alternatively that page can be accessed by navigating to ci.yourdomain.com/account). Copy-paste the content of _Example CLI Usage:_ section into the shell.
+        > IMPORTANT: `git push` should trigger a build, otherwise, modify the `.trigger` file in the project directory and commit and push the change for triggering a build.
+
+      - Navigate to ci._yourdomain.com_ and click the repository name, ci.build.sample, to open the details page and then open the _ACTIVITY FEED_ tab for checking the build status.
+
+        - If the build is successful (green (✓) checkmark icon) it should create a _ci.build.sample_ Docker image in the Docker registry (check `registryiu`_.yourdomain.com_). Verify the image Create a container from the image and pulling the endpoint which should display the baked-in message from the `hello_world` secret.
+
+          > WARNING: Do not forget to replace _[yourdomain.com]_ with the actual value.
+
+          ```
+          $ sudo docker run -d -p 9080:80 --name ci.build.sample registry.$YOUR_DOMAIN/ci.test/ci.build.sample
+          $ curl http://localhost:9080/api/hello
+          ```
+
+          If the expected output is not shown consult with the troubleshooting section further for investigating the issue in detail.
+
+        - If the build is failed (red (X) icon) open and inspect the build log for troubleshooting. The build-log can be accessed by clicking on the build record. If the failure cannot be inferred from the logs check the troubleshooting section further for investigating the issue in detail.
+
+
+### Build failures troubleshooting
+
+  - Set up Drone CLI
+
+      Drone CLI is used for managing the service, running local builds and triggering rebuilding on the service if necessary. Check the [Drone CLI documentation](https://docs.drone.io/cli/) for more information.
+
+    - Install Drone CLI
 
         ```
-        $ export DRONE_SERVER=https://ci.yourdomain.com
+        $ curl -L https://github.com/drone/drone-cli/releases/latest/download/drone_linux_amd64.tar.gz | tar zx
+        $ sudo install -t /usr/local/bin drone
+        ```
+
+    - Drone CLI requires the Drone admin user for running commands on the Drone service. The credential for the admin user can be extracted from the `DRONE_USER_CREATE` parameter from the `secrets.ini` file. Use the _username_ and _token_ parts to create a git user with matching username and password.
+
+    - Drone CLI requires `DRONE_TOKEN` and `DRONE_SERVER`environment variables to before connecting to the Drone service. Conveniently, the commands to set those variables can be fetched from the Drone web interface. Use the admin user credentials to log in to the Drone web interface. In the landing page click on the user icon (auto-generated icon with an abstract pattern in the top right corner), and then click _User Settings_ in the emerged context menu. In the opened page find the _Example CLI Usage_ section and copy-paste its content into the shell and run the commands.
+
+      > INFO: The commands should resemble the following piece of code
+
+        ```
+        $ export DRONE_SERVER=https://ci.[yourdomain.com]
         $ export DRONE_TOKEN=[ci-agent-token]
-        $ drone info
         ```
 
-        The output should contain the username and email.
+    - Check if the connection to the service can be established by running the following command.
 
-    - For connecting to the secrets plugin the CLI uses the `DRONE_SECRET_ENDPOINT` and `DRONE_SECRET_SECRET` environment variables. Use the value of `DRONE_SECRET` from the `.env` file for setting `DRONE_SECRET_SECRET`.
+      ```
+      $ sudo drone info
+      ```
 
-      > If the port prefix (_ports_prefix.ini_) or the containers setup script (_setup_virtual_hosts.sh_) have not been not been modified the secret plugin port should be correct, otherwise run `sudo docker ps -a` and look up for the `ci-secret` container port binding.
+      The output should contain the user information if connected or error text if failed.
+
+- Troubleshooting
+
+  The most fragile step of the build pipeline is `containerize` as it depends on external services - Vault and Docker Registry.
+
+    - Check if the secret values can be fetched by the Drone Vault plugin
+
+        Replace the placeholders with matching values from `$REPO_ROOT/src/ci/.env` an set the environment values as follows. 
+
         ```
-        $ export DRONE_SECRET_ENDPOINT=http://localhost:10430
-        $ export DRONE_SECRET_SECRET=[drone-secret-from-env]
+        $ export DRONE_SECRET_ENDPOINT=http://localhost:[DRONE_VAULT_PLUGIN_PORT]
+        $ export DRONE_SECRET_SECRET=[DRONE_SECRET]
         ```
 
-    - For checking if secret are accessible run the following commands
+        Check if the build argument is accessible.
 
-      Check if Docker registry credentials are accessible
-      ```
-      $ drone plugins secret get secrets/data/ci.docker docker_username --repo ciagent/ci.build.sample
-      ```
+        ```
+        $ drone plugins secret get secrets/data/ci.build.sample hello_world --repo ciagent/ci.build.sample
+        ```
 
-      Check if the build argument is accessible
-      ```
-      $ drone plugins secret get secrets/data/ci.build.sample hello_world --repo ciagent/ci.build.sample
-      ```
+        Check if Docker registry credentials are accessible.
 
-      If correct secret values are displayed the cause of the issue is not related to the secrets plugin or Vault configuration, otherwise check `VAULT_TOKEN` by trying to login using its value and confirm that Access Login Policy is configured correctly as described [here](/src/vault/README.md#acl-policy).
+        ```
+        $ drone plugins secret get secrets/data/ci.docker registry_username --repo ciagent/ci.build.sample
+        $ drone plugins secret get secrets/data/ci.docker registry_password --repo ciagent/ci.build.sample
+        ```
 
-    - If secrets fetching is not an issue check if the registry can be accessed by the provided username and password values ([here](/src/registry/README.md#docker-registry-username-and-password)) and the registry virtual host file has been amended as described [here](/README.md#modify-registry-vhost-config).
+        > WARNING: Be aware not to confuse the CLI to secret plugin communication or configurations errors with the real secret access issues reported as via _secret key not found_ or _secret not found_ error messages.
 
-7. Check the build result by creating a container from the built image and pulling the endpoint which should display a backed-in message.
-    
-    > Do not forget to replace _yourdomain.com_ with the actual value.
+        If the secret values cannot check if the secrets are accessible by the generated token (`VAULT_TOKEN`) as described [here](/src/vault/README.md#read-secret).
 
-    ```
-    $ sudo docker run -d -p 9080:80 --name ci.build.sample registry.yourdomain.com/ci.test/ci.build.sample
-    $ curl http://localhost:9080/api/hello
-    ```
+    - Check Docker Registry configuration
 
-    If the `hello_world` secret value has not been modified the output should contain _Hello world!_ otherwise the modified value.
+      - Check if the registry can be accessed by the using the provided username and password values ([here](/src/registry/README.md#docker-registry-username-and-password))
+
+      - Check if the registry virtual host file is amended as described [here](/README.md#modify-registry-vhost-config).

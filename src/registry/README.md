@@ -1,24 +1,48 @@
 ## Docker Registry
 Check [Docker Registry](https://docs.docker.com/registry/) and [Joxit Docker Registry UI](https://joxit.dev/docker-registry-ui/) documentation for more information.
-> Run `echo $REPO_ROOT` to verify if the environment variable is set before continuing.
 
-1. Stage Docker Registry (registry) and Docker Registry UI (registry-ui) containers.
 
-    The following commands will navigate to the directory containing `ci_docker_compose.yml` and run the containers in the background.
+### Preliminary checklist
+
+- [x] `$REPO_ROOT` and `$SHOEBOX_ROOT` environment variables are set
+
+    ```
+    $ echo $REPO_ROOT
+    $ echo $SHOEBOX_ROOT
+    ```
+
+- [x] Docker registry `secrets.ini` and `.env` files are generated
+
+    > WARNING: DO NOT modify assigned values in the `.env` file. If necessary modify, the `secrets.ini` file and run `registry_containers_setup.sh` to override the current values.
+
+    ```
+    $ sudo cat $SHOEBOX_ROOT/registry/secrets.ini
+    $ sudo cat $REPO_ROOT/src/registry/.env
+    ```
+
+- [x] registryui._yourdomain.com_ and registry._yourdomain.com_ subdomains are configured and serve https traffic
+
+- [x] [Vault](/src/vault/README.md) service is up and running and the vault is configured and [unsealed](/src/vault/README.md#unseal-vault) (vault._yourdomain.com_)
+
+Proceed if all of the checks passes, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
+
+
+### Setup
+
+  1. Start Docker Registry (`registry`) and Docker Registry UI (`registry-ui`) containers.
 
       ```
-      $ sudo cd $REPO_ROOT/src/registry
+      $ cd $REPO_ROOT/src/registry
       $ sudo docker-compose up -d
       ```
 
-    > The `.env` file in the `/src/registry` directory contains environment variable values for the containers, review and modify if necessary.
-    
-    > The registry user name and password can be found the in the `secrets.ini` file at `$DEV_ROOT/registry`.
+      Run `$ sudo docker ps` to verify if the listed containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
 
-    Run `sudo docker ps` to verify if `registry` and `registry-ui` containers are up and running. Proceed if no error is detected, otherwise run `sudo docker logs [container name]` to check the logs for troubleshooting.
+  2. Verify fi the Docker registry user can log in. Browse to **registryui**._yourdomain.com_ and use the values of `REGISTRY_USERNAME` and `REGISTRY_PASSWORD` parameters from the Docker registry `secrets.ini` file.
 
-2. Browse to **registry**.yourdomain.com and login using the user name password given in the `secrets.ini` file mentioned above. Proceeded if login succeeds, otherwise check the logs for troubleshooting.
+  3. <a id="docker-registry-username-and-password"></a> Create the `ci.docker` secret in Vault as described [here](/src/vault/README.md#create-a-secret) for storing Docker registry username and password. The secret must contain the following key/value pairs.
 
-> The following step requires Vault to be set up and running. If not, follow the [Vault setup instruction](/src/vault/README.md) and continue after.
+      - `registry_username`/[REGISTRY_USERNAME]
+      - `registry_password`/[REGISTRY_PASSWORD]
 
-3. <a id="docker-registry-username-and-password"></a> Create a secret entry for storing the Docker registry username and password. Set _Path for this secret_ to `ci.docker` and create the following key/value pairs `docker_username`/`[docker-username-from-secrets-ini`] and `docker_password`/`[docker-password-from-secrets-ini]` replacing the placeholders with matching values from _secrets.ini_. Follow the instruction for adding new secrets as described [here](/src/vault/README.md#create-a-secret).
+     Use the values of parameters matching the placeholder names from the Docker registry `secrets.ini` file.
