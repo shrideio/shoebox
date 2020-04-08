@@ -16,7 +16,7 @@ Check [Vault Documentation](https://www.vaultproject.io/docs/), and [Vault](http
 
 - [x] Vault `secrets.ini` and `.env` files are generated
 
-    > WARNING: DO NOT modify assigned values in the `.env` file. If necessary,modify the `secrets.ini` file and run `vault_containers_setup.sh` to override the current values.
+    > WARNING: DO NOT modify assigned values in the `.env` file. If necessary, modify the `secrets.ini` file and run `vault_containers_setup.sh` to override the current values.
 
     ```
     $ sudo cat $SHOEBOX_ROOT/vault/secrets.ini
@@ -32,7 +32,7 @@ Proceed if all of the checks passes, otherwise, review the [landing page](/src/R
 
 1. Start Vault (`vault`) and Consul (`vault-db`) containers.
 
-    > WARNING: DO NOT modify assigned values in the `.env` file. If necessary,modify the `secrets.ini` file and run `vault_containers_setup.sh` to override the current values.
+    > WARNING: DO NOT modify assigned values in the `.env` file. If necessary, modify the `secrets.ini` file and run `vault_containers_setup.sh` to override the current values.
 
     ```
     $ sudo cd $REPO_ROOT/src/vault

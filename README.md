@@ -50,7 +50,7 @@ This setup requires a Linux machine with root access and system requirements mat
 
 Considering the physical host, there are three options to choose from.
 
-> IMPORTANT: None of the vendors listed below have a sponsorship or advertisement agreement with the authors. Likewise the authors are not responsible or liable for any damage or inconvenience caused by actions or inactions of the vendors.
+> IMPORTANT: None of the vendors listed below have a sponsorship or advertisement agreement with the authors. Likewise, the authors are not responsible or liable for any damage or inconvenience caused by actions or inactions of the vendors.
 
 1. Rent a Linux VPS.
 
@@ -78,25 +78,25 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
 
 ### Q/A
 
-- I know a better way, how can I help?
+- How to help or contribute?
 
-  We are no Linux gurus, Docker experts, or technical writing virtuosos, so you are more than welcome to contribute! File an issue ticket or even better open a pull requests, we will do our best to respond as soon as possible. Constructive criticism is very appreciated. 
+  We are no Linux gurus, Docker experts, or technical writing virtuosos, so you are more than welcome to contribute! File an issue ticket or even better open a pull requests, we will do our best to respond as soon as possible. Constructive criticism is highly appreciated.
 
-- What is the downside or deficiency of this setup?  
+- Any gotchas?
 
-  Firstly, it is a single machine configuration incapable of running on a cluster. The latter potentially may become a problem when simultaneously running build pipelines suffocate the performance of the rest of the services. This deficiency should be resolved once the setup is made deployable to a Kubernetes cluster.
+  Firstly, it is a single machine configuration incapable of running on a cluster. That potentially may become a problem when simultaneously running several build pipelines would degrade the performance of the other services. This deficiency should be resolved once the services are made deployable to a Kubernetes cluster.
 
-  Secondly, if the technology of your choice does not support Docker containerization or necessary tooling is not provided out of the box, the current CI/CD service is deemed unusable for your needs as its features are entirely based on the Docker infrastructure. In this case, consider using alternatives such as [Jenkins CI](https://jenkins.io/) or [Concourse](https://concourse-ci.org/) which might be included in the future.
+  Secondly, the technology of your choice must support Docker containerization for using the Drone build pipeline. If if does not, consider consider using alternatives such as [Jenkins CI](https://jenkins.io/) or [Concourse](https://concourse-ci.org/). No setup script or documentation is provided for the alternative CI services currently, however it might be added in the future and you are more than welcome to contribute.
 
   And lastly, the current build pipeline is .NET Core biased. Please feel free to contribute and add pipeline configurations for other technologies.
 
-- What are the plans for the future?
+- Future plans?
 
   As it is mentioned earlier, adding Kubernetes support is a high priory task on the list, however, we need to acquaint ourselves with the technology first.
 
   We will do our best to maintain the documentation and keep the scripts up-to-date, and continue adding new CI configurations for different technologies as the need arises (you are more than welcome to contribute).
 
-- Why is the name "Shoebox"?
+- Shoebox - why the name?
 
   ...cus' it has something in it to getcha runnin'! :boom: :running: :checkered_flag:
 
@@ -316,17 +316,17 @@ Certain services in this setup require an SMTP relay for sending email notificat
 The DNS providers a DNS API that is used by Certbot for proofing the domain name ownership for the SSL certificate acquisition.
 [Cloudflare](https://www.cloudflare.com/) is used as the default DNS provider for this setup.
 
-> IMPORTANT: If Cloudflare is not an option, there a few more [DNS providers compatible with Certbot](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438). In this case the actions described below must be adjusted accordingly.
+> IMPORTANT: If Cloudflare is not an option, there is a few more [DNS providers compatible with Certbot](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438). In this case the actions described below must be adjusted accordingly.
 
-> WARNING: If the selected DNS provider is not compatible with Certbot the **Network** section may be deemed incompatible, and certificate acquisition and renewal setup must be conducted independently.
+> WARNING: If the selected DNS provider is not compatible with Certbot, the **Network** section is deemed incompatible. The certificate acquisition process and renewal setup must be conducted independently.
 
 1. <a name="cloudflare-account-setup"></a> Create a [Cloudflare account](https://dash.cloudflare.com/sign-up), the basic plan is free of charge. Add your domain name as a website and complete the verification process for proving the domain name ownership.
 
-2. <a name="cloudflare-name-servers"></a> Change the name servers in the control panel of your domain name provider to the Cloudflare's name servers. To get the name servers navigate to `DNS -> Cloudflare nameservers`. Depending on the TTL set in the domain name provider control panel it may take some time for the change to take effect, keep `ping`-ing the domain name periodically.
+2. <a name="cloudflare-name-servers"></a> Change the name servers in the control panel of your domain name provider to the Cloudflare's name servers. To get the name servers, navigate to `DNS -> Cloudflare nameservers`. Depending on the TTL set in the DNS control panel it may take some time for the change to take effect, keep `ping`-ing the domain name periodically.
 
 3. <a name="turn-off-http-proxy"></a> Turn off the HTTP proxy for main and subdomain names. click the cloud icon ![Alt text](/resources/img/http_proxy_on.png?raw=true "HTTP proxy - ON") next to each domain/subdomain name to gray it out ![Alt text](/resources/img/http_proxy_off.png?raw=true "HTTP proxy - OFF").
 
-   > WARNING: If the http proxy is not disabled it will cause an obscure error response such as `ERR_TOO_MANY_REDIRECTS`.
+   > WARNING: If the http proxy is not disabled, it will cause an obscure error response such as _ERR_TOO_MANY_REDIRECTS_.
 
 4. <a name="cloudflare-dns-api-client"></a> Cloudflare DNS API client is used by Certbot for proofing the domain name ownership when acquiring an HTTPS certificate from [Let’s Encrypt](https://letsencrypt.org/).
 
@@ -366,9 +366,9 @@ The DNS providers a DNS API that is used by Certbot for proofing the domain name
 
 > IMPORTANT: Adjust the actions accordingly if the DNS provider is not Cloudflare.
 
-Login to [Cloudflare](https://dash.cloudflare.com/login), click on your domain name and then navigate to `DNS`. Click the `+Add record` button to open the record input form.
+Login to [Cloudflare](https://dash.cloudflare.com/login), click on your domain name, and then navigate to the `DNS` menu. Click the [+Add record] button to open the record input form.
 
-Create _CNAME_ aliases (bolded) matching the following subdomains
+Create _CNAME_ aliases (bolded) for the following subdomains:
 
 - **git**.yourdomain.com (Git server)
 - **registry**.yourdomain.com (Docker registry)
@@ -380,7 +380,7 @@ Create _CNAME_ aliases (bolded) matching the following subdomains
 
 > WARNING: Do not forget to disable the http proxy for all of the subdomains as it is described [here](#turn-off-http-proxy)
 
-Depending on the TTL value it may take certain time for the change to take effect, keep `ping`-ing the subdomains periodically to verify the result.
+Depending on the TTL value, it may take certain time for the change to take effect, keep `ping`-ing the subdomains periodically to verify the result.
 
 ### SSL Setup
 
@@ -388,7 +388,7 @@ Certbot is used as the default Let’s Encrypt client in this setup.
 
 > INFO: Check the [DNS providers](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438) list supporting _Let's Encrypt_ for other options.
 
-> IMPORTANT: If a different Let’s Encrypt client is selected the certificate has to be acquired independently and this section can be ignored.
+> IMPORTANT: If a different Let’s Encrypt client is selected, the certificate has to be acquired independently and this section can be ignored.
 
 1. Browse to [Apache on CentOS/RHEL 7](https://certbot.eff.org/lets-encrypt/centosrhel7-apache)
 
@@ -398,7 +398,7 @@ Certbot is used as the default Let’s Encrypt client in this setup.
 
    - On _Step 3_ - [EC2 region](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html). You may want to add more than one region in case one of the servers is down.
 
-   - On _Step 6_ - If Cloudflare is not selected as a DNS provider please adjust the command accordingly to possible options given in the [DNS Plugin list](https://certbot.eff.org/docs/using.html#dns-plugins).
+   - On _Step 6_ - If Cloudflare is not selected as a DNS provider, the command has to be adjusted accordingly to the options given in the [DNS Plugin list](https://certbot.eff.org/docs/using.html#dns-plugins).
 
 3. Run `certbot` with the following parameters to acquire a certificate. The default pending time for `NAME` record update is 10 seconds. It may be increased using the `--dns-cloudflare-propagation-seconds` if the command fails due to a timeout.
 
@@ -430,7 +430,7 @@ Certbot is used as the default Let’s Encrypt client in this setup.
    $ sudo certbot renew --dry-run
    ```
 
-   If dry run completed successfully configure a cron job.
+   If dry run completed successfully, configure a cron job.
 
    ```
    $ echo "0 0,12 * * * root python -c 'import random; import time; time.sleep(random.random() * 3600)' && certbot renew" | sudo tee -a /etc/crontab > /dev/null

@@ -16,7 +16,7 @@ Check [Taiga Documentation](https://taigaio.github.io/taiga-doc/dist/) and [Taig
 
 - [x] Taiga `secrets.ini` and `.env` files are generated
 
-    > WARNING: DO NOT modify assigned values in the `.env` file. If necessary,modify the `secrets.ini` file and run `project_containers_setup.sh` to override the current values.
+    > WARNING: DO NOT modify assigned values in the `.env` file. If necessary, modify the `secrets.ini` file and run `project_containers_setup.sh` to override the current values.
 
     ```
     $ sudo cat $SHOEBOX_ROOT/taiga/secrets.ini

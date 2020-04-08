@@ -14,7 +14,7 @@ Check [Drone documentation](https://docs.drone.io/), [Drone Vault plugin](https:
 
 - [x] Drone `secrets.ini` and `.env` files are generated
 
-    > WARNING: DO NOT modify assigned values in the `.env` file. If necessary,modify the `secrets.ini` file and run `ci_containers_setup.sh` to override the current values.
+    > WARNING: DO NOT modify assigned values in the `.env` file. If necessary, modify the `secrets.ini` file and run `ci_containers_setup.sh` to override the current values.
 
     ```
     $ sudo cat $SHOEBOX_ROOT/drone/secrets.ini
@@ -70,7 +70,7 @@ Proceed if all of the checks passes, otherwise, review the [landing page](/src/R
 
     - Activate the repository for build
 
-      - Navigate to ci._yourdomain.com_ and log in using the CI git user create earlier. If the repository is not listed click the [SYNC] button in the top right corner and wait.
+      - Navigate to ci._yourdomain.com_ and log in using the CI git user create earlier. If the repository is not listed, click the [SYNC] button in the top right corner and wait.
 
         > WARNING: If the repository is still not shown after syncing use the CI git user credentials (`DRONE_GIT_USERNAME` and `DRONE_GIT_PASSWORD`) to login to the Git service and check if the repository is accessible.
 
@@ -154,9 +154,9 @@ Proceed if all of the checks passes, otherwise, review the [landing page](/src/R
 
 - Troubleshooting
 
-  The most fragile step of the build pipeline is `containerize` as it depends on external services - Vault and Docker Registry.  
+  The most fragile step of the build pipeline is `containerize` as it depends on external services - Vault and Docker Registry.
 
-    - Check if the secret values can be fetched through the Drone Vault plugin.
+    - Check if the secret values can be fetched by the Drone Vault plugin
 
         Replace the placeholders with matching values from `$REPO_ROOT/src/ci/.env` an set the environment values as follows. 
 
@@ -182,8 +182,8 @@ Proceed if all of the checks passes, otherwise, review the [landing page](/src/R
 
         If the secret values cannot check if the secrets are accessible by the generated token (`VAULT_TOKEN`) as described [here](/src/vault/README.md#read-secret).
 
-    - Check Docker registry
+    - Check Docker Registry configuration
 
-      - Check if the registry can be accessed by the provided username and password values ([here](/src/registry/README.md#docker-registry-username-and-password))
+      - Check if the registry can be accessed by the using the provided username and password values ([here](/src/registry/README.md#docker-registry-username-and-password))
 
-      - Check if the registry virtual host file has been amended as described [here](/README.md#modify-registry-vhost-config).
+      - Check if the registry virtual host file is amended as described [here](/README.md#modify-registry-vhost-config).
