@@ -20,7 +20,7 @@ services:
         - git-db-data:/var/lib/postgresql/data
           
     git:
-      image: gogs/gogs:latest
+      image: gogs/gogs:0.11.91
       container_name: git
       hostname: git
       restart: always

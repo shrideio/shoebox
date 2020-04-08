@@ -3,7 +3,7 @@ version: '3.5'
 services:
 
   project-backend:
-    image: dockertaiga/back
+    image: dockertaiga/back:5.0.10
     container_name: project-backend
     hostname: project-backend
     restart: unless-stopped
@@ -31,7 +31,7 @@ services:
       - STARTUP_TIMEOUT=${TAIGA_STARTUP_TIMEOUT}
 
   project-frontend:
-    image: dockertaiga/front
+    image: dockertaiga/front:5.0.10
     container_name: project-frontend
     hostname: project-frontend
     restart: unless-stopped
@@ -44,7 +44,7 @@ services:
       - TAIGA_SCHEME=${TAIGA_SCHEME}
 
   project-db:
-    image: postgres:11-alpine
+    image: postgres:12-alpine
     container_name: project-db
     hostname: project-db
     restart: unless-stopped
