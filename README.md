@@ -2,7 +2,7 @@
 
 ### What is it?
 
-Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose) for setting up a simple collaborative software development environment hosted on a VPS or dedicated server as an inexpensive alternative for subscription based could services. Software components used in this setup are either open source or have free versions (some with limitations, please check).
+Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose) for setting up a simple collaborative software development environment. I can be hosted on a VPS or dedicated server as an inexpensive alternative for subscription based could services. Software components used in this setup are either open source or have free versions (some with limitations, please check).
 
 | Tool                                | Vendor                                                            | License                                                                                                                                                                                      |
 | :---------------------------------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -20,11 +20,11 @@ goto: [TL;DR](#tldr)
 
 The short answer is because of [“Those goddamn AWS charges!”](https://www.youtube.com/watch?v=982wFqC03v8).
 
-On a serious note, we believe that even small teams can benefit from using a fully equipped development environment without paying a premium for purchasing infrastructural services from cloud service providers.
+On a serious note, we believe that even small teams can benefit from using a fully equipped development environment without paying a premium for infrastructural services from cloud service providers.
 
-> INFO: The latter is less relatable to open source projects as usually most of the tools mentioned in this setup are provided free of charge by major vendors for such projects.
+> INFO: The latter is less actual for open source projects. Usually, most of the tools mentioned in this setup are provided free of charge by major vendors.
 
-And lastly, this setup has come up naturally when ([mich4xD](https://github.com/mich4xD)) and I ([bahram-aliyev](https://github.com/bahram-aliyev])) decided to document how to set up a development environment when working on a personal project, therefore this is a documentation for ourselves in the first place.
+And lastly, this setup is a result of our ([mich4xD](https://github.com/mich4xD) and [bahram-aliyev](https://github.com/bahram-aliyev])) "valor" attempt to document and automate the deployment of essential services for a development environment when working on a personal project.
 
 ### How does it work?
 
@@ -46,11 +46,11 @@ This setup requires a Linux machine with root access and system requirements mat
   - Storage: 30 GB
   - Network: 1 IPv4 address
 
-> INFO: The setup with minor adjustments should work on any other popular Linux distributive. However, it was tested and staged on CentOS 7.0, that is why this OS mention as a requirement.
+> INFO: This setup was tested and staged on CentOS 7.0, that is why this OS mention as a requirement. However, with minor adjustments (if any) it should work on any other popular Linux distributive.
 
-Considering the physical host there are three options to choose from.
+Considering the physical host, there are three options to choose from.
 
-> IMPORTANT: None of the vendors listed below has a sponsorship or advertisement agreement with the authors, likewise the authors are not responsible or liable for any damage or inconvenience caused by actions or inactions of the vendors.
+> IMPORTANT: None of the vendors listed below have a sponsorship or advertisement agreement with the authors. Likewise, the authors are not responsible or liable for any damage or inconvenience caused by actions or inactions of the vendors.
 
 1. Rent a Linux VPS.
 
@@ -61,9 +61,11 @@ Considering the physical host there are three options to choose from.
    - [Hostinger](https://www.hostinger.com/)
    - [Interserver](https://www.interserver.net/)
 
-2. Rent a dedicate server.
+2. Rent a dedicated server.
 
-   This option is usually more costly than VPS renting, however, provides extra computation power and storage capacity for the premium. There is a limited number of affordable options in a price range of 20 to 30 USD per month, as usually the price range starts at a 50 USD per month threshold. When choosing a dedicated server it is recommended to take into consideration the hardware age and refrain from using significantly outdated equipment due to potential performance degradation. The dedicated server option can be considered as an expansion path for future growth.
+   This option is usually more costly than renting a VPS, however, it provides extra computation power and storage capacity for the premium. There is a limited number of affordable options in a price range of 20 to 30 USD per month. Usually, the price range starts at a 50 USD per month threshold. The dedicated server option can be considered as an expansion path for future growth.
+   
+   > WARNING: When choosing a dedicated server it is recommended to avoid renting significantly outdated hardware. Old hardware can potentially yield less performance than a VPS with lesser cost.
 
    - [Nocix](https://www.nocix.net/)
    - [Wholesale Internet](https://www.wholesaleinternet.net/)
@@ -72,31 +74,29 @@ Considering the physical host there are three options to choose from.
 
    No comment on that, you are in full charge.
 
-Either way, be mindful of the law of diminishing returns. For example, the premium paid for extra storage on a VPS may equalize the VPS rental cost with the dedicated server monthly fee. The same is true for the dedicated server option, as the cost may eventually grow to the point where it is more reasonable to purchase the services from a cloud service provider. In short, do back-of-the-napkin-math.
+Either way, be mindful of the law of diminishing returns. For example, the premium paid for the extra storage on a VPS may equalize the VPS rental cost with the dedicated server monthly fee. The same is true for the dedicated server option, as the cost may eventually grow to the point where it is more reasonable to purchase services from a cloud service provider. Long story short, do back-of-the-napkin-math.
 
 ### Q/A
 
-- I know a better way, how can I help?
+- How to help or contribute?
 
-  We are no Linux gurus, Docker experts or technical writing virtuosos, therefore, you are more than welcome to contribute, and we would be more than happy to receive any constructive criticism on how to improve. Open a PR or file an issue ticket, we will do our best to respond as soon as possible.
+  We are no Linux gurus, Docker experts, or technical writing virtuosos, so you are more than welcome to contribute! File an issue ticket or even better open a pull requests, we will do our best to respond as soon as possible. Constructive criticism is highly appreciated.
 
-- Are there any downsides or deficiencys of this setup?
+- Any gotchas?
 
-  Yes, there are.
+  Firstly, it is a single machine configuration incapable of running on a cluster. That potentially may become a problem when simultaneously running several build pipelines would degrade the performance of the other services. This deficiency should be resolved once the services are made deployable to a Kubernetes cluster.
 
-  Firstly, it is a single machine configuration incapable of running on a cluster. The latter potentially may become a problem when simultaneously running build pipelines suffocate the performance of the rest of the services. This deficiency should be resolved once the setup is made deployable to a Kubernetes cluster.
-
-  Secondly, if the technology of your choice does not support Docker containerization or necessary tooling is not provided out of the box, the current CI/CD service is deemed unusable for your needs as its features are entirely based on the Docker infrastructure. In this case consider using alternatives such as [Jenkins CI](https://jenkins.io/) or [Concourse](https://concourse-ci.org/), which might be included in the setup in the future.
+  Secondly, the technology of your choice must support Docker containerization for using the Drone build pipeline. If if does not, consider consider using alternatives such as [Jenkins CI](https://jenkins.io/) or [Concourse](https://concourse-ci.org/). No setup script or documentation is provided for the alternative CI services currently, however it might be added in the future and you are more than welcome to contribute.
 
   And lastly, the current build pipeline is .NET Core biased. Please feel free to contribute and add pipeline configurations for other technologies.
 
-- What are the plans for the future?
+- Future plans?
 
-As it is mentioned earlier adding Kubernetes support is a high priory task on the list, however we need to acquaint ourselves with the technology first.
+  As it is mentioned earlier, adding Kubernetes support is a high priory task on the list, however, we need to acquaint ourselves with the technology first.
 
-We will do our best to maintain the documentation and keep the scripts up-to-date, and continue adding new CI configurations for different technologies as the need arises (you are more than welcome to contribute).
+  We will do our best to maintain the documentation and keep the scripts up-to-date, and continue adding new CI configurations for different technologies as the need arises (you are more than welcome to contribute).
 
-- Why is the name "Shoebox"?
+- Shoebox - why the name?
 
   ...cus' it has something in it to getcha runnin'! :boom: :running: :checkered_flag:
 
@@ -182,7 +182,7 @@ We will do our best to maintain the documentation and keep the scripts up-to-dat
   Current mode:                   enforcing
   ```
 
-  If SELinux is `enabled` follow the instruction to disable it, otherwise continue to the next section.
+  If SELinux is `enabled` follow the instruction to disable it, otherwise, continue to the next section.
 
   Edit the SELinux configuration file
 
@@ -316,17 +316,17 @@ Certain services in this setup require an SMTP relay for sending email notificat
 The DNS providers a DNS API that is used by Certbot for proofing the domain name ownership for the SSL certificate acquisition.
 [Cloudflare](https://www.cloudflare.com/) is used as the default DNS provider for this setup.
 
-> IMPORTANT: If Cloudflare is not an option there is a number of [DNS providers compatible with Certbot](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438). In this case the actions described below must be adjusted accordingly.
+> IMPORTANT: If Cloudflare is not an option, there is a few more [DNS providers compatible with Certbot](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438). In this case the actions described below must be adjusted accordingly.
 
-> WARNING: If the selected DNS provider is not compatible with Certbot the **Network** section may be deemed incompatible, and certificate acquisition and renewal setup must be conducted independently.
+> WARNING: If the selected DNS provider is not compatible with Certbot, the **Network** section is deemed incompatible. The certificate acquisition process and renewal setup must be conducted independently.
 
 1. <a name="cloudflare-account-setup"></a> Create a [Cloudflare account](https://dash.cloudflare.com/sign-up), the basic plan is free of charge. Add your domain name as a website and complete the verification process for proving the domain name ownership.
 
-2. <a name="cloudflare-name-servers"></a> Change the name servers in the control panel of your domain name provider to the Cloudflare's name servers. To get the name servers navigate to `DNS -> Cloudflare nameservers`. Depending on the TTL set in the domain name provider control panel it may take some time for the change to take effect, keep `ping`-ing the domain name periodically.
+2. <a name="cloudflare-name-servers"></a> Change the name servers in the control panel of your domain name provider to the Cloudflare's name servers. To get the name servers, navigate to `DNS -> Cloudflare nameservers`. Depending on the TTL set in the DNS control panel it may take some time for the change to take effect, keep `ping`-ing the domain name periodically.
 
 3. <a name="turn-off-http-proxy"></a> Turn off the HTTP proxy for main and subdomain names. click the cloud icon ![Alt text](/resources/img/http_proxy_on.png?raw=true "HTTP proxy - ON") next to each domain/subdomain name to gray it out ![Alt text](/resources/img/http_proxy_off.png?raw=true "HTTP proxy - OFF").
 
-   > WARNING: If the http proxy is not disabled it will cause an obscure error response such as `ERR_TOO_MANY_REDIRECTS`.
+   > WARNING: If the http proxy is not disabled, it will cause an obscure error response such as _ERR_TOO_MANY_REDIRECTS_.
 
 4. <a name="cloudflare-dns-api-client"></a> Cloudflare DNS API client is used by Certbot for proofing the domain name ownership when acquiring an HTTPS certificate from [Let’s Encrypt](https://letsencrypt.org/).
 
@@ -366,9 +366,9 @@ The DNS providers a DNS API that is used by Certbot for proofing the domain name
 
 > IMPORTANT: Adjust the actions accordingly if the DNS provider is not Cloudflare.
 
-Login to [Cloudflare](https://dash.cloudflare.com/login), click on your domain name and then navigate to `DNS`. Click the `+Add record` button to open the record input form.
+Login to [Cloudflare](https://dash.cloudflare.com/login), click on your domain name, and then navigate to the `DNS` menu. Click the [+Add record] button to open the record input form.
 
-Create _CNAME_ aliases (bolded) matching the following subdomains
+Create _CNAME_ aliases (bolded) for the following subdomains:
 
 - **git**.yourdomain.com (Git server)
 - **registry**.yourdomain.com (Docker registry)
@@ -380,7 +380,7 @@ Create _CNAME_ aliases (bolded) matching the following subdomains
 
 > WARNING: Do not forget to disable the http proxy for all of the subdomains as it is described [here](#turn-off-http-proxy)
 
-Depending on the TTL value it may take certain time for the change to take effect, keep `ping`-ing the subdomains periodically to verify the result.
+Depending on the TTL value, it may take certain time for the change to take effect, keep `ping`-ing the subdomains periodically to verify the result.
 
 ### SSL Setup
 
@@ -388,7 +388,7 @@ Certbot is used as the default Let’s Encrypt client in this setup.
 
 > INFO: Check the [DNS providers](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438) list supporting _Let's Encrypt_ for other options.
 
-> IMPORTANT: If a different Let’s Encrypt client is selected the certificate has to be acquired independently and this section can be ignored.
+> IMPORTANT: If a different Let’s Encrypt client is selected, the certificate has to be acquired independently and this section can be ignored.
 
 1. Browse to [Apache on CentOS/RHEL 7](https://certbot.eff.org/lets-encrypt/centosrhel7-apache)
 
@@ -398,7 +398,7 @@ Certbot is used as the default Let’s Encrypt client in this setup.
 
    - On _Step 3_ - [EC2 region](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html). You may want to add more than one region in case one of the servers is down.
 
-   - On _Step 6_ - If Cloudflare is not selected as a DNS provider please adjust the command accordingly to possible options given in the [DNS Plugin list](https://certbot.eff.org/docs/using.html#dns-plugins).
+   - On _Step 6_ - If Cloudflare is not selected as a DNS provider, the command has to be adjusted accordingly to the options given in the [DNS Plugin list](https://certbot.eff.org/docs/using.html#dns-plugins).
 
 3. Run `certbot` with the following parameters to acquire a certificate. The default pending time for `NAME` record update is 10 seconds. It may be increased using the `--dns-cloudflare-propagation-seconds` if the command fails due to a timeout.
 
@@ -430,7 +430,7 @@ Certbot is used as the default Let’s Encrypt client in this setup.
    $ sudo certbot renew --dry-run
    ```
 
-   If dry run completed successfully configure a cron job.
+   If dry run completed successfully, configure a cron job.
 
    ```
    $ echo "0 0,12 * * * root python -c 'import random; import time; time.sleep(random.random() * 3600)' && certbot renew" | sudo tee -a /etc/crontab > /dev/null
@@ -613,12 +613,7 @@ then check if the placeholders have been replaced on a sample file (i.e. git/.en
 $ sudo cat $REPO_ROOT/src/git/.env
 ```
 
-<<<<<<< HEAD
-
-=======
-
-> > > > > > > ab8f0a2c9634f64309a6a9cbd259e242834ca795
-> > > > > > > IMPORTANT: The following information is provided for troubleshooting purposes only and is not supposed to be used in a regular circumstance.
+> IMPORTANT: The following information is provided for troubleshooting purposes only and is not supposed to be used in a regular circumstance.
 
 The setup is split into a batch of scripts per service where each script can be run separately if necessary. The input for all of the scripts matches the following pattern.
 

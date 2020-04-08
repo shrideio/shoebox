@@ -4,6 +4,7 @@ Check [Vault Documentation](https://www.vaultproject.io/docs/), and [Vault](http
 
 > INFO: Consul was chosen over the other open-source storage providers as it is officially supported by HashiCorp. Check available Vault [storage options](https://www.vaultproject.io/docs/configuration/storage/) for more detail.
 
+
 ### Preliminary checklist
 
 - [x] `$REPO_ROOT` and `$SHOEBOX_ROOT` environment variables are set
@@ -15,7 +16,7 @@ Check [Vault Documentation](https://www.vaultproject.io/docs/), and [Vault](http
 
 - [x] Vault `secrets.ini` and `.env` files are generated
 
-    > WARNING: DO NOT modify assigned values in the `.env` file. If necessary,modify the `secrets.ini` file and run `vault_containers_setup.sh` to override the current values.
+    > WARNING: DO NOT modify assigned values in the `.env` file. If necessary, modify the `secrets.ini` file and run `vault_containers_setup.sh` to override the current values.
 
     ```
     $ sudo cat $SHOEBOX_ROOT/vault/secrets.ini
@@ -24,21 +25,21 @@ Check [Vault Documentation](https://www.vaultproject.io/docs/), and [Vault](http
 
 - [x] vault._yourdomain.com_ subdomain is configured and serves https traffic
 
-Proceed if all of the checks pass, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
+Proceed if all of the checks passes, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
 
 
 ### Setup
 
-1. Start Vault (vault) and Consul (vault-db) containers.
+1. Start Vault (`vault`) and Consul (`vault-db`) containers.
 
-    > WARNING: DO NOT modify assigned values in the `.env` file. If necessary,modify the `secrets.ini` file and run `vault_containers_setup.sh` to override the current values.
+    > WARNING: DO NOT modify assigned values in the `.env` file. If necessary, modify the `secrets.ini` file and run `vault_containers_setup.sh` to override the current values.
 
     ```
     $ sudo cd $REPO_ROOT/src/vault
     $ sudo docker-compose up -d
     ```
 
-    Run `sudo docker ps` to verify if `vault` and `vault-db` containers are up and running. Proceed if no error is detected, otherwise check the container logs for troubleshooting using the following command `sudo docker logs [container name]`.
+    Run `$ sudo docker ps` to verify if the listed containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
 
 2. <a id="unseal-vault"></a>Unseal Vault
 
@@ -60,21 +61,22 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
     - Choose _KV_ as the secrets engine and click [Next] to proceed. Set _Path_ to `secrets` and _Version_ to `2` (default KV engine version). Click [Enable Engine] to finish the secret engine setup.
 
-     Check the [KV engine documentation](https://www.vaultproject.io/docs/secrets/kv/kv-v2.html) for the engine options details and modify it if necessary.
+        > INFO: Check the [KV engine documentation](https://www.vaultproject.io/docs/secrets/kv/kv-v2) for more information.
 
 4. <a name="create-a-secret"></a>Create a secret
-
-    > The secret will be used by a continuous integration server for a test build.
 
     - Navigate to `Secrets -> secrets` to open the secret management console then click _Create secret_.
 
     - Set _Path for this secret_ to `ci.build.sample` and create a single entry version data with the following key/value pair `hello_world`/`Hello world!`, then click [Save] to save changes.
+
+        > IMPORTANT: The secret is used by the continuous integration server for a test build.
 
 5. Configure machine identity access
 
     > INFO: Check [AppRole Pull Authentication](https://learn.hashicorp.com/vault/identity-access-management/iam-authentication) for more information.
 
     - Enable the AppRole authentication method:
+
         - Navigate to the `Access` menu > Enable new method, then choose the _AppRole_ option from the list and click [Next] to continue. 
     
         - Click the `Method Options` link to expand the options section and set _Default Lease TTL_ and  _Max Lease TTL_ to `30 days`, leave the _Path_ value (expected to be `approle`) intact. Click [Enable Method] to finish the authentication method setup.
@@ -99,7 +101,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
     
     -  Create a role linked with the policy and generate a secret id for that role:
     
-        Click the Vault CLI shell icon (![Alt text](/resources/img/vault_shell.png?raw=true "Vault shell")) in the top right corner to open the command shell and execute the following commands:
+        Click the command shell icon (![Alt text](/resources/img/vault_shell.png?raw=true "Vault shell")) in the top right corner to open the command shell and execute the following commands:
 
         - Create a new `ciagent` role and link it to the `ciagent` policy.
 
@@ -119,7 +121,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
             > vault write -force auth/approle/role/ciagent/secret-id
             ```
 
-    - Reissue new Secret ID
+    - Reissue new Role Secret ID
 
         If the Secret ID value was not captured or lost the only way to restore it is to create a new one. Run the following command to list available secret-id keys.
 
@@ -127,7 +129,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
         > vault list auth/approle/role/ciagent/secret-id
         ```
 
-        Use the secret-id key from the output to replace the `[secret_id_accessor]` placeholder and run the following command to remove the current Secret ID.
+        Use the Secret ID key from the output to replace the `[secret_id_accessor]` placeholder and run the following command to remove the current Secret ID.
 
         ```
         > vault write /auth/approle/role/ciagent/secret-id-accessor/destroy secret_id_accessor="[secret_id_accessor]"
@@ -141,20 +143,29 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
         
         -  Find `POST /auth/approle/login/` and click on the section to expand it, then click [Try it out] to enable editing.
         
-        -  Fill in request body parameters with matching `role_id` and `secret_id` values, then click [Execute - send a request with your token to Vault] and follow the checklist to verify the setup correctness.
+        -  Fill in the request body parameters with matching `role_id` and `secret_id` values, then click [Execute - send a request with your token to Vault] and follow the checklist to verify the setup correctness.
 
             - [x] `token_policies` contains the [configured polices](#acl-policy)
             - [x] `lease_duration` is set to _2592000_ (30 days in seconds)
             - [x] `renewable` is set to _true_
             - [x] `client_token` is not empty
 
-            Proceed if the checks pass, otherwise consult with the Vault documentation.
+            Proceed if the checks pass, otherwise check the correctness of the previous steps and consult with the Vault documentation.
 
-        - Extract and save the `client_token` value, it will be used further for configuring the integration between the ci and vault servers.
-
-            > WARNING: Replace `[client_token]` with the actual vault token value.
+        - Extract and save the `client_token` value, it will be used further for configuring the integration between ci and vault servers.
 
             ```
             export VAULT_TOKEN=[client_token]
             echo $VAULT_TOKEN
             ```
+
+    - <a name="read-secret"></a> Login using the client token for verifying if the associated role can access the secret.
+
+        Open the UI shell (![Alt text](/resources/img/vault_shell.png?raw=true "Vault shell")) and execute the following command.
+
+        ```
+        vault read secrets/data/ci.build.sample/hello_world
+        ```
+
+        If failed to read the secret value due to an access error verify if the role access policies are configured correctly as described [here](#acl-policy).
+

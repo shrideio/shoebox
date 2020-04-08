@@ -24,29 +24,25 @@ Check [Docker Registry](https://docs.docker.com/registry/) and [Joxit Docker Reg
 
 - [x] [Vault](/src/vault/README.md) service is up and running and the vault is configured and [unsealed](/src/vault/README.md#unseal-vault) (vault._yourdomain.com_)
 
-Proceed if all of the checks pass, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
+Proceed if all of the checks passes, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
 
 
 ### Setup
 
-  1. Start Docker Registry (registry) and Docker Registry UI (registry-ui) containers.
+  1. Start Docker Registry (`registry`) and Docker Registry UI (`registry-ui`) containers.
 
       ```
-      $ sudo cd $REPO_ROOT/src/registry
+      $ cd $REPO_ROOT/src/registry
       $ sudo docker-compose up -d
       ```
 
-      Run `$ sudo docker ps` to verify if `registry` and `registry-ui` containers are up and running. Proceed if no error is detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
+      Run `$ sudo docker ps` to verify if the listed containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
 
-  2. Verify that  Docker registry user can log in. Browse to **registryui**._yourdomain.com_ and use the values of `REGISTRY_USERNAME` and `REGISTRY_PASSWORD` parameters from the `secrets.ini` file in the following path:
-      ```
-      $ cd $SHOEBOX_ROOT/registry
-      ```
+  2. Verify fi the Docker registry user can log in. Browse to **registryui**._yourdomain.com_ and use the values of `REGISTRY_USERNAME` and `REGISTRY_PASSWORD` parameters from the Docker registry `secrets.ini` file.
 
- > INFO: The `ci.docker` secret setup described below is used by the CI service for authenticating when creating a Docker image in the registry
+  3. <a id="docker-registry-username-and-password"></a> Create the `ci.docker` secret in Vault as described [here](/src/vault/README.md#create-a-secret) for storing Docker registry username and password. The secret must contain the following key/value pairs.
 
-  3. <a id="docker-registry-username-and-password"></a> Create a secret in Vault for storing the Docker registry username and password. Following the as described in the [Create a secret section in the vault documentation](/src/vault/README.md#create-a-secret), create a new secret under the `ci.docker` path with the following key/value pairs (use the values fetched earlier to replace matching  placeholders between the square brackets):
-      ```
-        registry_username/[REGISTRY_USERNAME]
-        registry_password/[REGISTRY_PASSWORD]
-      ```
+      - `registry_username`/[REGISTRY_USERNAME]
+      - `registry_password`/[REGISTRY_PASSWORD]
+
+     Use the values of parameters matching the placeholder names from the Docker registry `secrets.ini` file.

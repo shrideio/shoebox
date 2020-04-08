@@ -13,7 +13,7 @@ Check [ProGet Documentation](https://docs.inedo.com/docs/proget/overview) and [P
 
 - [x] Proget `secrets.ini` and `.env` files are generated
 
-    > WARNING: DO NOT modify assigned values in the `.env` file. If necessary,modify the `secrets.ini` file and run `packages_containers_setup.sh` to override the current values.
+    > WARNING: DO NOT modify assigned values in the `.env` file. If necessary, modify the `secrets.ini` file and run `packages_containers_setup.sh` to override the current values.
 
     ```
     $ sudo cat $SHOEBOX_ROOT/proget/secrets.ini
@@ -22,19 +22,19 @@ Check [ProGet Documentation](https://docs.inedo.com/docs/proget/overview) and [P
 
 - [x] packages._yourdomain.com_ subdomain is configured and serves https traffic
 
-Proceed if all of the checks pass, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
+Proceed if all of the checks passes, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
+
 
 ### Setup
 
-
-1. Start ProGet (packages) and PostgreSQL (packages-db) containers.
+1. Start ProGet (`packages`) and PostgreSQL (`packages-db`) containers.
 
     ```
     $ sudo cd $REPO_ROOT/src/packages
     $ sudo docker-compose up -d
     ```
 
-    Run `$ sudo docker ps` to verify if `packages` and `packages-db` containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
+    Run `$ sudo docker ps` to verify if the listed containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
 
 
 2. Configure ProGet
@@ -95,4 +95,4 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
     - ProGet supports feed connectors allowing to unify package feeds from different sources.
     For adding a NuGet connector for `nuget.org` click on the feed name `Feed -> v2`, and follow the breadcrumbs `[Manage Feed] -> add connector -> [Create Connector]` to open the _Create Connector_ dialog. Select `NuGet` as _Feed type_ leaving the rest of the inputs intact, then click [Save] to save changes and close the dialog. In the emerged _Select Connector_ dialog select _www.nuget.org_ as _Connector_ (should be preselected) and then click [Save] to save changes.
 
-> IMPORTANT: Despite of Proget advertising the Docker registry feature, it does not function properly when the service is hosted in a Linux container due to the following issue [Docker Push to Proget Container Registry fails](https://forums.inedo.com/topic/2788/docker-push-to-proget-container-registry-fails).
+> IMPORTANT: Despite of Proget advertising the Docker registry feature, it does not work correctly when the service is hosted in a Linux container due to the following issue [Docker Push to Proget Container Registry fails](https://forums.inedo.com/topic/2788/docker-push-to-proget-container-registry-fails).

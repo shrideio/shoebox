@@ -23,7 +23,7 @@ Check [Gogs Documentation](https://gogs.io/docs) and  [Gogs on Docker Hub](https
 
 - [x] SMTP relay is configured
 
-Proceed if all of the checks pass, otherwise, check the [landing page](/src/README.md#setup-outline) and continue when ready.
+Proceed if all of the checks passeses, otherwise, check the [landing page](/src/README.md#setup-outline) and continue when ready.
 
 ### Setup
 

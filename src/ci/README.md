@@ -14,7 +14,7 @@ Check [Drone documentation](https://docs.drone.io/), [Drone Vault plugin](https:
 
 - [x] Drone `secrets.ini` and `.env` files are generated
 
-    > WARNING: DO NOT modify assigned values in the `.env` file. If necessary,modify the `secrets.ini` file and run `ci_containers_setup.sh` to override the current values.
+    > WARNING: DO NOT modify assigned values in the `.env` file. If necessary, modify the `secrets.ini` file and run `ci_containers_setup.sh` to override the current values.
 
     ```
     $ sudo cat $SHOEBOX_ROOT/drone/secrets.ini
@@ -29,7 +29,7 @@ Check [Drone documentation](https://docs.drone.io/), [Drone Vault plugin](https:
 
 - [x] ci._yourdomain.com_ subdomain is configured and serves https traffic
 
-Proceed if all of the checks pass, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
+Proceed if all of the checks passes, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
 
 ### Setup
 
@@ -43,14 +43,14 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
     $ cat $REPO_ROOT/src/ci/.env
     ```
 
-2. Start Drone CI (ci), Drone build agent (ci-agent), Drone Vault plugin (ci-secret) and PostgreSQL (ci-db) containers.
+2. Start Drone CI (`ci`), Drone build agent (`ci-agent`), Drone Vault plugin (`ci-secret-plugin`) and PostgreSQL (`ci-db`) containers.
 
       ```
       $ sudo cd $REPO_ROOT/src/ci
       $ sudo docker-compose up -d
       ```
 
-    Run `$ sudo docker ps` for verifying if `ci`, `ci-agent`, `ci-secret` and `ci-db`  containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
+    Run `$ sudo docker ps` to verify if the listed containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
 
 3. Prepare and run a test build. The purpose of the test build is to very if secrets can be fetched from Vault and the container produced by the build pipeline can be pushed to a private Docker registry.
 
@@ -70,7 +70,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
     - Activate the repository for build
 
-      - Navigate to ci._yourdomain.com_ and log in using the CI git user create earlier. If the repository is not listed click the [SYNC] button in the top right corner and wait.
+      - Navigate to ci._yourdomain.com_ and log in using the CI git user create earlier. If the repository is not listed, click the [SYNC] button in the top right corner and wait.
 
         > WARNING: If the repository is still not shown after syncing use the CI git user credentials (`DRONE_GIT_USERNAME` and `DRONE_GIT_PASSWORD`) to login to the Git service and check if the repository is accessible.
 
@@ -94,6 +94,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
         ```
         $ cd $REPO_ROOT/src/ci/ci.build.sample
+        $ sudo git init
         $ sudo git add .
         $ sudo git commit -m "Adding ci.build.sample"
         $ sudo git remote add origin https://git.[yourdomain.com]/[DRONE_GIT_USERNAME]/ci.build.sample
@@ -153,9 +154,9 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
 - Troubleshooting
 
-  The most fragile step of the build pipeline is `containerize` as it depends on external services - Vault and Docker Registry.  
+  The most fragile step of the build pipeline is `containerize` as it depends on external services - Vault and Docker Registry.
 
-    - Check if the secret values can be fetched through the Drone Vault plugin.
+    - Check if the secret values can be fetched by the Drone Vault plugin
 
         Replace the placeholders with matching values from `$REPO_ROOT/src/ci/.env` an set the environment values as follows. 
 
@@ -164,7 +165,11 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
         $ export DRONE_SECRET_SECRET=[DRONE_SECRET]
         ```
 
-        > IMPORTANT: Be aware not to confuse the CLI to secret plugin communication or configurations errors with the real secret access issues. The later is reported via _secret key not found_ or _secret not found_ error messages.
+        Check if the build argument is accessible.
+
+        ```
+        $ drone plugins secret get secrets/data/ci.build.sample hello_world --repo ciagent/ci.build.sample
+        ```
 
         Check if Docker registry credentials are accessible.
 
@@ -173,19 +178,12 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
         $ drone plugins secret get secrets/data/ci.docker registry_password --repo ciagent/ci.build.sample
         ```
 
-        Check if the build argument is accessible.
+        > WARNING: Be aware not to confuse the CLI to secret plugin communication or configurations errors with the real secret access issues reported as via _secret key not found_ or _secret not found_ error messages.
 
-        ```
-        $ drone plugins secret get secrets/data/ci.build.sample hello_world --repo ciagent/ci.build.sample
-        ```
+        If the secret values cannot check if the secrets are accessible by the generated token (`VAULT_TOKEN`) as described [here](/src/vault/README.md#read-secret).
 
-        If the secret values are displayed correctly proceed to  
+    - Check Docker Registry configuration
 
-        Otherwise, check the vault is accesible when logging in using the `VAULT_TOKEN` value by trying to login using its value and confirm that Access Login Policy is configured correctly as described [here](/src/vault/README.md#acl-policy).
+      - Check if the registry can be accessed by the using the provided username and password values ([here](/src/registry/README.md#docker-registry-username-and-password))
 
-
-    - Pushing a resulting Docker image to the Docker registry
-
-      - Check if the registry can be accessed by the provided username and password values ([here](/src/registry/README.md#docker-registry-username-and-password))
-
-      - Check if the registry virtual host file has been amended as described [here](/README.md#modify-registry-vhost-config).
+      - Check if the registry virtual host file is amended as described [here](/README.md#modify-registry-vhost-config).
