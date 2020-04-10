@@ -52,9 +52,9 @@ networks:
    proxy-network:
       external: true
       
-  packages-network:
-    name: packages-network
-    driver: bridge
+   packages-network:
+      name: packages-network
+      driver: bridge
 
 
 volumes:

@@ -1,13 +1,12 @@
-#!/bin/bash
+!/bin/bash
 set -euo pipefail
 
+# PROXY-TRAEFIK
 
 YOUR_DOMAIN=$1
-CLOUDFLARE_EMAIL=$2
-CLOUDFLARE_API_KEY$3
-LETS_ENCRYPT_EMAIL=$4
 
-# PROXY-TRAEFIK
+LETSENCRYPT_ROOT=/etc/letsencrypt
+LETSENCRYPT_CONFIG=$LETSENCRYPT_ROOT/letsencrypt.ini
 
 PROXY_SRC=$(dirname "$0")
 
@@ -15,21 +14,16 @@ echo "Setting up Traefik..."
 echo "https://containo.us/traefik/"
 echo
 
-PROXY_LETSENCRYPT_DIR=/var/letsencrypt
-
-
-mkdir -p $PROXY_LETSENCRYPT_SRC
-
-source $PROGET_SECRETS
-
 PROXY_ENV=$PROXY_SRC/.env
 cp $PROXY_SRC/env.tmpl $PROXY_ENV
 
+source $LETSENCRYPT_CONFIG
+
 sed -i 's|@YOUR_DOMAIN$|'"$YOUR_DOMAIN"'|g' $PROXY_ENV
-sed -i 's|@CLOUDFLARE_EMAIL$|'"$CLOUDFLARE_EMAIL"'|g' $PROXY_ENV
-sed -i 's|@CLOUDFLARE_API_KEY$|'"$CLOUDFLARE_API_KEY"'|g' $PROXY_ENV
-sed -i 's|@PROXY_LETSENCRYPT_SRC$|'"$PROXY_LETSENCRYPT_SRC"'|g' $PROXY_ENV
-sed -i 's|@LETS_ENCRYPT_EMAIL$|'"$LETS_ENCRYPT_EMAIL"'|g' $PROXY_ENV
+sed -i 's|@DNS_CLOUDFLARE_EMAIL$|'"$DNS_CLOUDFLARE_EMAIL"'|g' $PROXY_ENV
+sed -i 's|@DNS_CLOUDFLARE_API_KEY$|'"$DNS_CLOUDFLARE_API_KEY"'|g' $PROXY_ENV
+sed -i 's|@LETSENCRYPT_ROOT$|'"$LETSENCRYPT_ROOT"'|g' $PROXY_ENV
+sed -i 's|@LETSENCRYPT_EMAIL$|'"$LETSENCRYPT_EMAIL"'|g' $PROXY_ENV
 
 
 
@@ -37,10 +31,10 @@ echo "Created .env file at '$PROXY_SRC'."
 echo
 
 echo "Proxy volume mounts:"
-echo "PROXY_LETSENCRYPT: $PROGET_PACKAGES"
+echo "PROXY_LETSENCRYPT: $LETSENCRYPT_ROOT"
 echo "PROXY_DOCKER_SOCK_ACCESS: /var/run/docker.sock"
 echo
 
 
-echo "Completed ProGet setup."
+echo "Completed Traefik setup."
 echo

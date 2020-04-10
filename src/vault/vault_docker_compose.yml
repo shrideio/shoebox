@@ -16,7 +16,7 @@ services:
     networks:
       - vault-network
     command: agent -server -bind 0.0.0.0 -client 0.0.0.0 -bootstrap-expect 1
-  
+
   vault:
     image: vault:latest
     container_name: vault
@@ -51,10 +51,10 @@ services:
 
 
 networks:
-   
-   proxy-network:
+
+    proxy-network:
       external: true
-      
+
     vault-network:
       name: vault-network
       driver: bridge
@@ -78,10 +78,4 @@ volumes:
       driver_opts:
         type: none
         device: ${VAULT_CONSUL_CONFIG}
-        o: bind
-
-    vault-db-data:
-      driver_opts:
-        type: none
-        device: ${VAULT_CONSUL_DATA}
         o: bind

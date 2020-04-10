@@ -130,10 +130,10 @@ services:
 networks:
    
    proxy-network:
-      external: true
-
-    project-network:
-      driver: bridge
+     external: true
+      
+   project-network:
+     driver: bridge
 
 
 volumes:

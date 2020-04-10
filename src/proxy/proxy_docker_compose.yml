@@ -15,7 +15,7 @@ services:
       - "--certificatesresolvers.myresolver.acme.dnschallenge=true"
       - "--certificatesresolvers.myresolver.acme.dnschallenge.provider=cloudflare"
       #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
-      - "--certificatesresolvers.myresolver.acme.email=${LETS_ENCRYPT_EMAIL}"
+      - "--certificatesresolvers.myresolver.acme.email=${LETSENCRYPT_EMAIL}"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     networks:
       - proxy-network
@@ -24,10 +24,10 @@ services:
       - "443:443"
       - "8080:8080"
     environment:
-      - "CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}"
-      - "CLOUDFLARE_API_KEY=${CLOUDFLARE_API_KEY}"
+      - "CLOUDFLARE_EMAIL=${DNS_CLOUDFLARE_EMAIL}"
+      - "CLOUDFLARE_API_KEY=${DNS_CLOUDFLARE_API_KEY}"
     volumes:
-      - "${PROXY_LETSENCRYPT_SRC}:/letsencrypt"
+      - "${LETSENCRYPT_ROOT}:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
 
