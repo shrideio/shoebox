@@ -40,7 +40,7 @@ Proceed if all of the checks passes, otherwise, review the [landing page](/src/R
 
   2. Verify fi the Docker registry user can log in. Browse to **registryui**._yourdomain.com_ and use the values of `REGISTRY_USERNAME` and `REGISTRY_PASSWORD` parameters from the Docker registry `secrets.ini` file.
 
-  3. <a id="docker-registry-username-and-password"></a> Create the `ci.docker` secret in Vault as described [here](/src/vault/README.md#create-a-secret) for storing Docker registry username and password. The secret must contain the following key/value pairs.
+  3. <a id="docker-registry-username-and-password"></a> Create the `ci.registry` secret in Vault as described [here](/src/vault/README.md#create-a-secret) for storing Docker registry username and password. The secret must contain the following key/value pairs.
 
       - `registry_username`/[REGISTRY_USERNAME]
       - `registry_password`/[REGISTRY_PASSWORD]

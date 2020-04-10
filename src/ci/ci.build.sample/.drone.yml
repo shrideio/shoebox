@@ -71,14 +71,14 @@ volumes:
 kind: secret
 name: registry_password
 get:
-  path: secrets/data/ci.docker
+  path: secrets/data/ci.registry
   name: registry_password
 
 ---
 kind: secret
 name: registry_username
 get:
-  path: secrets/data/ci.docker
+  path: secrets/data/ci.registry
   name: registry_username
 
 ---
