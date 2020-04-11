@@ -1,6 +1,7 @@
 namespace ci.build.sample
 
 open Microsoft.Extensions.Configuration
+open package.sample
 
 module HttpHandlers =
 
@@ -11,6 +12,6 @@ module HttpHandlers =
     let helloWorld =
         fun (next : HttpFunc) (ctx : HttpContext) ->
             task {
-                let helloWorld = ctx.GetService<IConfiguration>().["HELLO_WORLD"]
+                let helloWorld = Shoebox.say <| ctx.GetService<IConfiguration>().["HELLO_WORLD"]
                 return! text helloWorld next ctx
             }
