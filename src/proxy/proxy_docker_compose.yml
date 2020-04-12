@@ -31,7 +31,7 @@ services:
       - "CLOUDFLARE_API_KEY=${DNS_CLOUDFLARE_API_KEY}"
     volumes:
       - letsencrypt:letsencrypt
-      - traefik-conf:/var/config
+      - traefik-conf:/etc/traefik/conf
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     labels:
       - "traefik.enable=true"
