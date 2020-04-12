@@ -79,3 +79,9 @@ volumes:
         type: none
         device: ${VAULT_CONSUL_CONFIG}
         o: bind
+        
+    vault-db-data:	
+      driver_opts:	
+        type: none	
+        device: ${VAULT_CONSUL_DATA}	
+        o: bind 	
