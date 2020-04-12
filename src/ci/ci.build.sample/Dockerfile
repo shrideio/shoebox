@@ -19,7 +19,7 @@ COPY tests/. ./tests/
 COPY src/. ./src/
 
 # build
-RUN dotnet nuget add source $PACKAGES_SOURCE --name (awk -F/ '{print $3}' <<< $PACKAGES_SOURCE) --username $PACKAGES_USERNAME --password $PACKAGES_PASSWORD
+RUN dotnet nuget add source $PACKAGES_SOURCE --name (awk -F/ '{print $3}' <<< $PACKAGES_SOURCE) --username $PACKAGES_USERNAME --password $PACKAGES_PASSWORD --store-password-in-clear-text
 RUN dotnet build ./src/**/*.fsproj --verbosity normal --configuration Release
 RUN dotnet build ./tests/**/*.fsproj --verbosity normal --configuration Release
 
