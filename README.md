@@ -335,16 +335,17 @@ The DNS providers a DNS API that is used by Certbot for proofing the domain name
    Create an ini file for the Cloudflare DNS API client,
 
    ```
-   $ sudo mkdir -p /etc/letsencrypt/renewal/dns
-   $ sudo nano /etc/letsencrypt/renewal/dns/cloudflare.ini
+   $ sudo mkdir -p /etc/letsencrypt
+   $ sudo nano /etc/letsencrypt/letsencrypt.ini
    ```
 
    Copy-paste the following fragment.
 
    ```
-   # Cloudflare API credentials used by Certbot
-   dns_cloudflare_email = @CLOUDFLARE_EMAIL
-   dns_cloudflare_api_key = @CLOUDFLARE_API_KEY
+   # Credentials and email for lets encrypt in Traefik
+   DNS_CLOUDFLARE_EMAIL = @CLOUDFLARE_EMAIL
+   DNS_CLOUDFLARE_API_KEY = @CLOUDFLARE_API_KEY
+   LETSENCRYPT_EMAIL = @LETSENCRYPT_EMAIL
    ```
 
    Get the DNS API key: In the Cloudflare panel browse to `Overview -> Get your API token -> API Tokens -> Global API Key [View]`.
@@ -356,11 +357,12 @@ The DNS providers a DNS API that is used by Certbot for proofing the domain name
      <br/><br/>
 
    ```
-   $ sudo sed -i 's|@CLOUDFLARE_EMAIL$|'[cloudflare_email]'|g' /etc/letsencrypt/renewal/dns/cloudflare.ini
-   $ sudo sed -i 's|@CLOUDFLARE_API_KEY$|'[cloudflare_api_key]'|g' /etc/letsencrypt/renewal/dns/cloudflare.ini
+   $ sudo sed -i 's|@DNS_CLOUDFLARE_EMAIL$|'[cloudflare_email]'|g' /etc/letsencrypt/letsencrypt.ini
+   $ sudo sed -i 's|@DNS_CLOUDFLARE_API_KEY$|'[cloudflare_api_key]'|g' /etc/letsencrypt/letsencrypt.ini
+   $ sudo sed -i 's|@LETSENCRYPT_EMAIL$|'[letsencrypt_email]'|g' /etc/letsencrypt/letsencrypt.ini
    ```
 
-   Run `$ sudo cat /etc/letsencrypt/renewal/dns/cloudflare.ini` to verify the result.
+   Run `$ sudo cat /etc/letsencrypt/letsencrypt.ini` to verify the result.
 
 ### Subdomain Records
 
