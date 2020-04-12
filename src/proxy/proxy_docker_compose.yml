@@ -30,8 +30,8 @@ services:
       - "CLOUDFLARE_EMAIL=${DNS_CLOUDFLARE_EMAIL}"
       - "CLOUDFLARE_API_KEY=${DNS_CLOUDFLARE_API_KEY}"
     volumes:
-      - "${LETSENCRYPT_ROOT}:/letsencrypt"
-      - "${LETSENCRYPT_ROOT}:/var/config"
+      - letsencrypt:letsencrypt
+      - traefik-conf:/var/config
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     labels:
       - "traefik.enable=true"
@@ -55,5 +55,10 @@ volumes:
       driver_opts:
         type: none
         device: ${TRAEFIK_CONFIG}
+        o: bind
+    letsencrypt:
+      driver_opts:
+        type: none
+        device: ${LETSENCRYPT_ROOT}
         o: bind
 
