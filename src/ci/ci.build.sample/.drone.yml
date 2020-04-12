@@ -16,7 +16,7 @@ steps:
     PACKAGES_PASSWORD:
       from_secret: packages_password
   commands:
-  - dotnet nuget add source package.@YOUR_DOMAIN/nuget/v2/ --name package.@YOUR_DOMAIN --username $PACKAGES_USERNAME --password $PACKAGES_PASSWORD
+  - dotnet nuget add source https://packages.@YOUR_DOMAIN/nuget/v2/ --name packages.@YOUR_DOMAIN --username $PACKAGES_USERNAME --password $PACKAGES_PASSWORD --store-password-in-clear-text
   - dotnet build src/**/*.fsproj --verbosity normal --configuration Release
   - dotnet build tests/**/*.fsproj --verbosity normal --configuration Release
   when:
