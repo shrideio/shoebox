@@ -393,7 +393,7 @@ Run the proxy container setup script and start the proxy docker container:
 
 ```
 $ cd $REPO_ROOT/src/proxy/
-$ sudo ./proxy_containers_setup $SHOEBOX_ROOT $YOUR_DOMAIN 
+$ sudo ./proxy_containers_setup.sh $SHOEBOX_ROOT $YOUR_DOMAIN 
 $ docker-compose up -d
 ```
 
