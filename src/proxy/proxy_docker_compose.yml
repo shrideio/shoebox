@@ -6,17 +6,20 @@ services:
     image: "traefik:v2.2"
     container_name: "proxy"
     command:
+      # Uncomment two commands below for debugging information inside the proxy container logs(docker logs proxy):
       #- "--log.level=DEBUG"
+      #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
       - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.myresolver.acme.dnschallenge=true"
       - "--certificatesresolvers.myresolver.acme.dnschallenge.provider=cloudflare"
-      #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
       - "--certificatesresolvers.myresolver.acme.email=${LETSENCRYPT_EMAIL}"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+
     networks:
       - proxy-network
     ports:
@@ -28,10 +31,29 @@ services:
       - "CLOUDFLARE_API_KEY=${DNS_CLOUDFLARE_API_KEY}"
     volumes:
       - "${LETSENCRYPT_ROOT}:/letsencrypt"
+      - "${LETSENCRYPT_ROOT}:/var/config"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy-network"
+      - "traefik.http.routers.traefik_dashboard.service=traefik_dashboard"
+      - "traefik.http.routers.traefik_dashboard.rule=Host(`proxy.${YOUR_DOMAIN}`)"
+      - "traefik.http.routers.traefik_dashboard.entrypoints=websecure"
+      - "traefik.http.routers.traefik_dashboard.tls.certresolver=myresolver"
+      - "traefik.http.services.traefik_dashboard.loadbalancer.server.port=8080"
+      - "traefik.http.middlewares.traefik_dashboard_auth.basicauth.usersfile=/etc/traefik/conf/htpasswd"
+      - "traefik.http.routers.traefik_dashboard.middlewares=traefik_dashboard_auth@docker"
 
 networks:
   proxy-network:
     name: proxy-network
     driver: bridge
+    
+    
+volumes:
+    traefik-conf:
+      driver_opts:
+        type: none
+        device: ${TRAEFIK_CONFIG}
+        o: bind
+

@@ -41,6 +41,7 @@ services:
       ports:
         - ${DRONE_HTTP_PORT}:80
       networks:
+        - proxy-network
         - ci-network
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
