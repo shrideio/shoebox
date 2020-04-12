@@ -55,7 +55,7 @@ services:
         - "traefik.http.routers.ci.service=ci"
         - "traefik.http.routers.ci.rule=Host(`ci.${YOUR_DOMAIN}`)"
         - "traefik.http.routers.ci.entrypoints=websecure"
-        - "traefik.http.routers.ci.tls.certresolver=myresolver"
+        - "traefik.http.routers.ci.tls.certresolver=proxyresolver"
         - "traefik.http.services.ci.loadbalancer.server.port=80"
 
     ci-secret-plugin:

@@ -43,7 +43,7 @@ services:
         - "traefik.http.routers.packages.service=packages"
         - "traefik.http.routers.packages.rule=Host(`packages.${YOUR_DOMAIN}`)"
         - "traefik.http.routers.packages.entrypoints=websecure"
-        - "traefik.http.routers.packages.tls.certresolver=myresolver"
+        - "traefik.http.routers.packages.tls.certresolver=proxyresolver"
         - "traefik.http.services.packages.loadbalancer.server.port=80"
 
 

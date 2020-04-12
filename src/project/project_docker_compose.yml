@@ -123,7 +123,7 @@ services:
       - "traefik.http.routers.project.service=project"
       - "traefik.http.routers.project.rule=Host(`project.${YOUR_DOMAIN}`)"
       - "traefik.http.routers.project.entrypoints=websecure"
-      - "traefik.http.routers.project.tls.certresolver=myresolver"
+      - "traefik.http.routers.project.tls.certresolver=proxyresolver"
       - "traefik.http.services.project.loadbalancer.server.port=80"
 
 

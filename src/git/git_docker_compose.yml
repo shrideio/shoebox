@@ -41,7 +41,7 @@ services:
         - "traefik.http.routers.git.service=git"
         - "traefik.http.routers.git.rule=Host(`git.${YOUR_DOMAIN}`)"
         - "traefik.http.routers.git.entrypoints=websecure"
-        - "traefik.http.routers.git.tls.certresolver=myresolver"
+        - "traefik.http.routers.git.tls.certresolver=proxyresolver"
         - "traefik.http.services.git.loadbalancer.server.port=3000"
 
 networks:
