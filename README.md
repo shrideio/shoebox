@@ -2,7 +2,7 @@
 
 ### What is it?
 
-Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose) for setting up a simple collaborative software development environment. I can be hosted on a VPS or dedicated server as an inexpensive alternative for subscription based could services. Software components used in this setup are either open source or have free versions (some with limitations, please check).
+Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose) for setting up a simple collaborative software development environment. It can be hosted on a VPS or dedicated server as an inexpensive alternative for subscription based could services. Software components used in this setup are either open source or have free versions (some with limitations, please check).
 
 | Tool                                | Vendor                                                            | License                                                                                                                                                                                      |
 | :---------------------------------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -137,9 +137,9 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
     - [Configuration files](#create-vhost-configs)
     - [Docker Registry vhost configuration](#amend-docker-registry-vhost)
     - [Verify http to https redirect](#vhost-config-verify-result)
-  - [Containers Infrastructure](containers-infrastructure)
-  - [Service Setup](services-setup)
-  - [Backup Configuration](backup-configuration)
+  - [Containers Infrastructure](#containers-infrastructure)
+  - [Service Setup](#services-setup)
+  - [Backup Configuration](#backup-configuration)
 
 ## Prerequisites
 
