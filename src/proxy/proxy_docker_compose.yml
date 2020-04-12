@@ -30,7 +30,7 @@ services:
       - "CLOUDFLARE_EMAIL=${DNS_CLOUDFLARE_EMAIL}"
       - "CLOUDFLARE_API_KEY=${DNS_CLOUDFLARE_API_KEY}"
     volumes:
-      - letsencrypt:letsencrypt
+      - letsencrypt:/letsencrypt
       - traefik-conf:/etc/traefik/conf
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     labels:
