@@ -56,9 +56,9 @@ volumes:
         type: none
         device: ${TRAEFIK_CONFIG}
         o: bind
-    letsencrypt:
-      driver_opts:
+      
+      letsencrypt:
+        driver_opts:
         type: none
         device: ${LETSENCRYPT_ROOT}
         o: bind
-
