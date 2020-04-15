@@ -16,7 +16,7 @@ services:
     networks:
       - vault-network
     command: agent -server -bind 0.0.0.0 -client 0.0.0.0 -bootstrap-expect 1
-  
+
   vault:
     image: vault:latest
     container_name: vault
@@ -33,15 +33,27 @@ services:
       - 8600:8600/udp
       - ${VAULT_PORT}:8200
     networks:
+      - proxy-network
       - vault-network
     cap_add:
       - IPC_LOCK
     command: server
     depends_on:
       - vault-db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy-network"
+      - "traefik.http.routers.vault.service=vault"
+      - "traefik.http.routers.vault.rule=Host(`vault.${YOUR_DOMAIN}`)"
+      - "traefik.http.routers.vault.entrypoints=websecure"
+      - "traefik.http.routers.vault.tls.certresolver=proxyresolver"
+      - "traefik.http.services.vault.loadbalancer.server.port=8200"
 
 
 networks:
+
+    proxy-network:
+      external: true
 
     vault-network:
       name: vault-network
@@ -67,9 +79,9 @@ volumes:
         type: none
         device: ${VAULT_CONSUL_CONFIG}
         o: bind
-
-    vault-db-data:
-      driver_opts:
-        type: none
-        device: ${VAULT_CONSUL_DATA}
-        o: bind
+        
+    vault-db-data:	
+      driver_opts:	
+        type: none	
+        device: ${VAULT_CONSUL_DATA}	
+        o: bind 	

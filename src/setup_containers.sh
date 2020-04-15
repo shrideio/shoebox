@@ -23,5 +23,6 @@ bash $SRC_ROOT/registry/registry_containers_setup.sh "$SHOEBOX_ROOT" "$YOUR_DOMA
 bash $SRC_ROOT/ci/ci_containers_setup.sh "$SHOEBOX_ROOT" "$YOUR_DOMAIN" "$CI_PORTS_PREFIX"
 bash $SRC_ROOT/project/project_containers_setup.sh "$SHOEBOX_ROOT" "$YOUR_DOMAIN" "$PROJECT_PORTS_PREFIX"
 
+
 echo "Completed containers setup."
 echo

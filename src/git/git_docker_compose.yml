@@ -1,6 +1,5 @@
 version: "3.5"
 
-
 services:
 
     git-db:
@@ -18,7 +17,7 @@ services:
         - git-network
       volumes:
         - git-db-data:/var/lib/postgresql/data
-          
+
     git:
       image: gogs/gogs:latest
       container_name: git
@@ -30,12 +29,20 @@ services:
         - git-data:/data
       networks:
         - git-network
+        - proxy-network
       ports:
         - ${GOGS_SSH_PORT}:22
         - ${GOGS_HTTP_PORT}:3000
       depends_on:
         - git-db
-
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=proxy-network"
+        - "traefik.http.routers.git.service=git"
+        - "traefik.http.routers.git.rule=Host(`git.${YOUR_DOMAIN}`)"
+        - "traefik.http.routers.git.entrypoints=websecure"
+        - "traefik.http.routers.git.tls.certresolver=proxyresolver"
+        - "traefik.http.services.git.loadbalancer.server.port=3000"
 
 networks:
 
@@ -43,6 +50,8 @@ networks:
       name: git-network
       driver: bridge
 
+    proxy-network:
+      external: true
 
 volumes:
 
