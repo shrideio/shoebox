@@ -52,12 +52,12 @@ services:
 
 networks:
 
-    proxy-network:
-      external: true
-
     vault-network:
       name: vault-network
       driver: bridge
+
+    proxy-network:
+      external: true
 
 
 volumes:
@@ -84,4 +84,4 @@ volumes:
       driver_opts:	
         type: none	
         device: ${VAULT_CONSUL_DATA}	
-        o: bind 	
+        o: bind

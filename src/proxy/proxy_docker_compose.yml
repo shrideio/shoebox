@@ -1,5 +1,6 @@
 version: "3.5"
 
+
 services:
 
   proxy:
@@ -19,7 +20,6 @@ services:
       - "--certificatesresolvers.proxyresolver.acme.dnschallenge.provider=cloudflare"
       - "--certificatesresolvers.proxyresolver.acme.email=${LETSENCRYPT_EMAIL}"
       - "--certificatesresolvers.proxyresolver.acme.storage=/letsencrypt/acme.json"
-
     networks:
       - proxy-network
     ports:
@@ -44,12 +44,14 @@ services:
       - "traefik.http.middlewares.traefik_dashboard_auth.basicauth.usersfile=/etc/traefik/conf/htpasswd"
       - "traefik.http.routers.traefik_dashboard.middlewares=traefik_dashboard_auth@docker"
 
+
 networks:
+
   proxy-network:
     name: proxy-network
     driver: bridge
-    
-    
+
+
 volumes:
     traefik-conf:
       driver_opts:

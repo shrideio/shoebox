@@ -98,14 +98,14 @@ services:
 
 
 networks:
-    
-    proxy-network:
-      external: true
-      
+
     ci-network:
       name: ci-network
       driver: bridge
-      
+
+    proxy-network:
+      external: true
+
 
 volumes:
 

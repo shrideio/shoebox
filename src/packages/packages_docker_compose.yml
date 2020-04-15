@@ -49,12 +49,12 @@ services:
 
 networks:
 
-   proxy-network:
-      external: true
-      
    packages-network:
       name: packages-network
       driver: bridge
+
+   proxy-network:
+      external: true
 
 
 volumes:

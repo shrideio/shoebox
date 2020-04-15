@@ -44,6 +44,7 @@ services:
         - "traefik.http.routers.git.tls.certresolver=proxyresolver"
         - "traefik.http.services.git.loadbalancer.server.port=3000"
 
+
 networks:
 
     git-network:
@@ -52,6 +53,7 @@ networks:
 
     proxy-network:
       external: true
+
 
 volumes:
 
