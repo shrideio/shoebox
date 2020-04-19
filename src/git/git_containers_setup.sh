@@ -13,7 +13,7 @@ echo "Setting up Gogs..."
 echo "https://gogs.io/"
 echo
 
-GOGS_ROOT=$SHOEBOX_ROOT/gogs
+GOGS_ROOT=$SHOEBOX_ROOT/git-gogs
 GOGS_SECRETS=$GOGS_ROOT/secrets.ini
 GOGS_DATA=$GOGS_ROOT/data
 GOGS_POSTGRESQL_DATA=$GOGS_ROOT/postgresql/data

@@ -13,7 +13,7 @@ echo "Setting up ProGet..."
 echo "https://inedo.com/proget"
 echo
 
-PROGET_ROOT=$SHOEBOX_ROOT/proget
+PROGET_ROOT=$SHOEBOX_ROOT/packages-proget
 PROGET_SECRETS=$PROGET_ROOT/secrets.ini
 PROGET_PACKAGES=$PROGET_ROOT/packages
 PROGET_EXTENSIONS=$PROGET_ROOT/extensions

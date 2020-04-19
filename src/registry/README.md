@@ -16,7 +16,7 @@ Check [Docker Registry](https://docs.docker.com/registry/) and [Joxit Docker Reg
     > WARNING: DO NOT modify assigned values in the `.env` file. If necessary modify, the `secrets.ini` file and run `registry_containers_setup.sh` to override the current values.
 
     ```
-    $ sudo cat $SHOEBOX_ROOT/registry/secrets.ini
+    $ sudo cat $SHOEBOX_ROOT/registry-docker/secrets.ini
     $ sudo cat $REPO_ROOT/src/registry/.env
     ```
 

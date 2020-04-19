@@ -13,7 +13,7 @@ echo "Setting up Drone..."
 echo "https://drone.io/"
 echo
 
-DRONE_ROOT=$SHOEBOX_ROOT/drone
+DRONE_ROOT=$SHOEBOX_ROOT/ci-drone
 DRONE_DATA=$DRONE_ROOT/data
 DRONE_SECRETS=$DRONE_ROOT/secrets.ini
 DRONE_POSTGRESQL_DATA=$DRONE_ROOT/postgresql/data
