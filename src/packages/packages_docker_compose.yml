@@ -14,6 +14,7 @@ services:
         - POSTGRES_DB=${PROGET_POSTGRESQL_DATABASE}
         - POSTGRES_USER=${PROGET_POSTGRESQL_USER}
         - POSTGRES_PASSWORD=${PROGET_POSTGRESQL_PASSWORD}
+      command: ["-c", "shared_buffers=256MB", "-c", "max_connections=200"]
       ports:
         - ${PROGET_POSTGRESQL_PORT}:5432
       networks: 
@@ -25,7 +26,7 @@ services:
       hostname: packages
       restart: always
       environment:
-        - PROGET_DATABASE=Host=packages-db; Database=${PROGET_POSTGRESQL_DATABASE}; Username=${PROGET_POSTGRESQL_USER}; Password=${PROGET_POSTGRESQL_PASSWORD};
+        - PROGET_DATABASE=Host=packages-db; Database=${PROGET_POSTGRESQL_DATABASE}; Username=${PROGET_POSTGRESQL_USER}; Password=${PROGET_POSTGRESQL_PASSWORD}; MinPoolSize=1; MaxPoolSize=20;
       volumes:
         - packages-packages:/var/proget/packages
         - packages-extensions:/var/proget/extensions
@@ -34,14 +35,27 @@ services:
         - ${PROGET_HTTP_PORT}:80
       networks:
         - packages-network
+        - proxy-network
       depends_on:
         - packages-db
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=proxy-network"
+        - "traefik.http.routers.packages.service=packages"
+        - "traefik.http.routers.packages.rule=Host(`packages.${YOUR_DOMAIN}`)"
+        - "traefik.http.routers.packages.entrypoints=websecure"
+        - "traefik.http.routers.packages.tls.certresolver=proxyresolver"
+        - "traefik.http.services.packages.loadbalancer.server.port=80"
 
 
 networks:
-  packages-network:
-    name: packages-network
-    driver: bridge
+
+   packages-network:
+      name: packages-network
+      driver: bridge
+
+   proxy-network:
+      external: true
 
 
 volumes:

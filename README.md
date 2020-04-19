@@ -2,7 +2,7 @@
 
 ### What is it?
 
-Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose) for setting up a simple collaborative software development environment. I can be hosted on a VPS or dedicated server as an inexpensive alternative for subscription based could services. Software components used in this setup are either open source or have free versions (some with limitations, please check).
+Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose) for setting up a simple collaborative software development environment. It can be hosted on a VPS or dedicated server as an inexpensive alternative for subscription based could services. Software components used in this setup are either open source or have free versions (some with limitations, please check).
 
 | Tool                                | Vendor                                                            | License                                                                                                                                                                                      |
 | :---------------------------------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -60,6 +60,10 @@ Considering the physical host, there are three options to choose from.
    - [OVHCloud](https://www.ovh.com/)
    - [Hostinger](https://www.hostinger.com/)
    - [Interserver](https://www.interserver.net/)
+   - [Hostnoc](https://hostnoc.com/)
+   - [VPSCheap](https://www.vpscheap.net/)
+   - [VirMach ](https://virmach.com/)
+   - [TheStack](https://portal.thestack.net/)
 
 2. Rent a dedicated server.
 
@@ -69,6 +73,8 @@ Considering the physical host, there are three options to choose from.
 
    - [Nocix](https://www.nocix.net/)
    - [Wholesale Internet](https://www.wholesaleinternet.net/)
+   - [Server Room](https://www.serverroom.net/)
+   - [Primcast](https://www.primcast.com/)
 
 3. Run a server on-premises.
 
@@ -133,13 +139,10 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
   - [Subdomain Records](#subdomain-records)
   - [SSL Setup](#ssl-setup)
 - [Services](#services)
-  - [Virtual Hosts](#virtual-hosts)
-    - [Configuration files](#create-vhost-configs)
-    - [Docker Registry vhost configuration](#amend-docker-registry-vhost)
-    - [Verify http to https redirect](#vhost-config-verify-result)
-  - [Containers Infrastructure](containers-infrastructure)
-  - [Service Setup](services-setup)
-  - [Backup Configuration](backup-configuration)
+  - [SSL Proxy Setup](#ssl-proxy-setup)
+  - [Containers Infrastructure](#containers-Infrastructure)
+  - [Service Setup](#services-setup)
+  - [Backup Configuration](#backup-configuration)
 
 ## Prerequisites
 
@@ -211,63 +214,53 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
   SELinux status:                 disabled
   ```
 
-- #### Apache and mod_ssl
-
-  Install Apache and mod_ssl and register the former as a system service.
-
-  ```
-  $ sudo yum install httpd
-  $ sudo yum install mod_ssl
-
-  $ sudo systemctl enable httpd
-  $ sudo systemctl start httpd
-  $ sudo systemctl status httpd
-  ```
-
-  <a href="troubleshoot-apache"></a>If Apache has successfully started, the `status` command output will contain `active (running)`, otherwise, check `error_log` and `access_log` at `/var/log/httpd` for troubleshooting.
-
-  Enable `http` and `https` traffic on the firewall.
-
-  ```
-  $ sudo firewall-cmd --permanent --zone=public --add-service=http
-  $ sudo firewall-cmd --permanent --zone=public --add-service=https
-  $ sudo firewall-cmd --reload
-  ```
-
-  If the dns record exists, browse to your domain name; otherwise, use the server ip address. If the setup is successful, the browser will display the apache welcome page.
-
 - #### Docker and Docker Compose
 
-  Install Docker and Docker Compose.
+  - Install Docker
 
-  ```
-  $ sudo yum remove docker \
-                  docker-client \
-                  docker-client-latest \
-                  docker-common \
-                  docker-latest \
-                  docker-latest-logrotate \
-                  docker-logrotate \
-                  docker-engine
+    ```
+    $ sudo yum remove docker \
+                    docker-client \
+                    docker-client-latest \
+                    docker-common \
+                    docker-latest \
+                    docker-latest-logrotate \
+                    docker-logrotate \
+                    docker-engine
 
-  $ sudo yum install -y yum-utils \
-  device-mapper-persistent-data \
-  lvm2
+    $ sudo yum install -y yum-utils \
+    device-mapper-persistent-data \
+    lvm2
 
-  $ sudo yum-config-manager \
-      --add-repo \
-      https://download.docker.com/linux/centos/docker-ce.repo
+    $ sudo yum-config-manager \
+        --add-repo \
+        https://download.docker.com/linux/centos/docker-ce.repo
 
-  $ sudo yum install docker-ce docker-ce-cli containerd.io
-  $ sudo systemctl enable docker
-  $ sudo systemctl start docker
-  $ sudo docker run hello-world # to verify if  Docker CE is successfully installed
+    $ sudo yum install docker-ce docker-ce-cli containerd.io
 
-  $ sudo yum install docker-compose
-  $ sudo docker-compose --version # to confirm that `docker-compose` is successfully installed
-  ```
+    $ sudo systemctl enable docker
+    $ sudo systemctl start docker
 
-### SMTP relay
+    $ sudo docker run hello-world # confirm Docker CE is successfully installed
+    ```
+  - Install Docker Compose
+
+    > INFO: Check the latest stable Docker Compose version at https://github.com/docker/compose/releases
+
+    ```
+    $ export DOCKER_COMPOSE_VERSION=1.25.5 
+
+    $ sudo curl -L "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+    $ sudo curl -L https://raw.githubusercontent.com/docker/compose/$DOCKER_COMPOSE_VERSION/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
+
+    $ sudo chmod +x /usr/local/bin/docker-compose
+
+    $ sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+    $ sudo docker-compose --version # confirm Docker Compose is successfully installed
+    ```
+
+### Optional: SMTP relay
 
 Certain services in this setup require an SMTP relay for sending email notifications. If your DNS provider includes a free email address, you may want to use the provider's SMTP server; otherwise, there are a few free emailing services with a limited number of message sent per day/month (at least 100 emails a day).
 
@@ -335,32 +328,44 @@ The DNS providers a DNS API that is used by Certbot for proofing the domain name
    Create an ini file for the Cloudflare DNS API client,
 
    ```
-   $ sudo mkdir -p /etc/letsencrypt/renewal/dns
-   $ sudo nano /etc/letsencrypt/renewal/dns/cloudflare.ini
+   $ sudo mkdir -p /etc/letsencrypt
+   $ sudo nano /etc/letsencrypt/letsencrypt.ini
    ```
 
    Copy-paste the following fragment.
 
    ```
-   # Cloudflare API credentials used by Certbot
-   dns_cloudflare_email = @CLOUDFLARE_EMAIL
-   dns_cloudflare_api_key = @CLOUDFLARE_API_KEY
+   # Credentials and email for lets encrypt in Traefik
+   DNS_CLOUDFLARE_EMAIL=@CLOUDFLARE_EMAIL
+   DNS_CLOUDFLARE_API_KEY=@CLOUDFLARE_API_KEY
+   LETSENCRYPT_EMAIL=@LETSENCRYPT_EMAIL
    ```
 
    Get the DNS API key: In the Cloudflare panel browse to `Overview -> Get your API token -> API Tokens -> Global API Key [View]`.
 
-   Replace the placeholders and run the following commands to set values.
+   Replace the following place holders in the next section with your values:
 
    - [cloudflare_email] - the Cloudflare login
    - [cloudflare_api_key] - the Global API key
+   - [letsencrypt_email] - email for letsencrypt
+
+   Export the following envirnoment variables:
+
+   - export CLOUDFLARE_EMAIL=[cloudflare_email]
+   - export CLOUDFLARE_API_KEY=[cloudflare_api_key]
+   - export LETSENCRYPT_EMAIL=[letsencrypt_email]
+
      <br/><br/>
 
+  Exeucute the following to update the ini file with your credentials for cloudflare and your lets encrypt email:
+
    ```
-   $ sudo sed -i 's|@CLOUDFLARE_EMAIL$|'[cloudflare_email]'|g' /etc/letsencrypt/renewal/dns/cloudflare.ini
-   $ sudo sed -i 's|@CLOUDFLARE_API_KEY$|'[cloudflare_api_key]'|g' /etc/letsencrypt/renewal/dns/cloudflare.ini
+   $ sudo sed -i 's|@DNS_CLOUDFLARE_EMAIL$|'$CLOUDFLARE_EMAIL'|g' /etc/letsencrypt/letsencrypt.ini
+   $ sudo sed -i 's|@DNS_CLOUDFLARE_API_KEY$|'$CLOUDFLARE_API_KEY'|g' /etc/letsencrypt/letsencrypt.ini
+   $ sudo sed -i 's|@LETSENCRYPT_EMAIL$|'$LETSENCRYPT_EMAIL'|g' /etc/letsencrypt/letsencrypt.ini
    ```
 
-   Run `$ sudo cat /etc/letsencrypt/renewal/dns/cloudflare.ini` to verify the result.
+   Run `$ sudo cat /etc/letsencrypt/letsencrypt.ini` to verify the result.
 
 ### Subdomain Records
 
@@ -370,6 +375,7 @@ Login to [Cloudflare](https://dash.cloudflare.com/login), click on your domain n
 
 Create _CNAME_ aliases (bolded) for the following subdomains:
 
+- **proxy**.yourdomain.com (Proxy dashboard)
 - **git**.yourdomain.com (Git server)
 - **registry**.yourdomain.com (Docker registry)
 - **registryui**.yourdomain.com (Docker registry ui)
@@ -382,127 +388,6 @@ Create _CNAME_ aliases (bolded) for the following subdomains:
 
 Depending on the TTL value, it may take certain time for the change to take effect, keep `ping`-ing the subdomains periodically to verify the result.
 
-### SSL Setup
-
-Certbot is used as the default Let’s Encrypt client in this setup.
-
-> INFO: Check the [DNS providers](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438) list supporting _Let's Encrypt_ for other options.
-
-> IMPORTANT: If a different Let’s Encrypt client is selected, the certificate has to be acquired independently and this section can be ignored.
-
-1. Browse to [Apache on CentOS/RHEL 7](https://certbot.eff.org/lets-encrypt/centosrhel7-apache)
-
-2. Select the **wildcard** option from the headers on top and follow instruction up to the _step 6_ inclusively:
-
-   - On _Step 2_ - running the following command is sufficient `$ sudo yum install epel-release`.
-
-   - On _Step 3_ - [EC2 region](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html). You may want to add more than one region in case one of the servers is down.
-
-   - On _Step 6_ - If Cloudflare is not selected as a DNS provider, the command has to be adjusted accordingly to the options given in the [DNS Plugin list](https://certbot.eff.org/docs/using.html#dns-plugins).
-
-3. Run `certbot` with the following parameters to acquire a certificate. The default pending time for `NAME` record update is 10 seconds. It may be increased using the `--dns-cloudflare-propagation-seconds` if the command fails due to a timeout.
-
-   > INFO: Do not forget to adjust the command if the DNS provider is not Cloudflare.
-
-   ```
-   $ sudo certbot certonly -i apache \
-       --dns-cloudflare \
-       --dns-cloudflare-credentials /etc/letsencrypt/renewal/dns/cloudflare.ini \
-       --dns-cloudflare-propagation-seconds 30 \
-       -d $YOUR_DOMAIN \
-       -d *.$YOUR_DOMAIN
-   ```
-
-   Certbot will display the path to the acquired certificate and key files as shown below if the command succeeded.
-
-   ```
-   - Congratulations! Your certificate and chain have been saved at:
-     /etc/letsencrypt/live/yourdomain.com/fullchain.pem
-     Your key file has been saved at:
-     /etc/letsencrypt/live/yourdomain.com/privkey.pem
-   ```
-
-4. Let’s Encrypt certificates are issued for 90 days. It is recommended to configure auto-renewal to keep the certificate up-to-date.
-
-   Test the renewal process.
-
-   ```
-   $ sudo certbot renew --dry-run
-   ```
-
-   If dry run completed successfully, configure a cron job.
-
-   ```
-   $ echo "0 0,12 * * * root python -c 'import random; import time; time.sleep(random.random() * 3600)' && certbot renew" | sudo tee -a /etc/crontab > /dev/null
-   ```
-
-5. Enable https traffic on port _443_
-
-   Configure Apache to listen port 443, open `httpd.conf` for editing,
-
-   ```
-   $ sudo nano /etc/httpd/conf/httpd.conf
-   ```
-
-   then copy-paste the following lines of configuration to the end of the file and save changes.
-
-   ```
-   # Enable https traffic on port 443
-   <IfModule mod_ssl.c>
-   Listen 443
-   </IfModule>
-   ```
-
-   Disable the default ssl configuration
-
-   ```
-   $ sudo mv /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf_
-   ```
-
-   and restart Apache.
-
-   ```
-   $ sudo systemctl restart httpd
-   ```
-
-   Proceed if no error is reported; otherwise, check `error_log` and `access_log` for troubleshooting.
-
-6. Create a unified configuration file for enabling ssl on virtual hosts
-
-   Check if `options-ssl-apache.conf` was successfully created. This file is required for enabling SSL on virtual hosts and referenced by virtual host configuration files.
-
-   ```
-   $ sudo ls /etc/letsencrypt
-   ```
-
-   The output should contain the file name.
-
-   Append the file,
-
-   ```
-   $ sudo nano /etc/letsencrypt/options-ssl-apache.conf
-   ```
-
-   and copy-paste the following fragment to the end of the file and save changes.
-
-   ```
-   # SSL certificate files references
-   SSLCertificateFile /etc/letsencrypt/live/@YOUR_DOMAIN/cert.pem
-   SSLCertificateKeyFile /etc/letsencrypt/live/@YOUR_DOMAIN/privkey.pem
-   SSLCertificateChainFile /etc/letsencrypt/live/@YOUR_DOMAIN/chain.pem
-   ```
-
-   Replace the placeholder with the actual domain name in `letsencrypt.conf`
-
-   ```
-   $ sudo sed -i 's|@YOUR_DOMAIN|'"$YOUR_DOMAIN"'|g' /etc/letsencrypt/options-ssl-apache.conf
-   ```
-
-   and verify the result.
-
-   ```
-   $ sudo cat /etc/letsencrypt/options-ssl-apache.conf
-   ```
 
 ## Services
 
@@ -518,71 +403,26 @@ Change the the `*.sh` scripts file mode to `execute`:
 $ sudo find $REPO_ROOT -type f -name "*.sh" -exec chmod +x {} \;
 ```
 
-### Virtual Hosts
 
-Create virtual host configuration files matching the [subdomains](#subdomain-records) for redirecting the http traffic to underlying services:
+### SSL Proxy Setup
 
-1. <a id="create-vhost-configs"></a> `setup_virtual_hosts.sh` generates virtual host configuration files and copies them to `/etc/httpd/conf.d`.
+For routing all requests to our services using https, we will be using traefik.
 
-   The script requires a domain name as a parameter, check if `$YOUR_DOMAIN` is set before running it.
+Check if `$SHOEBOX_ROOT` and `$YOUR_DOMAIN` are set before running the script.
 
-   ```
-   $ echo $YOUR_DOMAIN
-   ```
+Run the proxy container setup script and start the proxy docker container:
 
-   Run the following command to create virtual host configuration files for the [subdomains](#create-subdomain-records).
+```
+$ cd $REPO_ROOT/src/proxy/
+$ sudo ./proxy_containers_setup.sh $SHOEBOX_ROOT $YOUR_DOMAIN 
+$ docker-compose up -d
+```
 
-   > INFO: `ports_prefix.ini` contains virtual host to underlying service port mappings, review and modify if necessary.
+Verify that the container is up by using the `docker ps` command.
 
-   ```
-   $ sudo $REPO_ROOT/src/setup_virtual_hosts.sh $YOUR_DOMAIN
-   ```
+The user name and the password for the basic auth for the proxy dashboard that can be access through `proxy.yourdomain.com`
+exists in `$SHOEBOX_ROOT/proxy-traefik/secrets.ini`
 
-   Check if the virtual host configuration files have been created.
-
-   ```
-   $ sudo ls /etc/httpd/conf.d
-   ```
-
-   The output is expected to contain the following file names:
-
-   ```
-   - git.ssl.conf
-   - registry.ssl.conf
-   - registryui.ssl.conf
-   - packages.ssl.conf
-   - vault.ssl.conf
-   - ci.ssl.conf
-   - project.ssl.conf
-   ```
-
-2. <a id="amend-docker-registry-vhost"></a> Modify `registry.ssl.conf` to prevent `docker push` from failing.
-
-   Open the configuration file for editing for editing,
-
-   ```
-   $ sudo nano /etc/httpd/conf.d/registry.ssl.conf
-   ```
-
-   then copy-paste the text given below anywhere in between the _<VirtualHost *:443>...</VirtualHost *:443>_ section and save changes.
-
-   ```
-   Header add X-Forwarded-Proto "https"
-   RequestHeader add X-Forwarded-Proto "https"
-   ```
-
-3. <a id="vhost-config-verify-result"></a> Restart Apache,
-
-   ```
-   $ sudo systemctl restart httpd
-   ```
-
-   Verify if the http server is serving https traffic by browsing to any of the created subdomains and following the check list:
-
-   - [x] Redirect from `http` to `https` works
-   - [x] Response is `503 Service Unavailable`
-
-   Proceed if the checks are passed; otherwise, check the service status and logs as described [here](#troubleshoot-apache).
 
 ### Containers Infrastructure
 

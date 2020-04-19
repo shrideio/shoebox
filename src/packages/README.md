@@ -81,8 +81,14 @@ Proceed if all of the checks passes, otherwise, review the [landing page](/src/R
 
     - Open the administration console ![Alt text](/resources/img/proget_cog.png?raw=true "ProGet administration console"), then navigate to `Integrations & Extensibility -> API Keys`. 
 
-    - Create dedicated API keys for the `FeedConsumer` and `PackagePublisher` users. Click [Create API Key] to open the _Create API Key_ dialog. Fill in the _Impersonate user_ and _Description_ fields with matching user names (the API user is not shown in the API Keys table, that is why setting _Description_ is important). Click [Save API Key] to save changes and proceed.
+    - Create API keys for the `FeedConsumer` and `PackagePublisher` users. Click [Create API Key] to open the _Create API Key_ dialog. Fill in the _Impersonate user_ and _Description_ fields with matching user names (the API user is not shown in the API Keys table, that is why setting _Description_ is important). Click [Save API Key] to save changes and proceed.
 
+    - Create the `ci.packages` secret in Vault as described [here](/src/vault/README.md#create-a-secret) for storing credentials for pulling packages from by the CI service. The secret must contain the following key/value pairs:
+
+        > WARNING: Do not forget to replace the _[FeedConsumer-API-key]_ with the FeedConsumer API key value.
+
+      - `packages_username`/_FeedConsumer_
+      - `packages_password`/[FeedConsumer-API-key]
 
 4. Create NuGet feed
 
@@ -94,5 +100,27 @@ Proceed if all of the checks passes, otherwise, review the [landing page](/src/R
 
     - ProGet supports feed connectors allowing to unify package feeds from different sources.
     For adding a NuGet connector for `nuget.org` click on the feed name `Feed -> v2`, and follow the breadcrumbs `[Manage Feed] -> add connector -> [Create Connector]` to open the _Create Connector_ dialog. Select `NuGet` as _Feed type_ leaving the rest of the inputs intact, then click [Save] to save changes and close the dialog. In the emerged _Select Connector_ dialog select _www.nuget.org_ as _Connector_ (should be preselected) and then click [Save] to save changes.
+
+5. Push a sample NuGet package to the feed. The sample package is used for testing the integration between the ci and package services.
+
+    - Instal .NET Core SDK
+
+        ```
+        $ sudo rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
+        $ sudo yum install dotnet-sdk-3.1
+        ```
+
+        Run `$ sudo dotnet --version` to verify that .NET Core SDK is successfully installed.
+
+    - Push the sample package to the package management server
+
+        > WARNING: Do not forget to replace the _[PackagePublisher-API-KEY]_ with the PackagePublisher API key.
+
+        ```
+        $ export PACKAGE_PATH=$REPO_ROOT/src/packages/package.sample/bin/Release/netstandard2.0/package.sample.1.0.0.nupkg
+        $ export PUBLISHER_API_KEY=[PackagePublisher-API-KEY]
+        $ sudo dotnet nuget push $PACKAGE_PATH --api-key $PUBLISHER_API_KEY --source https://packages.$YOUR_DOMAIN/nuget/v2/
+        ```
+
 
 > IMPORTANT: Despite of Proget advertising the Docker registry feature, it does not work correctly when the service is hosted in a Linux container due to the following issue [Docker Push to Proget Container Registry fails](https://forums.inedo.com/topic/2788/docker-push-to-proget-container-registry-fails).

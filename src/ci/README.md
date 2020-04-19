@@ -174,8 +174,8 @@ Proceed if all of the checks passes, otherwise, review the [landing page](/src/R
         Check if Docker registry credentials are accessible.
 
         ```
-        $ drone plugins secret get secrets/data/ci.docker registry_username --repo ciagent/ci.build.sample
-        $ drone plugins secret get secrets/data/ci.docker registry_password --repo ciagent/ci.build.sample
+        $ drone plugins secret get secrets/data/ci.registry registry_username --repo ciagent/ci.build.sample
+        $ drone plugins secret get secrets/data/ci.registry registry_password --repo ciagent/ci.build.sample
         ```
 
         > WARNING: Be aware not to confuse the CLI to secret plugin communication or configurations errors with the real secret access issues reported as via _secret key not found_ or _secret not found_ error messages.

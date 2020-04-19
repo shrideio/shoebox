@@ -5,12 +5,18 @@ name: build
 steps:
 
 - name: build
-  image: mcr.microsoft.com/dotnet/core/sdk:2.2
+  image: mcr.microsoft.com/dotnet/core/sdk:3.1-alpine
   pull: always
   volumes:
   - name: nuget
     path: /root/.nuget
+  environment:
+    PACKAGES_USERNAME:
+      from_secret: packages_username
+    PACKAGES_PASSWORD:
+      from_secret: packages_password
   commands:
+  - dotnet nuget add source https://packages.@YOUR_DOMAIN/nuget/v2/ --name packages.@YOUR_DOMAIN --username $PACKAGES_USERNAME --password $PACKAGES_PASSWORD --store-password-in-clear-text
   - dotnet build src/**/*.fsproj --verbosity normal --configuration Release
   - dotnet build tests/**/*.fsproj --verbosity normal --configuration Release
   when:
@@ -20,7 +26,7 @@ steps:
     - tag
 
 - name: test
-  image: mcr.microsoft.com/dotnet/core/sdk:2.2
+  image: mcr.microsoft.com/dotnet/core/sdk:3.1-alpine
   pull: always
   volumes:
   - name: nuget
@@ -29,7 +35,7 @@ steps:
   - dotnet test tests/**/*.fsproj --no-build --no-restore --verbosity normal --configuration Release
 
 - name: publish
-  image: mcr.microsoft.com/dotnet/core/sdk:2.2
+  image: mcr.microsoft.com/dotnet/core/sdk:3.1-alpine
   pull: always
   volumes:
   - name: nuget
@@ -69,16 +75,30 @@ volumes:
 
 ---
 kind: secret
+name: packages_username
+get:
+  path: secrets/data/ci.packages
+  name: packages_username
+
+---
+kind: secret
+name: packages_password
+get:
+  path: secrets/data/ci.packages
+  name: packages_password
+
+---
+kind: secret
 name: registry_password
 get:
-  path: secrets/data/ci.docker
+  path: secrets/data/ci.registry
   name: registry_password
 
 ---
 kind: secret
 name: registry_username
 get:
-  path: secrets/data/ci.docker
+  path: secrets/data/ci.registry
   name: registry_username
 
 ---
