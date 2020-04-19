@@ -60,6 +60,10 @@ Considering the physical host, there are three options to choose from.
    - [OVHCloud](https://www.ovh.com/)
    - [Hostinger](https://www.hostinger.com/)
    - [Interserver](https://www.interserver.net/)
+   - [Hostnoc](https://hostnoc.com/)
+   - [VPSCheap](https://www.vpscheap.net/)
+   - [VirMach ](https://virmach.com/)
+   - [TheStack](https://portal.thestack.net/)
 
 2. Rent a dedicated server.
 
@@ -69,6 +73,8 @@ Considering the physical host, there are three options to choose from.
 
    - [Nocix](https://www.nocix.net/)
    - [Wholesale Internet](https://www.wholesaleinternet.net/)
+   - [Server Room](https://www.serverroom.net/)
+   - [Primcast](https://www.primcast.com/)
 
 3. Run a server on-premises.
 
