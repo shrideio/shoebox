@@ -18,7 +18,7 @@ services:
     command: agent -server -bind 0.0.0.0 -client 0.0.0.0 -bootstrap-expect 1
 
   vault:
-    image: vault:1.3.4
+    image: vault:1.4.0
     container_name: vault
     hostname: vault
     restart: always
