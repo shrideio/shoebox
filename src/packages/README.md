@@ -114,12 +114,12 @@ Proceed if all of the checks passes, otherwise, review the [landing page](/src/R
 
     - Push the sample package to the package management server
 
-        > WARNING: Do not forget to replace the _[PackagePublisher-API-KEY]_ with the PackagePublisher API key value.
+        > WARNING: Do not forget to replace the _[PackagePublisher-API-KEY]_ with the PackagePublisher API key.
 
         ```
         $ export PACKAGE_PATH=$REPO_ROOT/src/packages/package.sample/bin/Release/netstandard2.0/package.sample.1.0.0.nupkg
         $ export PUBLISHER_API_KEY=[PackagePublisher-API-KEY]
-        $ sudo dotnet nuget push $PACKAGE_PATH --api-key $PUBLISHER_API_KEY --source packages.$YOUR_DOMAIN/nuget/v2/
+        $ sudo dotnet nuget push $PACKAGE_PATH --api-key $PUBLISHER_API_KEY --source https://packages.$YOUR_DOMAIN/nuget/v2/
         ```
 
 
