@@ -20,7 +20,7 @@ services:
       - POSTGRES_PASSWORD=${TAIGA_POSTGRESQL_PASSWORD}
 
   project-cache:
-    image: redis:5.0.9-alpine
+    image: redis:5.0.8-alpine
     container_name: project-cache
     hostname: project-cache
     restart: unless-stopped
@@ -139,11 +139,11 @@ services:
 
 networks:
 
-    project-network:
-      driver: bridge
+  project-network:
+    driver: bridge
 
-    proxy-network:
-      external: true
+  proxy-network:
+    external: true
 
 
 volumes:
@@ -175,5 +175,5 @@ volumes:
   project-proxy-conf:
     driver_opts:
       type: none
-      device: ${TAIGA_PROXY_CONF}
+      device: ${TAIGA_PROXY_CONF} 
       o: bind
