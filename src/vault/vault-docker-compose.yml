@@ -16,7 +16,7 @@ services:
     networks:
       - vault-network
     command: agent -server -bind 0.0.0.0 -client 0.0.0.0 -bootstrap-expect 1
-  
+
   vault:
     image: vault:latest
     container_name: vault
