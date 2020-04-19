@@ -36,7 +36,11 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy-network"
-      - "traefik.http.routers.traefik_dashboard.service=traefik_dashboard"
+      ## DNS CHALLENGE
+      - "traefik.http.routers.traefik.tls.certresolver=proxyresolver"
+      - "traefik.http.routers.traefik.tls.domains[0].main=*.${YOUR_DOMAIN}"
+      - "traefik.http.routers.traefik.tls.domains[0].sans=${YOUR_DOMAIN}"
+      ## TRAEFIC DASHBOARD 
       - "traefik.http.routers.traefik_dashboard.rule=Host(`proxy.${YOUR_DOMAIN}`)"
       - "traefik.http.routers.traefik_dashboard.entrypoints=websecure"
       - "traefik.http.routers.traefik_dashboard.tls.certresolver=proxyresolver"
@@ -53,14 +57,15 @@ networks:
 
 
 volumes:
+
     traefik-conf:
       driver_opts:
         type: none
         device: ${TRAEFIK_CONFIG}
         o: bind
-      
-      letsencrypt:
-        driver_opts:
+
+    letsencrypt:
+      driver_opts:
         type: none
         device: ${LETSENCRYPT_ROOT}
         o: bind

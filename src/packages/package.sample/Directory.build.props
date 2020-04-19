@@ -1,0 +1,15 @@
+<Project>
+  <PropertyGroup>
+    <Product>package.sample</Product>
+    <RepositoryUrl>https://github.com/shrideio/shoebox</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Company>Shoebox</Company>
+    <Authors>Shoebox</Authors>
+    <Description>Library for testing integration with a private Nuget repository</Description>
+    <Copyright>Copyright © Shoebox 2020</Copyright>
+    <Version>1.0.0</Version>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <PackageId>package.sample</PackageId>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+</Project>

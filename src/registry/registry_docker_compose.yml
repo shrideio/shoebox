@@ -14,8 +14,8 @@ services:
       - registry-data:/var/lib/registry
       - registry-config:/etc/docker/registry
     networks:
-      - proxy-network
       - registry-network
+      - proxy-network
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy-network"
@@ -37,8 +37,8 @@ services:
       - DELETE_IMAGES=true
       - REGISTRY_TITLE=Docker Registry
     networks:
-      - proxy-network
       - registry-network
+      - proxy-network
     depends_on:
       - registry
     labels:
