@@ -38,6 +38,7 @@ source $GOGS_SECRETS
 GIT_ENV=$GIT_SRC/.env
 cp $GIT_SRC/env.tmpl $GIT_ENV
 
+sed -i 's|@YOUR_DOMAIN$|'"$YOUR_DOMAIN"'|g' $GIT_ENV
 sed -i 's|@GOGS_DATA$|'"$GOGS_DATA"'|g' $GIT_ENV
 sed -i 's|@GOGS_POSTGRESQL_DATA$|'"$GOGS_POSTGRESQL_DATA"'|g' $GIT_ENV
 sed -i 's|@GOGS_SSH_PORT$|'"$GOGS_SSH_PORT"'|g' $GIT_ENV
