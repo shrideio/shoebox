@@ -28,7 +28,7 @@ Check [Taiga Documentation](https://taigaio.github.io/taiga-doc/dist/) and [Taig
 
 ### Setup
 
- 1. Start Taiga backend (`project-backend`), Taiga frontend (`project-frontend`), RabbitMQ server (`project-messaging`), Taiga events (`project-events`), Nginx reverse proxy (`project-proxy`), and PostgreSQL (`project-db`) containers.
+ 1. Start Taiga backend (`project-backend`), Taiga frontend (`project-frontend`), RabbitMQ server (`project-messaging`), Taiga events (`project-events`), Nginx reverse proxy (`project-proxy`), PostgreSQL (`project-db`) and Redis (`project-cache`) containers.
 
     ```
     $ sudo cd $REPO_ROOT/src/project
