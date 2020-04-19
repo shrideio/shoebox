@@ -34,8 +34,8 @@ services:
       ports:
         - ${PROGET_HTTP_PORT}:80
       networks:
-        - proxy-network
         - packages-network
+        - proxy-network
       depends_on:
         - packages-db
       labels:
