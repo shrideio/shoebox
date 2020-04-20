@@ -175,5 +175,5 @@ volumes:
   project-proxy-conf:
     driver_opts:
       type: none
-      device: ${TAIGA_PROXY_CONF} 
+      device: ${TAIGA_PROXY_CONF}
       o: bind
