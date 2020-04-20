@@ -24,7 +24,7 @@ services:
     container_name: project-cache
     hostname: project-cache
     restart: unless-stopped
-    command: redis-server --requirepass ${TAIGA_REDIS_PASSWORD}
+    command: ["redis-server", "--requirepass", "${TAIGA_REDIS_PASSWORD}"]
     networks:
       - project-network
 
@@ -175,5 +175,5 @@ volumes:
   project-proxy-conf:
     driver_opts:
       type: none
-      device: ${TAIGA_PROXY_CONF} 
+      device: ${TAIGA_PROXY_CONF}
       o: bind

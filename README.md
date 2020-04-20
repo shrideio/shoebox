@@ -121,6 +121,7 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
   - [Tools](#tools)
     - [Nano](#nano)
     - [Git client](#git-client)
+    - [Httpd tools](#httpd-tools)
   - [Infrastructure](#infrastructure)
     - [Disable SELinux](#disable-selinux)
     - [Apache and mod_ssl](#install-apache-with-mod_ssl)
@@ -165,6 +166,13 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
   ```
   $ sudo yum install git
   $ sudo git --version # to confirm `git` is successfully installed
+  ```
+
+- #### Httpd tools
+  install httpd tools in order to have the `htpasswd` tool to generate hashed passwords.
+
+  ```
+  $yum install httpd-tools
   ```
 
 ### Infrastructure
