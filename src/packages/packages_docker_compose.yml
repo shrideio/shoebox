@@ -21,7 +21,7 @@ services:
         - packages-network
 
     packages:
-      image: inedo/proget:latest
+      image: inedo/proget:5.2.29
       container_name: packages
       hostname: packages
       restart: always

@@ -16,7 +16,7 @@ Check [ProGet Documentation](https://docs.inedo.com/docs/proget/overview) and [P
     > WARNING: DO NOT modify assigned values in the `.env` file. If necessary, modify the `secrets.ini` file and run `packages_containers_setup.sh` to override the current values.
 
     ```
-    $ sudo cat $SHOEBOX_ROOT/proget/secrets.ini
+    $ sudo cat $SHOEBOX_ROOT/packages-proget/secrets.ini
     $ sudo cat $REPO_ROOT/src/packages/.env
     ```
 

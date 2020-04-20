@@ -20,13 +20,11 @@ services:
       - POSTGRES_PASSWORD=${TAIGA_POSTGRESQL_PASSWORD}
 
   project-cache:
-    image: redis:5.0.9-alpine
+    image: redis:5.0.8-alpine
     container_name: project-cache
     hostname: project-cache
     restart: unless-stopped
-    command: ["--requirepass", "${TAIGA_REDIS_PASSWORD}"]
-    networks:
-      - project-network
+    command: ["redis-server", "--requirepass", "${TAIGA_REDIS_PASSWORD}"]
     networks:
       - project-network
 
@@ -86,7 +84,9 @@ services:
       - RABBIT_USER=${TAIGA_RABBIT_USER}
       - RABBIT_PASSWORD=${TAIGA_RABBIT_PASSWORD}
       - RABBIT_VHOST=project
-      - REDIS_HOST=project-cach
+      - REDIS_DB=project
+      - REDIS_PORT=6379
+      - REDIS_HOST=project-cache
       - REDIS_PASSWORD=${TAIGA_REDIS_PASSWORD}
       - STARTUP_TIMEOUT=${TAIGA_STARTUP_TIMEOUT}
 
@@ -139,11 +139,11 @@ services:
 
 networks:
 
-    project-network:
-      driver: bridge
+  project-network:
+    driver: bridge
 
-    proxy-network:
-      external: true
+  proxy-network:
+    external: true
 
 
 volumes:

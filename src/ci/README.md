@@ -17,7 +17,7 @@ Check [Drone documentation](https://docs.drone.io/), [Drone Vault plugin](https:
     > WARNING: DO NOT modify assigned values in the `.env` file. If necessary, modify the `secrets.ini` file and run `ci_containers_setup.sh` to override the current values.
 
     ```
-    $ sudo cat $SHOEBOX_ROOT/drone/secrets.ini
+    $ sudo cat $SHOEBOX_ROOT/ci-drone/secrets.ini
     $ sudo cat $REPO_ROOT/src/ci/.env
     ```
 

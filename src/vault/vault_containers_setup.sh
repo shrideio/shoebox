@@ -13,7 +13,7 @@ echo "Setting up Vault..."
 echo "https://www.vaultproject.io/"
 echo
 
-VAULT_ROOT=$SHOEBOX_ROOT/vault
+VAULT_ROOT=$SHOEBOX_ROOT/vault-hashicorp
 VAULT_CONFIG=$VAULT_ROOT/config
 VAULT_LOGS=$VAULT_ROOT/logs
 VAULT_CONSUL_CONFIG=$VAULT_ROOT/consul/config

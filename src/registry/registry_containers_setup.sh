@@ -14,7 +14,7 @@ echo "https://hub.docker.com/_/registry"
 echo "https://joxit.dev/docker-registry-ui"
 echo
 
-REGISTRY_ROOT=$SHOEBOX_ROOT/registry
+REGISTRY_ROOT=$SHOEBOX_ROOT/registry-docker
 REGISTRY_SECRETS=$REGISTRY_ROOT/secrets.ini
 REGISTRY_DATA=$REGISTRY_ROOT/data
 REGISTRY_CONFIG=$REGISTRY_ROOT/config

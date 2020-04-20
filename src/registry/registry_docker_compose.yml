@@ -4,7 +4,7 @@ version: "3.5"
 services:
 
   registry:
-    image: registry
+    image: registry:2.7
     container_name: registry
     hostname: registry
     restart: always
@@ -26,7 +26,7 @@ services:
       - "traefik.http.services.registry.loadbalancer.server.port=5000"
 
   registry-ui:
-    image: joxit/docker-registry-ui:static
+    image: joxit/docker-registry-ui:1.4-static
     container_name: registry-ui
     restart: always
     ports:
