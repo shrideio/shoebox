@@ -14,7 +14,7 @@ services:
         - POSTGRES_DB=${PROGET_POSTGRESQL_DATABASE}
         - POSTGRES_USER=${PROGET_POSTGRESQL_USER}
         - POSTGRES_PASSWORD=${PROGET_POSTGRESQL_PASSWORD}
-      command: ["-c", "shared_buffers=256MB", "-c", "max_connections=200"]
+      command: postgres -c shared_buffers=256MB -c max_connections=200
       ports:
         - ${PROGET_POSTGRESQL_PORT}:5432
       networks: 
