@@ -64,6 +64,7 @@ Considering the physical host, there are three options to choose from.
    - [VPSCheap](https://www.vpscheap.net/)
    - [VirMach ](https://virmach.com/)
    - [TheStack](https://portal.thestack.net/)
+   - [Kamatera Express](https://www.kamatera.com/)
 
 2. Rent a dedicated server.
 
@@ -126,10 +127,6 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
     - [Disable SELinux](#disable-selinux)
     - [Apache and mod_ssl](#install-apache-with-mod_ssl)
     - [Docker and Docker Compose](#install-docker-and-docker-compose)
-    - [Environment variables](#environment-variables)
-      - [REPO_ROOT](#REPO_ROOT)
-      - [YOUR_DOMAIN](#YOUR_DOMAIN)
-      - [SHOEBOX_ROOT](#SHOEBOX_ROOT)
     - [SMTP relay](#smtp-relay)
 - [Network](#network)
   - [DNS Provider](#dns-Provider)
@@ -172,7 +169,7 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
   install httpd tools in order to have the `htpasswd` tool to generate hashed passwords.
 
   ```
-  $yum install httpd-tools
+  $ yum install httpd-tools
   ```
 
 ### Infrastructure
@@ -251,12 +248,13 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
 
     $ sudo docker run hello-world # confirm Docker CE is successfully installed
     ```
+
   - Install Docker Compose
 
     > INFO: Check the latest stable Docker Compose version at https://github.com/docker/compose/releases
 
     ```
-    $ export DOCKER_COMPOSE_VERSION=1.25.5 
+    $ export DOCKER_COMPOSE_VERSION=1.25.5
 
     $ sudo curl -L "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 
@@ -277,45 +275,11 @@ Certain services in this setup require an SMTP relay for sending email notificat
 - [Mailjet](https://www.mailjet.com/pricing/) (6,000/month, 200/day)
 - [SendGrid](https://sendgrid.com/marketing/sendgrid-services-cro/#pricing-app) (100/day)
 
-### Environment Variables
-
-> INFO: Review and modify if necessary.
-
-- #### REPO_ROOT
-
-  The destination path for cloning this repository.
-
-  ```
-  $ export REPO_ROOT=/tmp/shoebox
-  $ echo $REPO_ROOT
-  ```
-
-- #### YOUR_DOMAIN
-
-  The domain name for the server with hosted services.
-
-  > IMPORTANT: Do not forget to replace `yourdomain.com` with the actual domain name.
-
-  ```
-  $ export YOUR_DOMAIN=yourdomain.com
-  $ echo $YOUR_DOMAIN
-  ```
-
-- #### SHOEBOX_ROOT
-
-  The root directory where the data and configuration files of the services are stored.
-
-  ```
-  $ export SHOEBOX_ROOT=/var/shoebox
-  $ echo $SHOEBOX_ROOT
-  ```
-
 ## Network
 
 ### DNS Provider
 
-The DNS providers a DNS API that is used by Certbot for proofing the domain name ownership for the SSL certificate acquisition.
-[Cloudflare](https://www.cloudflare.com/) is used as the default DNS provider for this setup.
+[Cloudflare](https://www.cloudflare.com/) is used as the default DNS provider for this setup. It provides a DNS API that is used by Certbot for proofing the domain name ownership when acquiring an SSL/TLS certificate.
 
 > IMPORTANT: If Cloudflare is not an option, there is a few more [DNS providers compatible with Certbot](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438). In this case the actions described below must be adjusted accordingly.
 
@@ -329,51 +293,37 @@ The DNS providers a DNS API that is used by Certbot for proofing the domain name
 
    > WARNING: If the http proxy is not disabled, it will cause an obscure error response such as _ERR_TOO_MANY_REDIRECTS_.
 
-4. <a name="cloudflare-dns-api-client"></a> Cloudflare DNS API client is used by Certbot for proofing the domain name ownership when acquiring an HTTPS certificate from [Let’s Encrypt](https://letsencrypt.org/).
+4. <a name="cloudflare-dns-api-client"></a> Cloudflare API credentials are used by Certbot for proofing the domain name ownership when acquiring an HTTPS certificate from [Let’s Encrypt](https://letsencrypt.org/).
 
    > INFO: Adjust the actions accordingly if the DNS provider is not Cloudflare.
 
-   Create an ini file for the Cloudflare DNS API client,
+   Create an ini file for the Cloudflare DNS API client.
 
    ```
    $ sudo mkdir -p /etc/letsencrypt
    $ sudo nano /etc/letsencrypt/letsencrypt.ini
    ```
 
-   Copy-paste the following fragment.
-
-   ```
-   # Credentials and email for lets encrypt in Traefik
-   DNS_CLOUDFLARE_EMAIL=@CLOUDFLARE_EMAIL
-   DNS_CLOUDFLARE_API_KEY=@CLOUDFLARE_API_KEY
-   LETSENCRYPT_EMAIL=@LETSENCRYPT_EMAIL
-   ```
-
    Get the DNS API key: In the Cloudflare panel browse to `Overview -> Get your API token -> API Tokens -> Global API Key [View]`.
 
-   Replace the following place holders in the next section with your values:
+   Export the following environment variables with matching values:
+  
+    ```
+    $ export CLOUDFLARE_EMAIL=[cloudflare-email] # Cloudflare email (login)
+    $ export CLOUDFLARE_API_KEY=[cloudflare-api-key] # Cloudflare Global API key
+    $ export LETSENCRYPT_EMAIL=[letsencrypt-email] # Email for Let's Encrypt
+    ```
 
-   - [cloudflare_email] - the Cloudflare login
-   - [cloudflare_api_key] - the Global API key
-   - [letsencrypt_email] - email for letsencrypt
+    Execute the following commands to update the ini file with the Cloudflare credentials and Let's Encrypt email.
 
-   Export the following envirnoment variables:
+    ```
+    echo "CLOUDFLARE_EMAIL=$CLOUDFLARE_EMAIL" >> /etc/letsencrypt/letsencrypt.ini
+    echo "CLOUDFLARE_API_KEY=$CLOUDFLARE_API_KEY" >> /etc/letsencrypt/letsencrypt.ini
+    echo "LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL" >> /etc/letsencrypt/letsencrypt.ini
+    ```
 
-   - export CLOUDFLARE_EMAIL=[cloudflare_email]
-   - export CLOUDFLARE_API_KEY=[cloudflare_api_key]
-   - export LETSENCRYPT_EMAIL=[letsencrypt_email]
+    Run `$ sudo cat /etc/letsencrypt/letsencrypt.ini` to verify the result.
 
-     <br/><br/>
-
-  Exeucute the following to update the ini file with your credentials for cloudflare and your lets encrypt email:
-
-   ```
-   $ sudo sed -i 's|@DNS_CLOUDFLARE_EMAIL$|'$CLOUDFLARE_EMAIL'|g' /etc/letsencrypt/letsencrypt.ini
-   $ sudo sed -i 's|@DNS_CLOUDFLARE_API_KEY$|'$CLOUDFLARE_API_KEY'|g' /etc/letsencrypt/letsencrypt.ini
-   $ sudo sed -i 's|@LETSENCRYPT_EMAIL$|'$LETSENCRYPT_EMAIL'|g' /etc/letsencrypt/letsencrypt.ini
-   ```
-
-   Run `$ sudo cat /etc/letsencrypt/letsencrypt.ini` to verify the result.
 
 ### Subdomain Records
 
@@ -399,6 +349,42 @@ Depending on the TTL value, it may take certain time for the change to take effe
 
 ## Services
 
+### Set environment variables
+
+> INFO: Review and modify if necessary.
+
+- `REPO_ROOT`
+
+    The destination path for cloning this repository.
+
+    ```
+    $ export REPO_ROOT=/tmp/shoebox
+    $ echo $REPO_ROOT
+    ```
+
+- `YOUR_DOMAIN`
+
+    The domain name for the server with hosted services.
+
+    > IMPORTANT: Do not forget to replace `yourdomain.com` with the actual domain name.
+
+    ```
+    $ export YOUR_DOMAIN=yourdomain.com
+    $ echo $YOUR_DOMAIN
+    ```
+
+- `SHOEBOX_ROOT`
+
+    The root directory where the data and configuration files of the services are stored.
+
+    ```
+    $ export SHOEBOX_ROOT=/var/shoebox
+    $ echo $SHOEBOX_ROOT
+    ```
+
+
+### Prepare scripts
+
 Shallow clone this repository:
 
 ```
@@ -412,29 +398,32 @@ $ sudo find $REPO_ROOT -type f -name "*.sh" -exec chmod +x {} \;
 ```
 
 
-### SSL Proxy Setup
+### Setup reverse proxy
 
-For routing all requests to our services using https, we will be using traefik.
+[Traefik](https://docs.traefik.io/) is used as reverse proxy for routing http traffic in and out of the services. In addition, it automates acquiring an SSL/TLS certificate from Let's Encrypt.
 
-Check if `$SHOEBOX_ROOT` and `$YOUR_DOMAIN` are set before running the script.
+  Check if `$SHOEBOX_ROOT` and `$YOUR_DOMAIN` are set before running the script.
 
-Run the proxy container setup script and start the proxy docker container:
+  ```
+  $ echo $SHOEBOX_ROOT
+  $ echo $YOUR_DOMAIN
+  ```
 
-```
-$ cd $REPO_ROOT/src/proxy/
-$ sudo ./proxy_containers_setup.sh $SHOEBOX_ROOT $YOUR_DOMAIN 
-$ docker-compose up -d
-```
+  Run the following script to create the `proxy` container.
 
-Verify that the container is up by using the `docker ps` command.
+  ```
+  $ cd $REPO_ROOT/src/proxy/
+  $ sudo ./proxy_containers_setup.sh $SHOEBOX_ROOT $YOUR_DOMAIN 
+  $ docker-compose up -d
+  ```
+  Run `$ sudo docker ps`to verify if the container is up and running.
 
-The user name and the password for the basic auth for the proxy dashboard that can be access through `proxy.yourdomain.com`
-exists in `$SHOEBOX_ROOT/proxy-traefik/secrets.ini`
+The credentials for accessing the proxy dashboard at `proxy.yourdomain.com` can be found in `$SHOEBOX_ROOT/proxy-traefik/secrets.ini`.
 
 
-### Containers Infrastructure
+### Create Containers Infrastructure
 
-`setup_containers.sh` creates directories for container volume mounts, generates `.evn` files from `env.tmpl` files and copies configuration files (i.e. Vault and Consul) to service working directories if necessary. The script requires two input parameters, first for the services root directory and second for a domain name.
+The `setup_containers.sh` scripts creates directories for container volume mounts, generates `.evn` and copies configuration files (i.e. Vault and Consul) to service working directories if necessary. The script requires two input parameters, first for the services root directory and second for a domain name.
 
 Check if `$SHOEBOX_ROOT` and `$YOUR_DOMAIN` are set before running the script.
 
@@ -449,13 +438,13 @@ Run the following command to prepare the necessary infrastructure for docker con
 $ sudo $REPO_ROOT/src/setup_containers.sh $SHOEBOX_ROOT $YOUR_DOMAIN
 ```
 
-Verifying the created directories structure,
+Verify the directories are created.
 
 ```
 $ sudo ls -R $SHOEBOX_ROOT
 ```
 
-then check if the placeholders have been replaced on a sample file (i.e. git/.env).
+Verify if the placeholders are replaced by viewing the content of a sample `.en` file (i.e. git/.env).
 
 ```
 $ sudo cat $REPO_ROOT/src/git/.env
