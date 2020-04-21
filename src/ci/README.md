@@ -46,7 +46,7 @@ Proceed if all of the checks passes, otherwise, review the [landing page](/src/R
 2. Start Drone CI (`ci`), Drone build agent (`ci-agent`), Drone Vault plugin (`ci-secret-plugin`) and PostgreSQL (`ci-db`) containers.
 
       ```
-      $ sudo cd $REPO_ROOT/src/ci
+      $ cd $REPO_ROOT/src/ci
       $ sudo docker-compose up -d
       ```
 

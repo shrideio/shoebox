@@ -30,7 +30,7 @@ Proceed if all of the checks passes, otherwise, check the [landing page](/src/RE
 1. Start Gogs (git) and PostgreSQL (git-db) containers.
 
     ```
-    $ sudo cd $REPO_ROOT/src/git
+    $ cd $REPO_ROOT/src/git
     $ sudo docker-compose up -d
     ```
 

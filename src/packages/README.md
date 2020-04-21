@@ -30,7 +30,7 @@ Proceed if all of the checks passes, otherwise, review the [landing page](/src/R
 1. Start ProGet (`packages`) and PostgreSQL (`packages-db`) containers.
 
     ```
-    $ sudo cd $REPO_ROOT/src/packages
+    $ cd $REPO_ROOT/src/packages
     $ sudo docker-compose up -d
     ```
 

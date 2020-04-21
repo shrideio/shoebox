@@ -35,7 +35,7 @@ Proceed if all of the checks passes, otherwise, review the [landing page](/src/R
     > WARNING: DO NOT modify assigned values in the `.env` file. If necessary, modify the `secrets.ini` file and run `vault_containers_setup.sh` to override the current values.
 
     ```
-    $ sudo cd $REPO_ROOT/src/vault
+    $ cd $REPO_ROOT/src/vault
     $ sudo docker-compose up -d
     ```
 
