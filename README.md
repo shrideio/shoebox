@@ -4,15 +4,17 @@
 
 Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose) for setting up a simple collaborative software development environment. It can be hosted on a VPS or dedicated server as an inexpensive alternative for subscription based could services. Software components used in this setup are either open source or have free versions (some with limitations, please check).
 
-| Tool                                | Vendor                                                            | License                                                                                                                                                                                      |
-| :---------------------------------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+#### Tools
+
+| Name                                | Vendor                                                            | License                                                                          |
+| :---------------------------------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------------- |
 | Git Server                          | [Gogs](https://gogs.io/)                                          | [MIT](https://github.com/gogs/gogs/blob/master/LICENSE)                                                                                                                                      |
 | Secret Management                   | [Vault](https://www.vaultproject.io/)                             | [MPL-2.0](https://github.com/hashicorp/vault/blob/master/LICENSE)                                                                                                                            |
 | Package Management                  | [Ideo Proget](https://inedo.com/proget)                           | [ProGet License Agreement](https://inedo.com/proget/license-agreement) <br /> [Free Edition Limitations](https://docs.inedo.com/docs/proget/administration/license#free-edition-limitations) |
 | Docker Registry                     | [Docker Registry](https://docs.docker.com/registry/)              | [Apache-2.0](https://github.com/docker/distribution/blob/master/LICENSE)                                                                                                                     |
 | Docker Registry UI                  | [Joxit Docker Registry UI](https://joxit.dev/docker-registry-ui/) | [AGPL-3.0](https://github.com/Joxit/docker-registry-ui/blob/master/LICENSE)                                                                                                                  |
-| Continuous Integration and Delivery | [Drone CI](https://drone.io/)                                     | [Drone Non-Commercial License](https://github.com/drone/drone/blob/master/LICENSE) <br /> [Waiver: Individual and Small Business](https://github.com/drone/drone/blob/master/LICENSE#L62)    |
-| Project Management                  | [Taiga](https://taiga.io/)                                        | [Taiga Backend - AGPL-3.0](https://github.com/taigaio/taiga-back/blob/master/LICENSE) <br /> [Taiga Front - AGPL-3.0](https://github.com/taigaio/taiga-front/blob/master/LICENSE)            |
+| Continuous Integration and Delivery | [Drone CI](https://drone.io/)                                     | [Drone Non-Commercial License](https://github.com/drone/drone/blob/master/LICENSE) <br /> [Waiver: Individual and Small Business](https://github.com/drone/drone/blob/master/LICENSE#L62) |
+| Project Management                  | [Taiga](https://taiga.io/)                                        | [Taiga Backend - AGPL-3.0](https://github.com/taigaio/taiga-back/blob/master/LICENSE) <br /> [Taiga Front - AGPL-3.0](https://github.com/taigaio/taiga-front/blob/master/LICENSE) |
 
 goto: [TL;DR](#tldr)
 
@@ -137,15 +139,17 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
 - [Services](#services)
   - [Environment variables](#environment-variables)
   - [Setup scripts](#setup-scripts)
-  - [Reverse proxy](#ssl-proxy-setup)
-  - [Container volume directories](#containers-Infrastructure)
+  - [Reverse proxy](#reverse-proxy)
+  - [Containers infrastructure](#containers-infrastructure)
   - [Services setup](#services-setup)
 
 ## Prerequisites
 
 ### Tools
 
-- #### Nano(Simple console-based text editor)
+- #### Nano
+
+  > INFO: Simple console-based text editor
 
   ```
   $ sudo yum install nano
@@ -274,7 +278,9 @@ Certain services in this setup require an SMTP relay for sending email notificat
 - [Mailjet](https://www.mailjet.com/pricing/) (6,000/month, 200/day)
 - [SendGrid](https://sendgrid.com/marketing/sendgrid-services-cro/#pricing-app) (100/day)
 
+
 ## Network
+
 
 ### DNS Provider
 
@@ -423,13 +429,13 @@ $ sudo find $REPO_ROOT -type f -name "*.sh" -exec chmod +x {} \;
 The credentials for accessing the proxy dashboard at `proxy.yourdomain.com` can be found in `$SHOEBOX_ROOT/proxy-traefik/secrets.ini`.
 
 
-### Create Container Volume Directories
+### Containers infrastructure
 
-The `setup_containers.sh` scripts creates directories for container volume mounts, generates `.evn` and copies configuration files (i.e. Vault and Consul) to service working directories if necessary. The script requires two input parameters, first for the services root directory and second for a domain name.
+The `setup_containers.sh` scripts creates directories for container volume mounts, generates `.evn` files, and copies configuration files (i.e. Vault and Consul) to service working directories if necessary. It also generates secrets for certain service components (i.e. databases) and users if required, and stores them in the `secretes.ini` files in services working directories.
 
-The `ports_prefix.ini` at the repository root (`$REPO_ROOT`) defines port prefixes for the ports assigned to containers. Port definitions are hard-coded in the [service]-docker-compose.yml files, however the port prefixes can be modified in the mentioned file before running `setup_containers.sh`.
+The `ports_prefix.ini` file at the repository root (`$REPO_ROOT`) defines the prefixes for ports assigned to containers. The port definitions are hard-coded in the [service]-docker-compose.yml files, however the port prefixes can be modified in the mentioned file before running `setup_containers.sh`.
 
-Check if `$SHOEBOX_ROOT` and `$YOUR_DOMAIN` are set before running the script.
+ `setup_containers.sh` requires two input parameters, first for the services root directory and second for a domain name. Check if `$SHOEBOX_ROOT` and `$YOUR_DOMAIN` are set before running the script.
 
 ```
 $ echo $SHOEBOX_ROOT
@@ -448,7 +454,7 @@ Verify the directories are created.
 $ sudo ls $SHOEBOX_ROOT
 ```
 
-The output should contain the following:
+The output should contain the following list with service working directories:
 
 ```
 git-gogs prox-traefik packages-proget registry-docker vault-hashicorp ci-drone
@@ -459,7 +465,7 @@ Verify if the placeholders are replaced by viewing the content of a sample `.env
 ```
 $ sudo cat $REPO_ROOT/src/git/.env
 ```
-### Service Setup
+### Service setup
 
 > IMPORTANT: Order matters
 
