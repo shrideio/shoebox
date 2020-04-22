@@ -1,25 +1,24 @@
 #!/bin/bash
 set -euo pipefail
 
-SHOEBOX_ROOT=$1
-YOUR_DOMAIN=$2
-PORTS_PREFIX=$3
-
-# DOCKER REGISTRY
-
-REGISTRY_SRC=$(dirname "$0")
-
 echo "Setting up Docker registry..."
 echo "https://hub.docker.com/_/registry"
 echo "https://joxit.dev/docker-registry-ui"
 echo
 
+SHOEBOX_ROOT=$1
+YOUR_DOMAIN=$2
+
+source $SRC_ROOT/ports_prefix.ini
+REGISTRY_PORTS_PREFIX=${3:-$REGISTRY_PORTS_PREFIX}
+
 REGISTRY_ROOT=$SHOEBOX_ROOT/registry-docker
 REGISTRY_SECRETS=$REGISTRY_ROOT/secrets.ini
 REGISTRY_DATA=$REGISTRY_ROOT/data
 REGISTRY_CONFIG=$REGISTRY_ROOT/config
-REGISTRY_PORT=${PORTS_PREFIX}50
-REGISTRY_UI_PORT=${PORTS_PREFIX}80
+
+REGISTRY_PORT=${REGISTRY_PORTS_PREFIX}50
+REGISTRY_UI_PORT=${REGISTRY_PORTS_PREFIX}80
 
 mkdir -p $REGISTRY_DATA
 mkdir -p $REGISTRY_CONFIG
@@ -32,6 +31,8 @@ if test ! -f "$REGISTRY_SECRETS"; then
 fi
 
 source $REGISTRY_SECRETS
+
+REGISTRY_SRC=$(dirname "$0")
 
 htpasswd -bBc -C 10 $REGISTRY_SRC/htpasswd $REGISTRY_USERNAME $REGISTRY_PASSWORD
 cp $REGISTRY_SRC/config.tmpl $REGISTRY_SRC/config.yml

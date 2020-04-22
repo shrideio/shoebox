@@ -1,25 +1,25 @@
 #!/bin/bash
 set -euo pipefail
 
-# GOGS
-
-SHOEBOX_ROOT=$1
-YOUR_DOMAIN=$2
-PORTS_PREFIX=$3
-
-GIT_SRC=$(dirname "$0")
-
 echo "Setting up Gogs..."
 echo "https://gogs.io/"
 echo
+
+
+SHOEBOX_ROOT=$1
+YOUR_DOMAIN=$2
+
+source $SRC_ROOT/ports_prefix.ini
+GIT_PORTS_PREFIX=${3:-$GIT_PORTS_PREFIX}
 
 GOGS_ROOT=$SHOEBOX_ROOT/git-gogs
 GOGS_SECRETS=$GOGS_ROOT/secrets.ini
 GOGS_DATA=$GOGS_ROOT/data
 GOGS_POSTGRESQL_DATA=$GOGS_ROOT/postgresql/data
-GOGS_SSH_PORT=${PORTS_PREFIX}22
-GOGS_HTTP_PORT=${PORTS_PREFIX}80
-GOGS_POSTGRESQL_PORT=${PORTS_PREFIX}32
+
+GOGS_SSH_PORT=${GIT_PORTS_PREFIX}22
+GOGS_HTTP_PORT=${GIT_PORTS_PREFIX}80
+GOGS_POSTGRESQL_PORT=${GIT_PORTS_PREFIX}32
 
 mkdir -p $GOGS_DATA
 mkdir -p $GOGS_POSTGRESQL_DATA
@@ -34,6 +34,8 @@ if test ! -f "$GOGS_SECRETS"; then
 fi
 
 source $GOGS_SECRETS
+
+GIT_SRC=$(dirname "$0")
 
 GIT_ENV=$GIT_SRC/.env
 cp $GIT_SRC/env.tmpl $GIT_ENV

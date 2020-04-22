@@ -1,31 +1,31 @@
 #!/bin/bash
 set -euo pipefail
 
-SHOEBOX_ROOT=$1
-YOUR_DOMAIN=$2
-PORTS_PREFIX=$3
-
-# VAULT
-
-VAULT_SRC=$(dirname "$0")
-
 echo "Setting up Vault..."
 echo "https://www.vaultproject.io/"
 echo
+
+SHOEBOX_ROOT=$1
+YOUR_DOMAIN=$2
+
+source $SRC_ROOT/ports_prefix.ini
+REGISTRY_PORTS_PREFIX=${3:-$REGISTRY_PORTS_PREFIX}
 
 VAULT_ROOT=$SHOEBOX_ROOT/vault-hashicorp
 VAULT_CONFIG=$VAULT_ROOT/config
 VAULT_LOGS=$VAULT_ROOT/logs
 VAULT_CONSUL_CONFIG=$VAULT_ROOT/consul/config
 VAULT_CONSUL_DATA=$VAULT_ROOT/consul/data
-VAULT_PORT=${PORTS_PREFIX}80
-CONSUL_PORT=${PORTS_PREFIX}85
+
+VAULT_PORT=${REGISTRY_PORTS_PREFIX}80
+CONSUL_PORT=${REGISTRY_PORTS_PREFIX}85
 
 mkdir -p $VAULT_CONFIG
 mkdir -p $VAULT_LOGS
 mkdir -p $VAULT_CONSUL_CONFIG
 mkdir -p $VAULT_CONSUL_DATA
 
+VAULT_SRC=$(dirname "$0")
 cp $VAULT_SRC/config/vault/config.hcl $VAULT_CONFIG/config.hcl
 cp $VAULT_SRC/config/consul/config.json $VAULT_CONSUL_CONFIG/config.json
 

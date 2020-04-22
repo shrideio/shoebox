@@ -1,16 +1,14 @@
 #!/bin/bash
 set -euo pipefail
 
-# PROXY-TRAEFIK
+echo "Setting up Traefik..."
+echo "https://containo.us/traefik/"
+echo
 
 SHOEBOX_ROOT=$1
 YOUR_DOMAIN=$2
 
 PROXY_SRC=$(pwd "$0")
-
-echo "Setting up Traefik..."
-echo "https://containo.us/traefik/"
-echo
 
 LETSENCRYPT_ROOT=/etc/letsencrypt
 LETSENCRYPT_INI=$LETSENCRYPT_ROOT/letsencrypt.ini

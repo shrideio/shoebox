@@ -34,7 +34,7 @@ This setup requires a Linux machine with root access and system requirements mat
 
   - OS: Linux CentOS/RHEL 7.0
   - CPU: 2 vCPU
-  - RAM: 4 GB
+  - RAM: 2 GB
   - Storage: 20 GB
   - Network: 1 static IPv4 address
 
@@ -42,8 +42,8 @@ This setup requires a Linux machine with root access and system requirements mat
 
   - OS: Linux CentOS/RHEL 7.0
   - CPU: 4 vCPU
-  - RAM: 6 GB
-  - Storage: 30 GB
+  - RAM: 4 GB
+  - Storage: 20 GB
   - Network: 1 IPv4 address
 
 > INFO: This setup was tested and staged on CentOS 7.0, that is why this OS mention as a requirement. However, with minor adjustments (if any) it should work on any other popular Linux distributive.
@@ -125,22 +125,21 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
     - [Httpd tools](#httpd-tools)
   - [Infrastructure](#infrastructure)
     - [Disable SELinux](#disable-selinux)
-    - [Apache and mod_ssl](#install-apache-with-mod_ssl)
     - [Docker and Docker Compose](#install-docker-and-docker-compose)
     - [SMTP relay](#smtp-relay)
 - [Network](#network)
-  - [DNS Provider](#dns-Provider)
+  - [DNS Provider](#dns-provider)
     - [Account setup](#cloudflare-account-setup)
     - [Name servers](#cloudflare-name-servers)
-    - [Disable HTTP proxy](#turn-off-http-proxy)
-    - [DNS API Client](#cloudflare-dns-api-client)
+    - [Disable HTTP proxy](#disable-http-proxy)
+    - [DNS API client](#cloudflare-dns-api-client)
   - [Subdomain Records](#subdomain-records)
-  - [SSL Setup](#ssl-setup)
 - [Services](#services)
-  - [SSL Proxy Setup](#ssl-proxy-setup)
-  - [Containers Infrastructure](#containers-Infrastructure)
-  - [Service Setup](#services-setup)
-  - [Backup Configuration](#backup-configuration)
+  - [Environment variables](#environment-variables)
+  - [Setup scripts](#setup-scripts)
+  - [Reverse proxy](#ssl-proxy-setup)
+  - [Container volume directories](#containers-Infrastructure)
+  - [Services setup](#services-setup)
 
 ## Prerequisites
 
@@ -289,7 +288,7 @@ Certain services in this setup require an SMTP relay for sending email notificat
 
 2. <a name="cloudflare-name-servers"></a> Change the name servers in the control panel of your domain name provider to the Cloudflare's name servers. To get the name servers, navigate to `DNS -> Cloudflare nameservers`. Depending on the TTL set in the DNS control panel it may take some time for the change to take effect, keep `ping`-ing the domain name periodically.
 
-3. <a name="turn-off-http-proxy"></a> Turn off the HTTP proxy for main and subdomain names. click the cloud icon ![Alt text](/resources/img/http_proxy_on.png?raw=true "HTTP proxy - ON") next to each domain/subdomain name to gray it out ![Alt text](/resources/img/http_proxy_off.png?raw=true "HTTP proxy - OFF").
+3. <a name="disable-http-proxy"></a> Disable the HTTP proxy for main and subdomain names. click the cloud icon ![Alt text](/resources/img/http_proxy_on.png?raw=true "HTTP proxy - ON") next to each domain/subdomain name to gray it out ![Alt text](/resources/img/http_proxy_off.png?raw=true "HTTP proxy - OFF").
 
    > WARNING: If the http proxy is not disabled, it will cause an obscure error response such as _ERR_TOO_MANY_REDIRECTS_.
 
@@ -342,14 +341,17 @@ Create _CNAME_ aliases (bolded) for the following subdomains:
 - **ci**.yourdomain.com (continues integration/build server)
 - **project**.yourdomain.com (project management tool)
 
-> WARNING: Do not forget to disable the http proxy for all of the subdomains as it is described [here](#turn-off-http-proxy)
+> WARNING: Do not forget to disable the http proxy for all of the subdomains as described [here](#disable-http-proxy)
 
 Depending on the TTL value, it may take certain time for the change to take effect, keep `ping`-ing the subdomains periodically to verify the result.
 
 
 ## Services
 
-### Set environment variables
+
+### Environment variables
+
+Set the following environment variables:
 
 > INFO: Review and modify if necessary.
 
@@ -383,7 +385,7 @@ Depending on the TTL value, it may take certain time for the change to take effe
     ```
 
 
-### Prepare scripts
+### Setup scripts
 
 Shallow clone this repository:
 
@@ -398,9 +400,9 @@ $ sudo find $REPO_ROOT -type f -name "*.sh" -exec chmod +x {} \;
 ```
 
 
-### Setup reverse proxy
+### Reverse proxy
 
-[Traefik](https://docs.traefik.io/) is used as reverse proxy for routing http traffic in and out of the services. In addition, it automates acquiring an SSL/TLS certificate from Let's Encrypt.
+[Traefik](https://docs.traefik.io/) is used as a reverse proxy for routing http traffic in and out of the services. In addition, it automates acquiring an SSL/TLS certificate from Let's Encrypt.
 
   Check if `$SHOEBOX_ROOT` and `$YOUR_DOMAIN` are set before running the script.
 
@@ -421,9 +423,11 @@ $ sudo find $REPO_ROOT -type f -name "*.sh" -exec chmod +x {} \;
 The credentials for accessing the proxy dashboard at `proxy.yourdomain.com` can be found in `$SHOEBOX_ROOT/proxy-traefik/secrets.ini`.
 
 
-### Create Containers Infrastructure
+### Create Container Volume Directories
 
 The `setup_containers.sh` scripts creates directories for container volume mounts, generates `.evn` and copies configuration files (i.e. Vault and Consul) to service working directories if necessary. The script requires two input parameters, first for the services root directory and second for a domain name.
+
+The `ports_prefix.ini` at the repository root (`$REPO_ROOT`) defines port prefixes for the ports assigned to containers. Port definitions are hard-coded in the [service]-docker-compose.yml files, however the port prefixes can be modified in the mentioned file before running `setup_containers.sh`.
 
 Check if `$SHOEBOX_ROOT` and `$YOUR_DOMAIN` are set before running the script.
 
@@ -441,32 +445,20 @@ $ sudo $REPO_ROOT/src/setup_containers.sh $SHOEBOX_ROOT $YOUR_DOMAIN
 Verify the directories are created.
 
 ```
-$ sudo ls -R $SHOEBOX_ROOT
+$ sudo ls $SHOEBOX_ROOT
 ```
 
-Verify if the placeholders are replaced by viewing the content of a sample `.en` file (i.e. git/.env).
+The output should contain the following:
+
+```
+git-gogs prox-traefik packages-proget registry-docker vault-hashicorp ci-drone
+```
+
+Verify if the placeholders are replaced by viewing the content of a sample `.env` file (i.e. git/.env).
 
 ```
 $ sudo cat $REPO_ROOT/src/git/.env
 ```
-
-> IMPORTANT: The following information is provided for troubleshooting purposes only and is not supposed to be used in a regular circumstance.
-
-The setup is split into a batch of scripts per service where each script can be run separately if necessary. The input for all of the scripts matches the following pattern.
-
-```
-$ sudo $REPO_ROOT/src/[service]_containers_setup.sh $SHOEBOX_ROOT $YOUR_DOMAIN [port-prefix]
-```
-
-> INFO: [port-prefix] for a particular service can be found in `ports_prefix.ini`.
-
-- [git_containers_setup.sh](/src/git/git_containers_setup.sh) - Git server
-- [vault_containers_setup.sh](/src/vault/vault_containers_setup.sh) - key/secret vault
-- [packages_containers_setup.sh](/src/packages/packages_containers_setup.sh) - package registry
-- [registry_containers_setup.sh](/src/registry/registry_containers_setup.sh) - Docker registry
-- [ci_containers_setup.sh](/src/ci/ci_containers_setup.sh) - continuous integration and continuous delivery
-- [project_containers_setup.sh](/src/project/project_containers_setup.sh) - project management tool
-
 ### Service Setup
 
 > IMPORTANT: Order matters
@@ -477,7 +469,3 @@ $ sudo $REPO_ROOT/src/[service]_containers_setup.sh $SHOEBOX_ROOT $YOUR_DOMAIN [
 4. [Docker Registry](/src/registry/README.md)
 5. [Continuous Integration and Continuous Delivery (Drone)](/src/ci/README.md)
 6. [Project Management (Taiga)](/src/project/README.md)
-
-### Backup Configuration
-
-:see_no_evil: :hear_no_evil: :speak_no_evil:

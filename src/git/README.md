@@ -12,8 +12,6 @@ Check [Gogs Documentation](https://gogs.io/docs) and  [Gogs on Docker Hub](https
 
 - [x] Gogs `secrets.ini` and `.env` files are generated
 
-    > WARNING: DO NOT modify assigned values in the `.env` file. If necessary modify, the `secrets.ini` file and run `git_containers_setup.sh` to override the current values.
-
     ```
     $ sudo cat $SHOEBOX_ROOT/git-gogs/secrets.ini
     $ sudo cat $REPO_ROOT/src/git/.env

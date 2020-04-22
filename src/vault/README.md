@@ -16,8 +16,6 @@ Check [Vault Documentation](https://www.vaultproject.io/docs/), and [Vault](http
 
 - [x] Vault `secrets.ini` and `.env` files are generated
 
-    > WARNING: DO NOT modify assigned values in the `.env` file. If necessary, modify the `secrets.ini` file and run `vault_containers_setup.sh` to override the current values.
-
     ```
     $ sudo cat $SHOEBOX_ROOT/vault-hashicorp/secrets.ini
     $ sudo cat $REPO_ROOT/src/vault/.env

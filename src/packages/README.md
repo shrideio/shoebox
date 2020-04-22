@@ -4,23 +4,21 @@ Check [ProGet Documentation](https://docs.inedo.com/docs/proget/overview) and [P
 
 ### Preliminary checklist
 
-- [x] `$REPO_ROOT` and `$SHOEBOX_ROOT` environment variables are set
+- [x] `$REPO_ROOT` and `$SHOEBOX_ROOT` environment variables are set.
 
     ```
     $ echo $REPO_ROOT
     $ echo $SHOEBOX_ROOT
     ```
 
-- [x] Proget `secrets.ini` and `.env` files are generated
-
-    > WARNING: DO NOT modify assigned values in the `.env` file. If necessary, modify the `secrets.ini` file and run `packages_containers_setup.sh` to override the current values.
+- [x] Proget `secrets.ini` and `.env` files are generated.
 
     ```
     $ sudo cat $SHOEBOX_ROOT/packages-proget/secrets.ini
     $ sudo cat $REPO_ROOT/src/packages/.env
     ```
 
-- [x] packages._yourdomain.com_ subdomain is configured and serves https traffic
+- [x] packages._yourdomain.com_ subdomain is configured and serves https traffic.
 
 Proceed if all of the checks passes, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
 
