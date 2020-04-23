@@ -2,7 +2,7 @@
 
 ### What is it?
 
-Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose) for setting up a simple collaborative software development environment. It can be hosted on a VPS or dedicated server as an inexpensive alternative for subscription based could services. Software components used in this setup are either open source or have free versions (some with limitations, please check).
+Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose) for setting up a simple collaborative software development environment. It can be hosted on a VPS or dedicated server as an inexpensive alternative for subscription-based could services. Software components used in this setup are either open source or have free versions (some with limitations, please check).
 
 #### Tools
 
@@ -81,21 +81,19 @@ Considering the physical host, there are three options to choose from.
 
 3. Run a server on-premises.
 
-   No comment on that, you are in full charge.
-
-Either way, be mindful of the law of diminishing returns. For example, the premium paid for the extra storage on a VPS may equalize the VPS rental cost with the dedicated server monthly fee. The same is true for the dedicated server option, as the cost may eventually grow to the point where it is more reasonable to purchase services from a cloud service provider. Long story short, do back-of-the-napkin-math.
+Either way, be mindful of the law of diminishing returns. For example, the premium paid for the extra storage on a VPS may equalize the VPS rental cost with the dedicated server monthly fee. Long story short, do back-of-the-napkin-math.
 
 ### Q/A
 
 - How to help or contribute?
 
-  We are no Linux gurus, Docker experts, or technical writing virtuosos, so you are more than welcome to contribute! File an issue ticket or even better open a pull requests, we will do our best to respond as soon as possible. Constructive criticism is highly appreciated.
+  We are no Linux gurus, Docker experts, or technical writing virtuosos, so you are more than welcome to contribute! File an issue ticket or even better open a pull request, we will do our best to respond as soon as possible. Constructive criticism is highly appreciated.
 
 - Any gotchas?
 
   Firstly, it is a single machine configuration incapable of running on a cluster. That potentially may become a problem when simultaneously running several build pipelines would degrade the performance of the other services. This deficiency should be resolved once the services are made deployable to a Kubernetes cluster.
 
-  Secondly, the technology of your choice must support Docker containerization for using the Drone build pipeline. If if does not, consider consider using alternatives such as [Jenkins CI](https://jenkins.io/) or [Concourse](https://concourse-ci.org/). No setup script or documentation is provided for the alternative CI services currently, however it might be added in the future and you are more than welcome to contribute.
+  Secondly, the technology of your choice must support Docker containerization for using the Drone build pipeline. If it does not, consider using alternatives such as [Jenkins CI](https://jenkins.io/) or [Concourse](https://concourse-ci.org/). No setup script or documentation is provided for the alternative CI services currently, however it might be added in the future and you are more than welcome to contribute.
 
   And lastly, the current build pipeline is .NET Core biased. Please feel free to contribute and add pipeline configurations for other technologies.
 
@@ -169,7 +167,7 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
   ```
 
 - #### Httpd tools
-  install httpd tools in order to have the `htpasswd` tool to generate hashed passwords.
+  Install `httpd-tools` in order to have the `htpasswd` tool for genrating hashed passwords.
 
   ```
   $ yum install httpd-tools
@@ -213,7 +211,7 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
   $ sudo shutdown -r now
   ```
 
-  Check SELinux status, it is expect to be `disabled`.
+  Check SELinux status, it is expected to be `disabled`.
 
   ```
   $ sestatus
@@ -334,7 +332,7 @@ Certain services in this setup require an SMTP relay for sending email notificat
 
 > IMPORTANT: Adjust the actions accordingly if the DNS provider is not Cloudflare.
 
-Login to [Cloudflare](https://dash.cloudflare.com/login), click on your domain name, and then navigate to the `DNS` menu. Click the [+Add record] button to open the record input form.
+Login to [Cloudflare](https://dash.cloudflare.com/login), click on your domain name and then navigate to the `DNS` menu. Click the [+Add record] button to open the record input form.
 
 Create _CNAME_ aliases (bolded) for the following subdomains:
 
@@ -349,7 +347,7 @@ Create _CNAME_ aliases (bolded) for the following subdomains:
 
 > WARNING: Do not forget to disable the http proxy for all of the subdomains as described [here](#disable-http-proxy)
 
-Depending on the TTL value, it may take certain time for the change to take effect, keep `ping`-ing the subdomains periodically to verify the result.
+Depending on the TTL value, it may take a certain time for the change to take effect, keep `ping`-ing the subdomains periodically to verify the result.
 
 
 ## Services
@@ -433,7 +431,9 @@ The credentials for accessing the proxy dashboard at `proxy.yourdomain.com` can 
 
 The `setup_containers.sh` scripts creates directories for container volume mounts, generates `.evn` files, and copies configuration files (i.e. Vault and Consul) to service working directories if necessary. It also generates secrets for certain service components (i.e. databases) and users if required, and stores them in the `secretes.ini` files in services working directories.
 
-The `ports_prefix.ini` file at the repository root (`$REPO_ROOT`) defines the prefixes for ports assigned to containers. The port definitions are hard-coded in the [service]-docker-compose.yml files, however the port prefixes can be modified in the mentioned file before running `setup_containers.sh`.
+> IMPORTANT: Once the secrets are created they remain intact, therefore  `setup_containers.sh` can be run multiple times without modifying credentials.
+
+The `ports_prefix.ini` file at the repository root (`$REPO_ROOT`) defines the prefixes for ports assigned to containers. The port definitions are hard-coded in the [service]-docker-compose.yml files, however, the port prefixes can be modified in the mentioned file before running `setup_containers.sh`.
 
  `setup_containers.sh` requires two input parameters, first for the services root directory and second for a domain name. Check if `$SHOEBOX_ROOT` and `$YOUR_DOMAIN` are set before running the script.
 
@@ -457,7 +457,7 @@ $ sudo ls $SHOEBOX_ROOT
 The output should contain the following list with service working directories:
 
 ```
-git-gogs prox-traefik packages-proget registry-docker vault-hashicorp ci-drone
+ci-drone git-gogs packages-proget project-taiga prox-traefik registry-docker vault-hashicorp 
 ```
 
 Verify if the placeholders are replaced by viewing the content of a sample `.env` file (i.e. git/.env).
@@ -465,7 +465,18 @@ Verify if the placeholders are replaced by viewing the content of a sample `.env
 ```
 $ sudo cat $REPO_ROOT/src/git/.env
 ```
+
+If needed to rerun the script for a specific service it can be done by running the associated bash script in the service source subdirectory as follows,
+
+```
+$ sudo $REPO_ROOT/src/[service-name]/[service-name]_containers_setup.sh $SHOEBOX_ROOT $YOUR_DOMAIN
+```
+
+where _[service-name]_ is one of `ci`, `git`, `packages`, `project`, `registry`, `vault`.
+
 ### Service setup
+
+Each service is provided with a tutorial describing steps required for initial setup and usage examples for executing routine tasks in the future. The key outcome of this setup is enabling the CI/CD service to run automated builds by utilizing the features of the rest of the services in this setup.
 
 > IMPORTANT: Order matters
 
