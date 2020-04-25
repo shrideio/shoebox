@@ -97,7 +97,7 @@ Proceed if all of the checks passes, otherwise, review the [landing page](/src/R
         > INFO: There is no need for prefixing the feed name with `nuget` as the NuGet feeds uri root already contains that literal. `v2` stands for the NuGet protocol version, v3 support is not included into the free license.
 
     - ProGet supports feed connectors allowing to unify package feeds from different sources.
-    For adding a NuGet connector for `nuget.org` click on the feed name `Feed -> v2`, and follow the breadcrumbs `[Manage Feed] -> add connector -> [Create Connector]` to open the _Create Connector_ dialog. Select `NuGet` as _Feed type_ leaving the rest of the inputs intact, then click [Save] to save changes and close the dialog. In the emerged _Select Connector_ dialog select _www.nuget.org_ as _Connector_ (should be preselected) and then click [Save] to save changes.
+    For adding a NuGet connector for `nuget.org` click on the feed name `Feed -> v2`, and follow the path `[Manage Feed] -> add connector -> [Create Connector]` to open the _Create Connector_ dialog. Select `NuGet` as _Feed type_ leaving the rest of the inputs intact, then click [Save] to save changes and close the dialog. In the emerged _Select Connector_ dialog select _www.nuget.org_ as _Connector_ (should be preselected) and then click [Save] to save changes.
 
 5. Push a sample NuGet package to the feed. The sample package is used for testing the integration between the ci and package services.
 

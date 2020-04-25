@@ -162,8 +162,7 @@ Proceed if all of the checks passes, otherwise, review the [landing page](/src/R
         Open the UI shell (![Alt text](/resources/img/vault_shell.png?raw=true "Vault shell")) and execute the following command.
 
         ```
-        vault read secrets/data/ci.build.sample/hello_world
+        vault read secrets/data/ci.build.sample
         ```
 
         If failed to read the secret value due to an access error verify if the role access policies are configured correctly as described [here](#acl-policy).
-
