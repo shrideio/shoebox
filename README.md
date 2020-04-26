@@ -150,7 +150,7 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
   > INFO: Simple console-based text editor
 
   ```
-  $ sudo yum install nano
+  $ sudo yum install -y nano
   ```
 
   Shortcuts:
@@ -162,7 +162,7 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
 - #### Git client
 
   ```
-  $ sudo yum install git
+  $ sudo yum install -y git
   $ sudo git --version # to confirm `git` is successfully installed
   ```
 
@@ -170,7 +170,7 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
   Install `httpd-tools` in order to have the `htpasswd` tool for genrating hashed passwords.
 
   ```
-  $ yum install httpd-tools
+  $ sudo yum install -y httpd-tools
   ```
 
 ### Infrastructure
@@ -225,28 +225,32 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
   - Install Docker
 
     ```
-    $ sudo yum remove docker \
-                    docker-client \
-                    docker-client-latest \
-                    docker-common \
-                    docker-latest \
-                    docker-latest-logrotate \
-                    docker-logrotate \
-                    docker-engine
+    $ sudo yum remove \
+        docker \
+        docker-client \
+        docker-client-latest \
+        docker-common \
+        docker-latest \
+        docker-latest-logrotate \
+        docker-logrotate \
+        docker-engine
 
-    $ sudo yum install -y yum-utils \
-    device-mapper-persistent-data \
-    lvm2
+    $ sudo yum install -y \
+        yum-utils \
+        device-mapper-persistent-data \
+        lvm2
 
-    $ sudo yum-config-manager \
-        --add-repo \
+    $ sudo yum-config-manager --add-repo \
         https://download.docker.com/linux/centos/docker-ce.repo
 
-    $ sudo yum install docker-ce docker-ce-cli containerd.io
+    $ sudo yum install -y docker-ce docker-ce-cli containerd.io
 
     $ sudo systemctl enable docker
     $ sudo systemctl start docker
+    ```
+    Run the following command create and run a test container. The output should contain _Hello from Docker!_.
 
+    ```
     $ sudo docker run hello-world # confirm Docker CE is successfully installed
     ```
 
@@ -296,16 +300,9 @@ Certain services in this setup require an SMTP relay for sending email notificat
 
    > WARNING: If the http proxy is not disabled, it will cause an obscure error response such as _ERR_TOO_MANY_REDIRECTS_.
 
-4. <a name="cloudflare-dns-api-client"></a> Cloudflare API credentials are used by Certbot for proofing the domain name ownership when acquiring an HTTPS certificate from [Let’s Encrypt](https://letsencrypt.org/).
+4. <a name="cloudflare-dns-api-client"></a> Cloudflare API credentials are used by Certbot for proving the domain name ownership when acquiring an HTTPS certificate from [Let’s Encrypt](https://letsencrypt.org/).
 
    > INFO: Adjust the actions accordingly if the DNS provider is not Cloudflare.
-
-   Create an ini file for the Cloudflare DNS API client.
-
-   ```
-   $ sudo mkdir -p /etc/letsencrypt
-   $ sudo nano /etc/letsencrypt/letsencrypt.ini
-   ```
 
    Get the DNS API key: In the Cloudflare panel browse to `Overview -> Get your API token -> API Tokens -> Global API Key [View]`.
 
@@ -317,15 +314,23 @@ Certain services in this setup require an SMTP relay for sending email notificat
     $ export LETSENCRYPT_EMAIL=[letsencrypt-email] # Email for Let's Encrypt
     ```
 
+    Create an ini file for the Cloudflare DNS API client.
+
+    ```
+    $ sudo mkdir -p /etc/cloudflare
+    $ export CLOUDFLARE_API_INI=/etc/cloudflare/cloudflare-api.ini
+    $ sudo touch $CLOUDFLARE_API_INI
+    ```
+
     Execute the following commands to update the ini file with the Cloudflare credentials and Let's Encrypt email.
 
     ```
-    echo "CLOUDFLARE_EMAIL=$CLOUDFLARE_EMAIL" >> /etc/letsencrypt/letsencrypt.ini
-    echo "CLOUDFLARE_API_KEY=$CLOUDFLARE_API_KEY" >> /etc/letsencrypt/letsencrypt.ini
-    echo "LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL" >> /etc/letsencrypt/letsencrypt.ini
+    echo "CLOUDFLARE_EMAIL=$CLOUDFLARE_EMAIL" >> $CLOUDFLARE_API_INI
+    echo "CLOUDFLARE_API_KEY=$CLOUDFLARE_API_KEY" >> $CLOUDFLARE_API_INI
+    echo "LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL" >> $CLOUDFLARE_API_INI
     ```
 
-    Run `$ sudo cat /etc/letsencrypt/letsencrypt.ini` to verify the result.
+    Run `$ sudo cat $CLOUDFLARE_API_INI` to verify the result.
 
 
 ### Subdomain Records
@@ -408,23 +413,24 @@ $ sudo find $REPO_ROOT -type f -name "*.sh" -exec chmod +x {} \;
 
 [Traefik](https://docs.traefik.io/) is used as a reverse proxy for routing http traffic in and out of the services. In addition, it automates acquiring an SSL/TLS certificate from Let's Encrypt.
 
-  Check if `$SHOEBOX_ROOT` and `$YOUR_DOMAIN` are set before running the script.
+  Check if `$SHOEBOX_ROOT`, `$YOUR_DOMAIN` and `$CLOUDFLARE_API_INI` are set before running the script.
 
   ```
   $ echo $SHOEBOX_ROOT
   $ echo $YOUR_DOMAIN
+  $ echo $CLOUDFLARE_API_INI
   ```
 
   Run the following script to create the `proxy` container.
 
   ```
   $ cd $REPO_ROOT/src/proxy/
-  $ sudo ./proxy_containers_setup.sh $SHOEBOX_ROOT $YOUR_DOMAIN 
+  $ sudo ./proxy_containers_setup.sh $SHOEBOX_ROOT $YOUR_DOMAIN $CLOUDFLARE_API_INI
   $ docker-compose up -d
   ```
   Run `$ sudo docker ps`to verify if the container is up and running.
 
-The credentials for accessing the proxy dashboard at `proxy.yourdomain.com` can be found in `$SHOEBOX_ROOT/proxy-traefik/secrets.ini`.
+The credentials for accessing the proxy dashboard at `proxy`.yourdomain.com can be found in `$SHOEBOX_ROOT/proxy-traefik/secrets.ini`.
 
 
 ### Containers infrastructure

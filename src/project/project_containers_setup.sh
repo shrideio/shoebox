@@ -69,7 +69,6 @@ echo "Created '.env' file at '$TAIGA_ROOT'."
 echo
 
 echo "Taiga volume mounts:"
-echo "TAIGA_DATA: $TAIGA_DATA"
 echo "TAIGA_BACKEND_CONF: $TAIGA_BACKEND_CONF"
 echo "TAIGA_BACKEND_MEDIA $TAIGA_BACKEND_MEDIA"
 echo "TAIGA_FRONTEND_CONF: $TAIGA_FRONTEND_CONF"

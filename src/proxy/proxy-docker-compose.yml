@@ -27,8 +27,8 @@ services:
       - "443:443"
       - "8080:8080"
     environment:
-      - "CLOUDFLARE_EMAIL=${DNS_CLOUDFLARE_EMAIL}"
-      - "CLOUDFLARE_API_KEY=${DNS_CLOUDFLARE_API_KEY}"
+      - "CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}"
+      - "CLOUDFLARE_API_KEY=${CLOUDFLARE_API_KEY}"
     volumes:
       - letsencrypt:/letsencrypt
       - traefik-conf:/etc/traefik/conf
@@ -67,5 +67,5 @@ volumes:
     letsencrypt:
       driver_opts:
         type: none
-        device: ${LETSENCRYPT_ROOT}
+        device: ${TRAEFIK_LETSENCRYPT}
         o: bind
