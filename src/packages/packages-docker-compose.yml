@@ -4,7 +4,7 @@ version: "3.5"
 services:
 
     packages-db:
-      image: postgres:12-alpine
+      image: postgres:11-alpine
       container_name: packages-db
       hostname: packages-db
       restart: always
@@ -21,7 +21,7 @@ services:
         - packages-network
 
     packages:
-      image: inedo/proget:5.2.29
+      image: inedo/proget:5.1.23
       container_name: packages
       hostname: packages
       restart: always
