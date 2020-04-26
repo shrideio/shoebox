@@ -21,7 +21,7 @@ Check [Gogs Documentation](https://gogs.io/docs) and  [Gogs on Docker Hub](https
 
 - [x] SMTP relay is configured
 
-Proceed if all of the checks passes, otherwise, check the [landing page](/src/README.md#setup-outline) and continue when ready.
+Proceed if all of the checks pass, otherwise, check the [landing page](/src/README.md#setup-outline) and continue when ready.
 
 ### Setup
 
@@ -32,14 +32,14 @@ Proceed if all of the checks passes, otherwise, check the [landing page](/src/RE
     $ sudo docker-compose up -d
     ```
 
-    Run `$ sudo docker ps` for verifying if `git` and `git-db` containers are up and running. Proceed if no error is detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
+    Run `$ sudo docker ps` for verifying if `git` and `git-db` containers are up and running, proceed if no error is detected. Otherwise, run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
 
 2. Configure Gogs
 
     - Navigate to git._yourdomain.com_ to open the Gogs installer page.
 
     - Set the configuration option as follows
-      > IMPORTANT: Despite creating an admin user is optional it is recommended to create one as a failover in case the SMTP relay is unreachable.
+      > IMPORTANT: Despite creating an admin user is optional, it is recommended to create one as a failover in case the SMTP relay is unreachable.
 
       > INFO: Do not forget to replace `yourdomain.com` with the actual domain name and use real email addresses.
 
@@ -71,12 +71,12 @@ Proceed if all of the checks passes, otherwise, check the [landing page](/src/RE
       | Username                                 | i.e. gitadmin                        |
       | Admin Email                              | i.e. gitadmin@_yourdomain.com_       |
 
-3. Click [Install Gogs]. If Gogs is installed successfully it will create the `app.ini` file at the path assigned to the `GOGS_DATA` parameter in `.env`. Check [Googs Configuration Cheat Sheet](https://gogs.io/docs/advanced/configuration_cheat_sheet) for post-installation configuration.
+3. Click [Install Gogs], after the installation is completed very if Gogs created the `app.ini` file at `$SHOEBOX_ROOT/git-gogs/data/gogs/conf`. Check [Googs Configuration Cheat Sheet](https://gogs.io/docs/advanced/configuration_cheat_sheet) for post-installation configuration.
 
-    > INFO: Do not forget to restart the `git` container after modifying `app.ini`, otherwise new configuration settings will not be applied.
+    > INFO: Do not forget to restart the `git` container after modifying `app.ini`. Otherwise, new configuration settings are not applied.
 
 4. Sign in with the admin user and follow the checklist:
     - [x] A new user can be created and receives an email notification upon registration
     - [x] A new repository can be created
     
-    If the checks pass Gogs is successfully configured and ready for use. Otherwise, check the container logs or Gogs logs at `GOGS_DATA/log`.
+    If the checks pass Gogs is successfully configured and ready for use. Otherwise, check the container logs or Gogs logs at `$SHOEBOX_ROOT/git-gogs/data/gogs/log`.

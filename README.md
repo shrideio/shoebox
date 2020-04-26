@@ -50,7 +50,7 @@ This setup requires a Linux machine with root access and system requirements mat
 
 > INFO: This setup was tested and staged on CentOS 7.0, that is why this OS mention as a requirement. However, with minor adjustments (if any) it should work on any other popular Linux distributive.
 
-Considering the physical host, there are three options to choose from.
+When it comes to choosing a physical host, there are three options for consideration.
 
 > IMPORTANT: None of the vendors listed below have a sponsorship or advertisement agreement with the authors. Likewise, the authors are not responsible or liable for any damage or inconvenience caused by actions or inactions of the vendors.
 
@@ -70,7 +70,7 @@ Considering the physical host, there are three options to choose from.
 
 2. Rent a dedicated server.
 
-   This option is usually more costly than renting a VPS, however, it provides extra computation power and storage capacity for the premium. There is a limited number of affordable options in a price range of 20 to 30 USD per month. Usually, the price range starts at a 50 USD per month threshold. The dedicated server option can be considered as an expansion path for future growth.
+   This option is usually more costly than renting a VPS. However, it provides extra computation power and storage capacity for the premium. There is a limited number of affordable options in a price range of 20 to 30 USD per month. Usually, the price range starts at a 50 USD per month threshold. The dedicated server option can be considered as an expansion path for future growth.
    
    > WARNING: When choosing a dedicated server it is recommended to avoid renting significantly outdated hardware. Old hardware can potentially yield less performance than a VPS with lesser cost.
 
@@ -89,17 +89,17 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
 
   We are no Linux gurus, Docker experts, or technical writing virtuosos, so you are more than welcome to contribute! File an issue ticket or even better open a pull request, we will do our best to respond as soon as possible. Constructive criticism is highly appreciated.
 
-- Any gotchas?
+- Any caveats?
 
   Firstly, it is a single machine configuration incapable of running on a cluster. That potentially may become a problem when simultaneously running several build pipelines would degrade the performance of the other services. This deficiency should be resolved once the services are made deployable to a Kubernetes cluster.
 
-  Secondly, the technology of your choice must support Docker containerization for using the Drone build pipeline. If it does not, consider using alternatives such as [Jenkins CI](https://jenkins.io/) or [Concourse](https://concourse-ci.org/). No setup script or documentation is provided for the alternative CI services currently, however it might be added in the future and you are more than welcome to contribute.
+  Secondly, the technology of your choice must support Docker containerization for using the Drone build pipeline. If it does not, consider using alternatives such as [Jenkins CI](https://jenkins.io/) or [Concourse](https://concourse-ci.org/). No setup script or documentation is provided for the alternative CI services currently, however it might be added in the future, and you are more than welcome to contribute.
 
   And lastly, the current build pipeline is .NET Core biased. Please feel free to contribute and add pipeline configurations for other technologies.
 
-- Future plans?
+- What is next?
 
-  As it is mentioned earlier, adding Kubernetes support is a high priory task on the list, however, we need to acquaint ourselves with the technology first.
+  As it is mentioned earlier, adding Kubernetes support is a high priory task on the list. However, we need to acquaint ourselves with the technology first.
 
   We will do our best to maintain the documentation and keep the scripts up-to-date, and continue adding new CI configurations for different technologies as the need arises (you are more than welcome to contribute).
 
@@ -273,7 +273,7 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
 
 ### Optional: SMTP relay
 
-Certain services in this setup require an SMTP relay for sending email notifications. If your DNS provider includes a free email address, you may want to use the provider's SMTP server; otherwise, there are a few free emailing services with a limited number of message sent per day/month (at least 100 emails a day).
+Certain services in this setup require an SMTP relay for sending email notifications. If your DNS provider includes a free email address, you may want to use the provider's SMTP server; otherwise, there are a few free emailing services with a limited number of messages sent per day/month (at least 100 emails a day).
 
 - [SendPulse](https://sendpulse.com/prices/smtp) (12,000/month)
 - [Mailgun](https://www.mailgun.com/pricing-options) (10,000/month)
@@ -288,7 +288,7 @@ Certain services in this setup require an SMTP relay for sending email notificat
 
 [Cloudflare](https://www.cloudflare.com/) is used as the default DNS provider for this setup. It provides a DNS API that is used by Certbot for proofing the domain name ownership when acquiring an SSL/TLS certificate.
 
-> IMPORTANT: If Cloudflare is not an option, there is a few more [DNS providers compatible with Certbot](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438). In this case the actions described below must be adjusted accordingly.
+> IMPORTANT: If Cloudflare is not an option, there are a few more [DNS providers compatible with Certbot](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438). In this case, the actions described below must be adjusted accordingly.
 
 > WARNING: If the selected DNS provider is not compatible with Certbot, the **Network** section is deemed incompatible. The certificate acquisition process and renewal setup must be conducted independently.
 
@@ -298,7 +298,7 @@ Certain services in this setup require an SMTP relay for sending email notificat
 
 3. <a name="disable-http-proxy"></a> Disable the HTTP proxy for main and subdomain names. click the cloud icon ![Alt text](/resources/img/http_proxy_on.png?raw=true "HTTP proxy - ON") next to each domain/subdomain name to gray it out ![Alt text](/resources/img/http_proxy_off.png?raw=true "HTTP proxy - OFF").
 
-   > WARNING: If the http proxy is not disabled, it will cause an obscure error response such as _ERR_TOO_MANY_REDIRECTS_.
+   > WARNING: If the http proxy is not disabled, it causes an obscure error response such as _ERR_TOO_MANY_REDIRECTS_.
 
 4. <a name="cloudflare-dns-api-client"></a> Cloudflare API credentials are used by Certbot for proving the domain name ownership when acquiring an HTTPS certificate from [Let’s Encrypt](https://letsencrypt.org/).
 
@@ -352,7 +352,7 @@ Create _CNAME_ aliases (bolded) for the following subdomains:
 
 > WARNING: Do not forget to disable the http proxy for all of the subdomains as described [here](#disable-http-proxy)
 
-Depending on the TTL value, it may take a certain time for the change to take effect, keep `ping`-ing the subdomains periodically to verify the result.
+Depending on the TTL value, it may take some time for the change to take effect, keep `ping`-ing the subdomains periodically to verify the result.
 
 
 ## Services
@@ -411,9 +411,9 @@ $ sudo find $REPO_ROOT -type f -name "*.sh" -exec chmod +x {} \;
 
 ### Reverse proxy
 
-[Traefik](https://docs.traefik.io/) is used as a reverse proxy for routing http traffic in and out of the services. In addition, it automates acquiring an SSL/TLS certificate from Let's Encrypt.
+[Traefik](https://docs.traefik.io/) is used as a reverse proxy for routing http traffic in and out of the services. Besides, it automates acquiring an SSL/TLS certificate from Let's Encrypt.
 
-  Check if `$SHOEBOX_ROOT`, `$YOUR_DOMAIN` and `$CLOUDFLARE_API_INI` are set before running the script.
+  Check if `$SHOEBOX_ROOT`, `$YOUR_DOMAIN`, and `$CLOUDFLARE_API_INI` are set before running the script.
 
   ```
   $ echo $SHOEBOX_ROOT
@@ -435,9 +435,9 @@ The credentials for accessing the proxy dashboard at `proxy`.yourdomain.com can 
 
 ### Containers infrastructure
 
-The `setup_containers.sh` scripts creates directories for container volume mounts, generates `.evn` files, and copies configuration files (i.e. Vault and Consul) to service working directories if necessary. It also generates secrets for certain service components (i.e. databases) and users if required, and stores them in the `secretes.ini` files in services working directories.
+The `setup_containers.sh` scripts creates directories for container volume mounts, generates `.evn` files and copies configuration files (i.e. Vault and Consul) to service working directories if necessary. It also generates secrets for certain service components (i.e. databases) and users if required, and stores them in the `secretes.ini` files in services working directories.
 
-> IMPORTANT: Once the secrets are created they remain intact, therefore  `setup_containers.sh` can be run multiple times without modifying credentials.
+> IMPORTANT: Once the secrets are created, they remain intact, therefore  `setup_containers.sh` can be run multiple times without modifying credentials.
 
 The `ports_prefix.ini` file at the repository root (`$REPO_ROOT`) defines the prefixes for ports assigned to containers. The port definitions are hard-coded in the [service]-docker-compose.yml files, however, the port prefixes can be modified in the mentioned file before running `setup_containers.sh`.
 
@@ -472,7 +472,7 @@ Verify if the placeholders are replaced by viewing the content of a sample `.env
 $ sudo cat $REPO_ROOT/src/git/.env
 ```
 
-If needed to rerun the script for a specific service it can be done by running the associated bash script in the service source subdirectory as follows,
+If needed to rerun the script for a specific service, it can be done by running the associated bash script in the service source subdirectory as follows,
 
 ```
 $ sudo $REPO_ROOT/src/[service-name]/[service-name]_containers_setup.sh $SHOEBOX_ROOT $YOUR_DOMAIN

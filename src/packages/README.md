@@ -20,7 +20,7 @@ Check [ProGet Documentation](https://docs.inedo.com/docs/proget/overview) and [P
 
 - [x] packages._yourdomain.com_ subdomain is configured and serves https traffic.
 
-Proceed if all of the checks passes, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
+Proceed if all of the checks pass, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
 
 
 ### Setup
@@ -47,15 +47,15 @@ Proceed if all of the checks passes, otherwise, review the [landing page](/src/R
 
         - Enter the license key and click [Save]. The updated page will contain the _activate_ link, click it for activation. The _Activation status_ is expected to show 'The license key is activated'.
 
-        If the desired result was not achieved and ProGet still remains inactive check the [license documentation](https://docs.inedo.com/docs/proget/administration/license).
+        If the desired result was not achieved and ProGet still remains inactive, check the [license documentation](https://docs.inedo.com/docs/proget/administration/license).
 
     - Change the administrator password.
     
-        Hover with the mouse cursor onto the user icon ![Alt text](/resources/img/proget_user.png?raw=true "ProGet user") in the top right corner to open a context menu and then click _Change Password_ to open the change password dialog. After the password is changed the welcome message should disappear from the login screen.        
+        Hover with the mouse cursor onto the user icon ![Alt text](/resources/img/proget_user.png?raw=true "ProGet user") in the top right corner to open a context menu and then click _Change Password_ to open the change password dialog. After the password is changed, the welcome message should disappear from the login screen.        
 
     - Change the packages registry url.
 
-      Open the administration console ![Alt text](/resources/img/proget_cog.png?raw=true "ProGet administration console"), then navigate to `System Configuration -> Advanced Settings`. Set the `Web.BaseUrl` parameter to https://packages._yourdomain.com_ and click [Save Changes]. The ProGet service will restart automatically causing a `502 Proxy Error` response temporary.
+      Open the administration console ![Alt text](/resources/img/proget_cog.png?raw=true "ProGet administration console"), then navigate to `System Configuration -> Advanced Settings`. Set the `Web.BaseUrl` parameter to https://packages._yourdomain.com_ and click [Save Changes]. The ProGet service will restart automatically, causing a `502 Proxy Error` response temporarily.
 
     - Configure authentication and access policies.
         
@@ -97,11 +97,11 @@ Proceed if all of the checks passes, otherwise, review the [landing page](/src/R
         > INFO: There is no need for prefixing the feed name with `nuget` as the NuGet feeds uri root already contains that literal. `v2` stands for the NuGet protocol version, v3 support is not included into the free license.
 
     - ProGet supports feed connectors allowing to unify package feeds from different sources.
-    For adding a NuGet connector for `nuget.org` click on the feed name `Feed -> v2`, and follow the path `[Manage Feed] -> add connector -> [Create Connector]` to open the _Create Connector_ dialog. Select `NuGet` as _Feed type_ leaving the rest of the inputs intact, then click [Save] to save changes and close the dialog. In the emerged _Select Connector_ dialog select _www.nuget.org_ as _Connector_ (should be preselected) and then click [Save] to save changes.
+    For adding a NuGet connector for `nuget.org` click on the feed name `Feed -> v2`, and follow the path `[Manage Feed] -> add connector -> [Create Connector]` to open the _Create Connector_ dialog. Select `NuGet` as _Feed type_, leaving the rest of the inputs intact, then click [Save] to save changes and close the dialog. In the emerged _Select Connector_ dialog select _www.nuget.org_ as _Connector_ (should be preselected), then click [Save] to save changes.
 
 5. Push a sample NuGet package to the feed. The sample package is used for testing the integration between the ci and package services.
 
-    - Instal .NET Core SDK
+    - Install .NET Core SDK
 
         ```
         $ sudo rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
@@ -121,4 +121,4 @@ Proceed if all of the checks passes, otherwise, review the [landing page](/src/R
         ```
 
 
-> IMPORTANT: Despite of Proget advertising the Docker registry feature, it does not work correctly when the service is hosted in a Linux container due to the following issue [Docker Push to Proget Container Registry fails](https://forums.inedo.com/topic/2788/docker-push-to-proget-container-registry-fails).
+> IMPORTANT: Despite Proget advertising the Docker registry feature, it does not work correctly when the service is hosted in a Linux container due to the following issue [Docker Push to Proget Container Registry fails](https://forums.inedo.com/topic/2788/docker-push-to-proget-container-registry-fails).
