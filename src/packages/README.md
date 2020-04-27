@@ -18,6 +18,8 @@ Check [ProGet Documentation](https://docs.inedo.com/docs/proget/overview) and [P
     $ sudo cat $REPO_ROOT/src/packages/.env
     ```
 
+- [x] [Vault](/src/vault/README.md) service is up and running and the vault is configured and [unsealed](/src/vault/README.md#unseal-vault) (vault._yourdomain.com_)
+
 - [x] packages._yourdomain.com_ subdomain is configured and serves https traffic.
 
 Proceed if all of the checks pass, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
@@ -32,7 +34,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
     $ sudo docker-compose up -d
     ```
 
-    Run `$ sudo docker ps` to verify if the listed containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
+    Run `$ sudo docker ps | grep packages` to verify if the listed containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
 
 
 2. Configure ProGet
@@ -79,19 +81,16 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
     - Open the administration console ![Alt text](/resources/img/proget_cog.png?raw=true "ProGet administration console"), then navigate to `Security & Authentication -> API Keys & Access Logs`. 
 
-    - Create API keys for the `FeedConsumer` and `PackagePublisher` users. Click [Create API Key] to open the _Create API Key_ dialog. 
+    - Create API keys for `PackagePublisher` user. Click [Create API Key] to open the _Create API Key_ dialog. 
     
-        Fill in the _Feed API user_ with matching user names, and enable access to _Feed API_ by checking _Grant access to Feed API_ checkbox.
-
-
-         Click [Save API Key] to save changes and proceed.
+        Fill in the _Feed API user_ with matching user names, and enable access to _Feed API_ by checking _Grant access to Feed API_ checkbox. Click [Save API Key] to save changes and proceed.
 
     - Create the `ci.packages` secret in Vault as described [here](/src/vault/README.md#create-a-secret) for storing credentials for pulling packages from by the CI service. The secret must contain the following key/value pairs:
 
-        > WARNING: Do not forget to replace the _[FeedConsumer-API-key]_ with the FeedConsumer API key value.
+        > WARNING: Do not forget to replace the _[FeedConsumer-password]_ with the FeedConsumer password value.
 
       - `packages_username`/_FeedConsumer_
-      - `packages_password`/[FeedConsumer-API-key]
+      - `packages_password`/[FeedConsumer-password]
 
 4. Create NuGet feed
 

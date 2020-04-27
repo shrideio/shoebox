@@ -33,6 +33,6 @@ Check [Taiga Documentation](https://taigaio.github.io/taiga-doc/dist/) and [Taig
     $ sudo docker-compose up -d
     ```
 
-    Run `$ sudo docker ps` to verify if the listed containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
+    Run `$ sudo docker ps | grep project` to verify if the listed containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
 
 2. Change the default Taiga administrator password after the first login. Use the following user name and password: _admin_ and _123123_ for the initial login.

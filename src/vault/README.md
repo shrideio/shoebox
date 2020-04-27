@@ -35,7 +35,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
     $ sudo docker-compose up -d
     ```
 
-    Run `$ sudo docker ps` to verify if the listed containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
+    Run `$ sudo docker ps | grep vault` to verify if the listed containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
 
 2. <a id="unseal-vault"></a>Unseal Vault
 
@@ -158,7 +158,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
         - Execute the following command to read the content of `ci.build.sample` secret.
 
             ```
-            vault read secrets/data/ci.build.sample
+            > vault read secrets/data/ci.build.sample
             ```
 
             If an access error is displayed, check the correctness of role access policies configuration as described [here](#acl-policy).

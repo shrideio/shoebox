@@ -31,14 +31,14 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
 ### Setup
 
-1. Drone Vault plugin requires a Vault client token for accessing secrets stored in the Vault service. Fetch the client token as described [here](/src/vault/README.md#issue-a-client-token) and then replace the placeholder in `.env` file running the following command.
+1. Drone Vault plugin requires a Vault client token for accessing secrets stored in the Vault service. Check if the `$VAULT_TOKEN` environment variable is assigned by running the following command `$ echo $VAULT_TOKEN`. If not, fetch the Vault client token and set the variable before continuing as described [here](/src/vault/README.md#issue-a-client-token). Replace the placeholder in the `.env` file by running the following command.
 
     > WARNING: Do not forget to replace [vault-token] with the actual value
 
     ```
-    $ export VAULT_TOKEN=[vault-token]
+    
     $ sudo sed -i 's|@VAULT_TOKEN$|'"$VAULT_TOKEN"'|g' $REPO_ROOT/src/ci/.env
-    $ cat $REPO_ROOT/src/ci/.env
+    $ cat $REPO_ROOT/src/ci/.env # verify the result
     ```
 
 2. Start Drone CI (`ci`), Drone build agent (`ci-agent`), Drone Vault plugin (`ci-secret-plugin`), and PostgreSQL (`ci-db`) containers.
@@ -48,23 +48,13 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
       $ sudo docker-compose up -d
       ```
 
-    Run `$ sudo docker ps` to verify if the listed containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
+    Run `$ sudo docker ps | grep ci` to verify if the listed containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
 
 3. Prepare and run a test build. The purpose of the test build is to very if secrets can be fetched from Vault, and the container produced by the build pipeline can be pushed to a private Docker registry.
-
-    > INFO: The sample project can be found at `$REPO_ROOT/src/ci.build.sample`
-
-    -  Using the secret `ci.build.sample` with the key-value pair we already created in the vault setup, we are going to be pulling the value for `hello_world` for the ci sample project.
-
-        - Secret path (_Path for this secret_ field): `ci.build.sample`
-        - Secret key/value: `hello_world`/`Hello world!`
-
-        The part describing the setup of the `ci.build.sample` secret can be found [here](/src/vault/README.md#create-a-secret).
 
     -  Create a git user for the CI service for enabling access to repositories. Use the values of `DRONE_GIT_USERNAME` and `DRONE_GIT_PASSWORD` from the `secrets.ini` file as username and password accordingly. After the user is created, make sure that the user has the setting: "This account has permissions to create Git Hooks" enabled. Log in to the Git service and create a repository named `ci.build.sample`.
 
         > IMPORTANT: For repositories not created under `DRONE_GIT_USERNAME`, adding that user as an admin collaborator should enable access for the CI service.
-
 
     - Activate the repository for build
 
@@ -72,7 +62,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
         > WARNING: If the repository is still not shown after syncing, use the CI git user credentials (`DRONE_GIT_USERNAME` and `DRONE_GIT_PASSWORD`) to login to the Git service and check if the repository is accessible.
 
-      - For activating the repository, click the repository name or [ACTIVATE], that should open the _SETTINGS_ tab, then click [ACTIVATE REPOSITORY] for activation. Check _Trusted_ in the _Project settings_ section and click [SAVE] to save changes.
+      - For activating the repository, click the repository name or [ACTIVATE], which should open the _SETTINGS_ tab. Then, click [ACTIVATE REPOSITORY] for activation.
 
 
     - Add the sample project to the repository and trigger a build.
@@ -83,41 +73,47 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
           ```
           $ sudo sed -i 's|@YOUR_DOMAIN|'"$YOUR_DOMAIN"'|g' $REPO_ROOT/src/ci/ci.build.sample/.drone.yml
-          $ cat $REPO_ROOT/src/ci/ci.build.sample/.drone.yml
+          $ cat $REPO_ROOT/src/ci/ci.build.sample/.drone.yml # verify the result
           ```
 
       - Create a local git repository for the sample project and push its content to the Git service.
 
-        > WARNING: Do not forget to replace [yourdomain.com] and [DRONE_GIT_USERNAME] placeholders with the actual values.
+        > WARNING: Do not forget to replace the [drone-git-username] placeholder with the actual *DRONE_GIT_USERNAME* value from `secrets.ini`.
 
         ```
         $ cd $REPO_ROOT/src/ci/ci.build.sample
         $ sudo git init
         $ sudo git add .
         $ sudo git commit -m "Adding ci.build.sample"
-        $ sudo git remote add origin https://git.[yourdomain.com]/[DRONE_GIT_USERNAME]/ci.build.sample
+        $ export DRONE_GIT_USERNAME=[drone-git-username]
+        $ sudo git remote add origin https://git.$YOUR_DOMAIN/$DRONE_GIT_USERNAME/ci.build.sample
         $ sudo git remote -v
         $ sudo git push origin master
         ```
 
         > IMPORTANT: `git push` should trigger a build, otherwise, modify the `.trigger` file in the project directory and commit and push the change for triggering a build.
 
-      - Navigate to ci._yourdomain.com_ and click the repository name, ci.build.sample, to open the details page and then open the _ACTIVITY FEED_ tab for checking the build status.
+    - Navigate to ci._yourdomain.com_ and click the repository name, ci.build.sample, to open the details page and then open the _ACTIVITY FEED_ tab for checking the build status.
 
-        - If the build is successful (green (✓) checkmark icon) it should create a _ci.build.sample_ Docker image in the Docker registry (check `registryiu`_.yourdomain.com_).
+      - If the build is successful (green (✓) check icon) it should create a _ci.build.sample_ Docker image in the Docker registry (check `registryiu`_.yourdomain.com_). Verify the build result as follows.
 
-- Create a container from the published Docker image, and pull the endpoint for fetching the baked-in message from the `hello_world` secret.
-
-          > WARNING: Do not forget to replace _[yourdomain.com]_ with the actual value.
+        Log in to the private registry by running the following commands.
 
           ```
-          $ sudo docker run -d -p 9080:80 --name ci.build.sample registry.$YOUR_DOMAIN/ci.test/ci.build.sample
-          $ curl http://localhost:9080/api/hello
+          $ source $SHOEBOX_ROOT/registry-docker/secrets.ini # loads $REGISTRY_USERNAME and $REGISTRY_PASSWORD variables
+          $ sudo docker login registry.$YOUR_DOMAIN --username $REGISTRY_USERNAME --password $REGISTRY_PASSWORD
           ```
 
-          If the expected output is not shown, consult with the troubleshooting section further for investigating the issue in detail.
+        Create a container from the published Docker image, and pull the endpoint for fetching the baked-in message from the `hello_world` secret.
 
-        - If the build is failed (red (X) icon), open and inspect the build log for troubleshooting. The build-log can be accessed by clicking on the build record. If the failure cannot be inferred from the logs, check the troubleshooting section further for investigating the issue in detail.
+        ```
+        $ sudo docker run -d -p 9080:80 --name ci.build.sample registry.$YOUR_DOMAIN/ci.test/ci.build.sample
+        $ curl http://localhost:9080/api/hello
+        ```
+
+        If the expected output is not shown, consult with the troubleshooting section further for investigating the issue in detail.
+
+      - If the build is failed (red (X) icon), open and inspect the build log for troubleshooting. The build-log can be accessed by clicking on the build record. If the failure cannot be inferred from the logs, check the troubleshooting section further for investigating the issue in detail.
 
 
 ### Build failures troubleshooting
@@ -133,14 +129,14 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
         $ sudo install -t /usr/local/bin drone
         ```
 
-    - Drone CLI requires the Drone admin user for running commands on the Drone service. The credential for the admin user can be extracted from the `DRONE_USER_CREATE` parameter from the `secrets.ini` file. Use the _username_ and _token_ parts to create a git user with a matching username and password.
+    - Drone CLI requires the Drone admin user for running commands on the Drone service. The credential for the admin user can be extracted from the `DRONE_USER_CREATE` parameter from the `secrets.ini` file. Use the _username_ and _token_ parts to create a git user with matching username and password values.
 
-    - Drone CLI requires `DRONE_TOKEN` and `DRONE_SERVER`environment variables to before connecting to the Drone service. Conveniently, the commands to set those variables can be fetched from the Drone web interface. Use the admin user credentials to log in to the Drone web interface. On the landing page, click on the user icon (auto-generated icon with an abstract pattern in the top right corner) and then click _User Settings_ in the emerged context menu. In the opened page, find the _Example CLI Usage_ section and copy-paste its content into the shell and run the commands.
+    - Drone CLI requires `DRONE_TOKEN` and `DRONE_SERVER` environment for connecting to the Drone service. Conveniently, the commands to set those variables can be fetched from the Drone web interface. Use the admin user credentials to log in to the Drone web interface. On the landing page, click on the user icon (auto-generated icon with an abstract pattern in the top right corner) and then click _User Settings_ in the emerged context menu. In the opened page, find the _Example CLI Usage_ section and copy-paste its content into the shell and run the commands.
 
       > INFO: The commands should resemble the following piece of code
 
         ```
-        $ export DRONE_SERVER=https://ci.[yourdomain.com]
+        $ export DRONE_SERVER=https://ci.$YOUR_DOMAIN
         $ export DRONE_TOKEN=[ci-agent-token]
         ```
 

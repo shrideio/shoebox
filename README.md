@@ -428,7 +428,7 @@ $ sudo find $REPO_ROOT -type f -name "*.sh" -exec chmod +x {} \;
   $ sudo ./proxy_containers_setup.sh $SHOEBOX_ROOT $YOUR_DOMAIN $CLOUDFLARE_API_INI
   $ docker-compose up -d
   ```
-  Run `$ sudo docker ps`to verify if the container is up and running.
+  Run `$ sudo docker ps | grep proxy`to verify if the container is up and running.
 
 The credentials for accessing the proxy dashboard at `proxy`.yourdomain.com can be found in `$SHOEBOX_ROOT/proxy-traefik/secrets.ini`.
 

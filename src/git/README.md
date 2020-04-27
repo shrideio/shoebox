@@ -32,7 +32,7 @@ Proceed if all of the checks pass, otherwise, check the [landing page](/src/READ
     $ sudo docker-compose up -d
     ```
 
-    Run `$ sudo docker ps` for verifying if `git` and `git-db` containers are up and running, proceed if no error is detected. Otherwise, run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
+    Run `$ sudo docker ps | grep git` for verifying if `git` and `git-db` containers are up and running, proceed if no error is detected. Otherwise, run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
 
 2. Configure Gogs
 
