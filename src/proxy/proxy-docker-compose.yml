@@ -6,6 +6,7 @@ services:
   proxy:
     image: "traefik:v2.2"
     container_name: "proxy"
+    restart: always
     command:
       # Uncomment two commands below for debugging information inside the proxy container logs(docker logs proxy):
       #- "--log.level=DEBUG"
