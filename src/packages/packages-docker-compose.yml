@@ -16,7 +16,7 @@ services:
         - POSTGRES_PASSWORD=${PROGET_POSTGRESQL_PASSWORD}
       command: postgres -c shared_buffers=256MB -c max_connections=200
       ports:
-        - ${PROGET_POSTGRESQL_PORT}:5432
+        - ${PROGET_POSTGRESQL_PORT_BINDING}:5432
       networks: 
         - packages-network
 
@@ -32,7 +32,7 @@ services:
         - packages-extensions:/var/proget/extensions
         - packages-config:/usr/share/Inedo/SharedConfig
       ports:
-        - ${PROGET_HTTP_PORT}:80
+        - ${PROGET_HTTP_PORT_BINDING}:80
       networks:
         - packages-network
         - proxy-network

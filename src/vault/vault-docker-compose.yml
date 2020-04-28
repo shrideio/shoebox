@@ -12,7 +12,7 @@ services:
       - vault-db-config:/consul/config
       - vault-db-data:/consul/data
     ports:
-      - ${VAULT_CONSUL_PORT}:8500
+      - ${VAULT_CONSUL_PORT_BINDING}:8500
     networks:
       - vault-network
     command: agent -server -bind 0.0.0.0 -client 0.0.0.0 -bootstrap-expect 1
@@ -31,7 +31,7 @@ services:
       - 8300:8300
       - 8600:8600
       - 8600:8600/udp
-      - ${VAULT_PORT}:8200
+      - ${VAULT_PORT_BINDING}:8200
     networks:
       - vault-network
       - proxy-network

@@ -154,10 +154,10 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
     - Check if the secret values can be fetched by the Drone Vault plugin
 
-        Replace the placeholders with matching values from `$REPO_ROOT/src/ci/.env` an set the environment values as follows. 
+        Replace the placeholders with matching values from `$REPO_ROOT/src/ci/.env` an set the environment values as follows.
 
         ```
-        $ export DRONE_SECRET_ENDPOINT=http://localhost:[DRONE_VAULT_PLUGIN_PORT]
+        $ export DRONE_SECRET_ENDPOINT=http://[DRONE_VAULT_PLUGIN_PORT_BINDING]
         $ export DRONE_SECRET_SECRET=[DRONE_SECRET]
         ```
 

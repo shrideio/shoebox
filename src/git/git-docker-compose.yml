@@ -12,7 +12,7 @@ services:
         - POSTGRES_USER=${GOGS_POSTGRESQL_USER}
         - POSTGRES_PASSWORD=${GOGS_POSTGRESQL_PASSWORD}
       ports:
-        - ${GOGS_POSTGRESQL_PORT}:5432
+        - ${GOGS_POSTGRESQL_PORT_BINDING}:5432
       networks:
         - git-network
       volumes:
@@ -31,8 +31,8 @@ services:
         - git-network
         - proxy-network
       ports:
-        - ${GOGS_SSH_PORT}:22
-        - ${GOGS_HTTP_PORT}:3000
+        - ${GOGS_SSH_PORT_BINDING}:22
+        - ${GOGS_HTTP_PORT_BINDING}:3000
       depends_on:
         - git-db
       labels:
