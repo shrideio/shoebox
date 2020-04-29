@@ -9,7 +9,7 @@ echo
 SHOEBOX_ROOT=$1
 YOUR_DOMAIN=$2
 
-GIT_SRC=$(pwd "$0")
+GIT_SRC=$(dirname $(realpath $0))
 SRC_ROOT=$(dirname "$GIT_SRC")
 
 source $SRC_ROOT/ports_prefix.ini

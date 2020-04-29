@@ -9,7 +9,7 @@ echo
 SHOEBOX_ROOT=$1
 YOUR_DOMAIN=$2
 
-CI_SRC=$(pwd "$0")
+CI_SRC=$(dirname $(realpath $0))
 SRC_ROOT=$(dirname "$CI_SRC")
 
 source $SRC_ROOT/ports_prefix.ini
