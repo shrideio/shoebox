@@ -2,7 +2,7 @@
 
 ### What is it?
 
-Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose) for setting up a simple collaborative software development environment. It can be hosted on a VPS or dedicated server as an inexpensive alternative for subscription-based could services. Software components used in this setup are either open source or have free versions (some with limitations, please check).
+Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose) for setting up a simple collaborative software development environment. It can be hosted on a VPS or dedicated server as an inexpensive alternative for subscription-based cloud services. Software components used in this setup are either open source or have free versions (some with limitations, please check).
 
 #### Tools
 
@@ -106,8 +106,6 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
 - Shoebox - why the name?
 
   ...cus' it has something in it to getcha runnin'! :boom: :running: :checkered_flag:
-
-  Shoebox is a symbolic name representing simple multipurpose storage for old toys, lego bricks, commix books, SEGA/Nintendo cartridges, Play Station disks, board game accessories... in short, for things that used to (or still) bring us joy. We believe that this "shoebox" contains a few "toys" that might help you brining a structure in teamwork and make collaborative software development with your peers more enjoyable. :nerd_face: :headphones: :computer:
 
 ### TL;DR
 
