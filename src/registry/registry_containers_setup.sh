@@ -9,6 +9,9 @@ echo
 SHOEBOX_ROOT=$1
 YOUR_DOMAIN=$2
 
+REGISTRY_SRC=$(dirname "$0")
+SRC_ROOT=$(dirname "$REGISTRY_SRC")
+
 source $SRC_ROOT/ports_prefix.ini
 REGISTRY_PORTS_PREFIX=${3:-$REGISTRY_PORTS_PREFIX}
 
@@ -35,8 +38,6 @@ if test ! -f "$REGISTRY_SECRETS"; then
 fi
 
 source $REGISTRY_SECRETS
-
-REGISTRY_SRC=$(dirname "$0")
 
 htpasswd -bBc -C 10 $REGISTRY_SRC/htpasswd $REGISTRY_USERNAME $REGISTRY_PASSWORD
 cp $REGISTRY_SRC/config.tmpl $REGISTRY_SRC/config.yml

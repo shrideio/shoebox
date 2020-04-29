@@ -9,6 +9,9 @@ echo
 SHOEBOX_ROOT=$1
 YOUR_DOMAIN=$2
 
+GIT_SRC=$(dirname "$0")
+SRC_ROOT=$(dirname "$GIT_SRC")
+
 source $SRC_ROOT/ports_prefix.ini
 GIT_PORTS_PREFIX=${3:-$GIT_PORTS_PREFIX}
 
@@ -39,8 +42,6 @@ if test ! -f "$GOGS_SECRETS"; then
 fi
 
 source $GOGS_SECRETS
-
-GIT_SRC=$(dirname "$0")
 
 GIT_ENV=$GIT_SRC/.env
 cp $GIT_SRC/env.tmpl $GIT_ENV

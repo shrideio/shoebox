@@ -8,6 +8,9 @@ echo
 SHOEBOX_ROOT=$1
 YOUR_DOMAIN=$2
 
+VAULT_SRC=$(dirname "$0")
+SRC_ROOT=$(dirname "$VAULT_SRC")
+
 source $SRC_ROOT/ports_prefix.ini
 REGISTRY_PORTS_PREFIX=${3:-$REGISTRY_PORTS_PREFIX}
 
@@ -29,7 +32,6 @@ mkdir -p $VAULT_LOGS
 mkdir -p $VAULT_CONSUL_CONFIG
 mkdir -p $VAULT_CONSUL_DATA
 
-VAULT_SRC=$(dirname "$0")
 cp $VAULT_SRC/config/vault/config.hcl $VAULT_CONFIG/config.hcl
 cp $VAULT_SRC/config/consul/config.json $VAULT_CONSUL_CONFIG/config.json
 
