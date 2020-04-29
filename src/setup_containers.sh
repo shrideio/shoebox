@@ -3,7 +3,7 @@ set -euo pipefail
 
 SHOEBOX_ROOT=$1
 YOUR_DOMAIN=$2
-SRC_ROOT=$(dirname "$0")
+SRC_ROOT=$(pwd "$0")
 
 echo
 echo "SHOEBOX_ROOT: $SHOEBOX_ROOT"

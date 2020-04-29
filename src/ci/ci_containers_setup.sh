@@ -9,11 +9,11 @@ echo
 SHOEBOX_ROOT=$1
 YOUR_DOMAIN=$2
 
-CI_SRC=$(dirname "$0")
+CI_SRC=$(pwd "$0")
 SRC_ROOT=$(dirname "$CI_SRC")
 
 source $SRC_ROOT/ports_prefix.ini
-CI_PORTS_PREFIX=${$3:-$CI_PORTS_PREFIX}
+CI_PORTS_PREFIX=${3:-$CI_PORTS_PREFIX}
 
 DRONE_ROOT=$SHOEBOX_ROOT/ci-drone
 DRONE_DATA=$DRONE_ROOT/data
