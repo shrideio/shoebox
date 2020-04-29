@@ -76,13 +76,13 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
     - Enable the AppRole authentication method.
 
-        - Navigate to the `Access` menu and then click [Enable new method +], then choose the _AppRole_ option from the list and click [Next] to continue.
+        - Navigate to the `Access` menu and then click `Enable new method +`, then choose the _AppRole_ option from the list and click `Next` to continue.
 
         - Click the `Method Options` link to expand the options section and set  _Default Lease TTL_ and  _Max Lease TTL_ to `0` (zero), _Token Type_ to `service`. Click [Enable Method] to finish the authentication method setup.
 
     - Create a policy for authenticating and accessing secrets.
     
-        Navigate to the `Policies` menu and click [Create ACL policy +]. Set _Name_ to `ciagent` and copy-paste the configuration bellow into the _Policy_ field.
+        Navigate to the `Policies`(top left) menu and click `Create ACL policy +`. Set _Name_ to `ciagent` and copy-paste the configuration bellow into the _Policy_ field.
     
         > IMPORTANT: `approle` is the alias for the _AppRole_ authentication method enabled earlier. If a different alias is chosen make sure to correct the `path` value for the login policy.
     
@@ -116,7 +116,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
             > vault write -force auth/approle/role/ciagent/secret-id
             ```
 
-            The output of the command should contain the `secret_id` value which is used as a password and MUST BE capture for later use.
+            The output of the command should contain the `secret_id` value which is used as a password and must be saved for later use.
 
     - Reissue new Role Secret ID
 
@@ -144,11 +144,11 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
             > vault read auth/approle/role/ciagent/role-id
             ```
 
-            Capture the `role_id` value, it is used further for issuing an access token for accessing secrets via the Vault API.
+            Capture the `role_id` value as it is used further for issuing an access token for accessing secrets via the Vault API.
 
-        - Next, type `api` in the UI shell and press the `Enter` key to open _Vault API explorer_. Find `POST /auth/approle/login/` and click on the section to expand it, then click [Try it out] to enable editing.
+        - Next, type `api` in the UI shell and press the `Enter` key to open _Vault API explorer_. Find `POST /auth/approle/login` and click on the section to expand it, then click [Try it out] to enable editing.
         
-        - Fill in the `role_id` and `secret_id` request body parameters with matching values captured earlier. Then, click [Execute - send a request with your token to Vault] to send an authentication request and receive a response containing the client token. Capture the values of `client_token`, it needs to be verified before actual use.
+        - Fill in the `role_id` and `secret_id` request body parameters with matching values captured earlier. Then, click [Execute - send a request with your token to Vault] to send an authentication request and receive a response containing the client token. Capture the value of `client_token` from the response body as it needs to be verified before actual use.
 
     - <a name="read-secret"></a> Verifying if the access token is correct and the associated role can access the secret using the issue client token.
 
@@ -169,4 +169,4 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
         echo $VAULT_TOKEN
         ```
 
-        The environment value is used further for configuring the integration between ci and vault servers.
+        The environment value will be used for configuring the integration between ci and vault servers.

@@ -55,6 +55,8 @@ Proceed if all of the checks pass, otherwise, check the [landing page](/src/READ
       | :--------------------------- | :--------------------------- |
       | Application URL              | https://git._yourdomain.com_ |
 
+      > IMPORTANT: Make sure to update the user name and password for gogs in the Admin Account Settings under the Optional Settings:
+
       | Optional Settings                        |                                      |
       | :--------------------------------------- | :----------------------------------- |
       | ***Email Service Settings***             |                                      |
@@ -71,7 +73,7 @@ Proceed if all of the checks pass, otherwise, check the [landing page](/src/READ
       | Username                                 | i.e. gitadmin                        |
       | Admin Email                              | i.e. gitadmin@_yourdomain.com_       |
 
-3. Click [Install Gogs], after the installation is completed very if Gogs created the `app.ini` file at `$SHOEBOX_ROOT/git-gogs/data/gogs/conf`. Check [Googs Configuration Cheat Sheet](https://gogs.io/docs/advanced/configuration_cheat_sheet) for post-installation configuration.
+3. Click [Install Gogs], after the installation is completed verify that Gogs' `app.ini` was created at `$SHOEBOX_ROOT/git-gogs/data/gogs/conf`. Check [Googs Configuration Cheat Sheet](https://gogs.io/docs/advanced/configuration_cheat_sheet) for post-installation configuration.
 
     > INFO: Do not forget to restart the `git` container after modifying `app.ini`. Otherwise, new configuration settings are not applied.
 
