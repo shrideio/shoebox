@@ -309,12 +309,12 @@ Certain services in this setup require an SMTP relay for sending email notificat
 
    Get the DNS API key: In the Cloudflare panel browse to `Overview -> Get your API token -> API Tokens -> Global API Key [View]`.
 
-   Export the following environment variables with matching values:
+   Export the following environment variables with your values instead of the placeholders for cloudflare email, api key and an email for let's encrypt:
   
     ```
-    $ export CLOUDFLARE_EMAIL=[cloudflare-email] # Cloudflare email (login)
-    $ export CLOUDFLARE_API_KEY=[cloudflare-api-key] # Cloudflare Global API key
-    $ export LETSENCRYPT_EMAIL=[letsencrypt-email] # Email for Let's Encrypt
+    $ export CLOUDFLARE_EMAIL=[cloudflare-email]
+    $ export CLOUDFLARE_API_KEY=[cloudflare-api-key]
+    $ export LETSENCRYPT_EMAIL=[letsencrypt-email]
     ```
 
     Create an ini file for the Cloudflare DNS API client.
@@ -433,12 +433,12 @@ $ sudo find $REPO_ROOT -type f -name "*.sh" -exec chmod +x {} \;
   ```
   Run `$ sudo docker ps | grep proxy`to verify if the container is up and running.
 
-The credentials for accessing the proxy dashboard at `proxy`.yourdomain.com can be found in `$SHOEBOX_ROOT/proxy-traefik/secrets.ini`.
+The credentials for accessing the proxy dashboard at `proxy`.yourdomain.com will be printed in the console and also can be found in `$SHOEBOX_ROOT/proxy-traefik/secrets.ini`.
 
 
 ### Containers infrastructure
 
-The `setup_containers.sh` scripts creates directories for container volume mounts, generates `.evn` files and copies configuration files (i.e. Vault and Consul) to service working directories if necessary. It also generates secrets for certain service components (i.e. databases) and users if required, and stores them in the `secretes.ini` files in services working directories.
+The `setup_containers.sh` scripts creates directories for container volume mounts, generates `.evn` files, and copies configuration files (i.e. Vault and Consul) to service working directories if necessary. It also generates secrets for certain service components (i.e. databases) and users if required, and stores them in the `secretes.ini` files in services working directories.
 
 > IMPORTANT: Once the secrets are created, they remain intact, therefore  `setup_containers.sh` can be run multiple times without modifying credentials.
 
@@ -457,7 +457,7 @@ Run the following command to prepare the necessary infrastructure for docker con
 $ sudo $REPO_ROOT/src/setup_containers.sh $SHOEBOX_ROOT $YOUR_DOMAIN
 ```
 
-Verify the directories are created.
+Verify the directories are created:
 
 ```
 $ sudo ls $SHOEBOX_ROOT
@@ -469,7 +469,7 @@ The output should contain the following list with service working directories:
 ci-drone git-gogs packages-proget project-taiga prox-traefik registry-docker vault-hashicorp 
 ```
 
-Verify if the placeholders are replaced by viewing the content of a sample `.env` file (i.e. git/.env).
+Verify that the placeholders are replaced by viewing the content of a sample `.env` file (i.e. git/.env).
 
 ```
 $ sudo cat $REPO_ROOT/src/git/.env
@@ -481,7 +481,7 @@ If needed to rerun the script for a specific service, it can be done by running 
 $ sudo $REPO_ROOT/src/[service-name]/[service-name]_containers_setup.sh $SHOEBOX_ROOT $YOUR_DOMAIN
 ```
 
-where _[service-name]_ is one of `ci`, `git`, `packages`, `project`, `registry`, `vault`.
+where _[service-name]_ is one of the following: `ci`, `git`, `packages`, `project`, `registry`, `vault`.
 
 ### Service setup
 
