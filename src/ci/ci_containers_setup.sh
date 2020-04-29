@@ -9,8 +9,11 @@ echo
 SHOEBOX_ROOT=$1
 YOUR_DOMAIN=$2
 
+CI_SRC=$(dirname $(realpath $0))
+SRC_ROOT=$(dirname "$CI_SRC")
+
 source $SRC_ROOT/ports_prefix.ini
-CI_PORTS_PREFIX=${$3:-$CI_PORTS_PREFIX}
+CI_PORTS_PREFIX=${3:-$CI_PORTS_PREFIX}
 
 DRONE_ROOT=$SHOEBOX_ROOT/ci-drone
 DRONE_DATA=$DRONE_ROOT/data
@@ -53,8 +56,6 @@ if test ! -f "$DRONE_SECRETS"; then
 fi
 
 source $DRONE_SECRETS
-
-CI_SRC=$(dirname "$0")
 
 CI_ENV=$CI_SRC/.env
 cp $CI_SRC/env.tmpl $CI_ENV

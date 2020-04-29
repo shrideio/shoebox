@@ -180,9 +180,12 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
   Check SELinux status.
 
   ```
-  $ sestatus
-
-  Output
+  $ sudo sestatus
+  ```
+  
+  Output:
+  
+  ```
   SELinux status:                 enabled
   ...
   ...
@@ -212,9 +215,11 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
   Check SELinux status, it is expected to be `disabled`.
 
   ```
-  $ sestatus
+  $ sudo sestatus
+  ```
 
-  Output
+  Output:
+  ```
   SELinux status:                 disabled
   ```
 

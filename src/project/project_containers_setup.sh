@@ -8,6 +8,9 @@ echo
 SHOEBOX_ROOT=$1
 YOUR_DOMAIN=$2
 
+PROJECT_SRC=$(dirname $(realpath $0))
+SRC_ROOT=$(dirname "$PROJECT_SRC")
+
 source $SRC_ROOT/ports_prefix.ini
 PROJECT_PORTS_PREFIX=${3:-$PROJECT_PORTS_PREFIX}
 
@@ -50,7 +53,6 @@ fi
 
 source $TAIGA_SECRETS
 
-PROJECT_SRC=$(dirname "$0")
 PROJECT_ENV=$PROJECT_SRC/.env
 cp $PROJECT_SRC/env.tmpl $PROJECT_ENV
 

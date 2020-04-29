@@ -14,10 +14,9 @@ Check [Vault Documentation](https://www.vaultproject.io/docs/), and [Vault](http
     $ echo $SHOEBOX_ROOT
     ```
 
-- [x] Vault `secrets.ini` and `.env` files are generated
+- [x] Vault `.env` is generated
 
     ```
-    $ sudo cat $SHOEBOX_ROOT/vault-hashicorp/secrets.ini
     $ sudo cat $REPO_ROOT/src/vault/.env
     ```
 
