@@ -8,6 +8,9 @@ echo
 SHOEBOX_ROOT=$1
 YOUR_DOMAIN=$2
 
+PACKAGES_SRC=$(dirname "$0")
+SRC_ROOT=$(dirname "$PACKAGES_SRC")
+
 source $SRC_ROOT/ports_prefix.ini
 PACKAGES_PORTS_PREFIX=${3:-$PACKAGES_PORTS_PREFIX}
 
@@ -41,7 +44,6 @@ fi
 
 source $PROGET_SECRETS
 
-PACKAGES_SRC=$(dirname "$0")
 PACKAGES_ENV=$PACKAGES_SRC/.env
 cp $PACKAGES_SRC/env.tmpl $PACKAGES_ENV
 
