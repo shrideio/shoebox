@@ -105,14 +105,12 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
 
 - Shoebox - why the name?
 
-  ...cus' it has something in it to getcha runnin'! :boom: :running: :checkered_flag:
-
-  Shoebox is a symbolic name representing simple multipurpose storage for old toys, lego bricks, commix books, SEGA/Nintendo cartridges, Play Station disks, board game accessories... in short, for things that used to (or still) bring us joy. We believe that this "shoebox" contains a few "toys" that might help you brining a structure in teamwork and make collaborative software development with your peers more enjoyable. :nerd_face: :headphones: :computer:
+  ...cus' it has something in it to getcha runnin'! :checkered_flag: :running: :boom:
 
 ### TL;DR
 
 - Components: Git; CI/CD; Docker Registry; Package Management; Secrets Management; Project Management
-- Minimum requirements: CentOS/RHEL 7.0; 2 vCPUs; 4 GB RAM; 20 GB storage; 1 IPv4 address
+- Minimum requirements: CentOS/RHEL 7.0; 2 vCPUs; 2 GB RAM; 20 GB storage; 1 IPv4 address
 - Cons: Single machine configuration; Docker support is a MUST for the build pipeline
 - Future plans: Add more build configurations; Move to K8s
 
