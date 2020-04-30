@@ -81,7 +81,9 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
     - Open the administration console ![Alt text](/resources/img/proget_cog.png?raw=true "ProGet administration console"), then navigate to `Security & Authentication -> API Keys & Access Logs`. 
 
-    - Create API keys for `PackagePublisher` user. Click [Create API Key] to open the _Create API Key_ dialog. 
+    - Create an API key for `PackagePublisher` user:
+        
+         Click [Create API Key] to open the _Create API Key_ dialog. 
     
         Fill in the _Feed API user_ with matching user names, and enable access to _Feed API_ by checking _Grant access to Feed API_ checkbox. Click [Save API Key] to save changes and proceed.
 
@@ -94,7 +96,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
 4. Create NuGet feed
 
-    > INFO: NuGet feed is required for testing the continuous integration setup.
+    > INFO: NuGet feed is required for testing the CI(continuous integration) setup.
 
     - Navigate to `Feeds` and click [Create New Feed] to open the _Create Feed_ dialog. Set _Feed name_ to `v2`, then choose _Third-party package format_ and select _NuGet_ from the dropdown. Click [Create Feed] to save changes. The created feed is exposed through the following uri: packages._yourdomain.com_/nuget/v2/
 

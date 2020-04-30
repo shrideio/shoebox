@@ -31,7 +31,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
 ### Setup
 
-1. Drone Vault plugin requires a Vault client token for accessing secrets stored in the Vault service. Check if the `$VAULT_TOKEN` environment variable is assigned by running the following command `$ echo $VAULT_TOKEN`. If not, fetch the Vault client token and set the variable before continuing as described [here](/src/vault/README.md#issue-a-client-token). Replace the placeholder in the `.env` file by running the following command.
+1. Drone Vault plugin requires a Vault client token for accessing secrets stored in the Vault service. Check if the `$VAULT_TOKEN` environment variable is assigned by running the following command `$ echo $VAULT_TOKEN`. If not, fetch the Vault client token and set the variable as described [here](/src/vault/README.md#issue-a-client-token) before continuing. Replace the placeholder in the `.env` file by running the following command.
 
     > WARNING: Do not forget to replace [vault-token] with the actual value
 
@@ -48,11 +48,11 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
       $ sudo docker-compose up -d
       ```
 
-    Run `$ sudo docker ps | grep ci` to verify if the listed containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
+    Run `$ sudo docker ps | grep ci` to verify that listed above containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
 
-3. Prepare and run a test build. The purpose of the test build is to very if secrets can be fetched from Vault, and the container produced by the build pipeline can be pushed to a private Docker registry.
+3. Prepare and run a test build. The purpose of the test build is to verify that secrets can be fetched from Vault, and that the container produced by the build pipeline can be pushed to a private Docker registry.
 
-    -  Create a git user for the CI service for enabling access to repositories. Use the values of `DRONE_GIT_USERNAME` and `DRONE_GIT_PASSWORD` from the `secrets.ini` file as username and password accordingly. After the user is created, make sure that the user has the setting: "This account has permissions to create Git Hooks" enabled. Log in to the Git service and create a repository named `ci.build.sample`.
+    -  Create a git user for the CI service for enabling access to repositories. Use the values of `DRONE_GIT_USERNAME` and `DRONE_GIT_PASSWORD` from the `secrets.ini` file as username and password accordingly. After the user is created, make sure that the user has the setting: "This account has permissions to create Git Hooks" enabled. Log into the Git as the `DRONE_GIT_USERNAME` user and create a repository named `ci.build.sample`.
 
         > IMPORTANT: For repositories not created under `DRONE_GIT_USERNAME`, adding that user as an admin collaborator should enable access for the CI service.
 
