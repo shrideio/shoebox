@@ -192,7 +192,7 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
   Current mode:                   enforcing
   ```
 
-  If SELinux is `enabled` follow the instruction to disable it, otherwise, continue to the next section.
+  If SELinux is `enabled`, follow the instruction to disable it, otherwise, continue to the next section.
 
   Edit the SELinux configuration file
 
@@ -438,7 +438,7 @@ The credentials for accessing the proxy dashboard at `proxy`.yourdomain.com will
 
 ### Containers infrastructure
 
-The `setup_containers.sh` scripts creates directories for container volume mounts, generates `.evn` files, and copies configuration files (i.e. Vault and Consul) to service working directories if necessary. It also generates secrets for certain service components (i.e. databases) and users if required, and stores them in the `secretes.ini` files in services working directories.
+The `setup_containers.sh` scripts creates directories for container volume mounts, generates `.evn` files, and copies configuration files (i.e. Vault and Consul) to service working directories if necessary. It also generates secrets for certain service components (i.e. databases) and users if required, and stores them in the `secretes.ini` files in services' working directories.
 
 > IMPORTANT: Once the secrets are created, they remain intact, therefore  `setup_containers.sh` can be run multiple times without modifying credentials.
 
