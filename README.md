@@ -457,7 +457,7 @@ Run the following command to prepare the necessary infrastructure for docker con
 $ sudo $REPO_ROOT/src/setup_containers.sh $SHOEBOX_ROOT $YOUR_DOMAIN
 ```
 
-Verify the directories are created:
+Verify the directories are created
 
 ```
 $ sudo ls $SHOEBOX_ROOT
@@ -469,7 +469,7 @@ The output should contain the following list with service working directories:
 ci-drone git-gogs packages-proget project-taiga prox-traefik registry-docker vault-hashicorp 
 ```
 
-Verify that the placeholders are replaced by viewing the content of a sample `.env` file (i.e. git/.env).
+Verify the placeholders are replaced by viewing the content of a sample `.env` file (i.e. git/.env).
 
 ```
 $ sudo cat $REPO_ROOT/src/git/.env
