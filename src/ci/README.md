@@ -111,9 +111,15 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
         $ curl http://localhost:9080/api/hello
         ```
 
-        If the expected output is not shown, consult with the troubleshooting section further for investigating the issue in detail.
+        If the expected output is shown you can remove the container using the following command:
+        
+        ```
+        $ docker rm -f [CONTAINER_ID]
+        ```
+        
+        otherwise, consult with the troubleshooting section further for investigating the issue in detail.
 
-      - If the build is failed (red (X) icon), open and inspect the build log for troubleshooting. The build-log can be accessed by clicking on the build record. If the failure cannot be inferred from the logs, check the troubleshooting section further for investigating the issue in detail.
+      - If the build failed (red (X) icon), open and inspect the build log for troubleshooting. The build-log can be accessed by clicking on the build record. If the failure cannot be inferred from the logs, check the troubleshooting section further for investigating the issue in detail.
 
 
 ### Build failures troubleshooting
