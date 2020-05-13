@@ -328,9 +328,9 @@ Certain services in this setup require an SMTP relay for sending email notificat
     Execute the following commands to update the ini file with the Cloudflare credentials and Let's Encrypt email.
 
     ```
-    echo "CLOUDFLARE_EMAIL=$CLOUDFLARE_EMAIL" >> $CLOUDFLARE_API_INI
-    echo "CLOUDFLARE_API_KEY=$CLOUDFLARE_API_KEY" >> $CLOUDFLARE_API_INI
-    echo "LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL" >> $CLOUDFLARE_API_INI
+    $ echo "CLOUDFLARE_EMAIL=$CLOUDFLARE_EMAIL" >> $CLOUDFLARE_API_INI
+    $ echo "CLOUDFLARE_API_KEY=$CLOUDFLARE_API_KEY" >> $CLOUDFLARE_API_INI
+    $ echo "LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL" >> $CLOUDFLARE_API_INI
     ```
 
     Run `$ sudo cat $CLOUDFLARE_API_INI` to verify the result.
