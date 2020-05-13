@@ -429,7 +429,7 @@ $ sudo find $REPO_ROOT -type f -name "*.sh" -exec chmod +x {} \;
   ```
   $ cd $REPO_ROOT/src/proxy/
   $ sudo ./proxy_containers_setup.sh $SHOEBOX_ROOT $YOUR_DOMAIN $CLOUDFLARE_API_INI
-  $ docker-compose up -d
+  $ sudo docker-compose up -d
   ```
   Run `$ sudo docker ps | grep proxy`to verify if the container is up and running.
 
