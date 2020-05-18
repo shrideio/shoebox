@@ -2,7 +2,7 @@
 
 ### What is it?
 
-Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose) for setting up a simple collaborative software development environment. It can be hosted on a VPS or dedicated server as an inexpensive alternative for subscription-based could services. Software components used in this setup are either open source or have free versions (some with limitations, please check).
+Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose) for setting up a simple collaborative software development environment. It can be hosted on a VPS or dedicated server as an inexpensive alternative for subscription-based cloud services. Software components used in this setup are either open source or have free versions (some with limitations, please check).
 
 #### Tools
 
@@ -274,7 +274,7 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
     $ sudo docker-compose --version # confirm Docker Compose is successfully installed
     ```
 
-### Optional: SMTP relay
+### SMTP relay
 
 Certain services in this setup require an SMTP relay for sending email notifications. If your DNS provider includes a free email address, you may want to use the provider's SMTP server; otherwise, there are a few free emailing services with a limited number of messages sent per day/month (at least 100 emails a day).
 
@@ -287,75 +287,72 @@ Certain services in this setup require an SMTP relay for sending email notificat
 ## Network
 
 
-### DNS Provider
+### DNS provider
 
 [Cloudflare](https://www.cloudflare.com/) is used as the default DNS provider for this setup. It provides a DNS API that is used by Certbot for proofing the domain name ownership when acquiring an SSL/TLS certificate.
 
-> IMPORTANT: If Cloudflare is not an option, there are a few more [DNS providers compatible with Certbot](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438). In this case, the actions described below must be adjusted accordingly.
+> IMPORTANT: If Cloudflare is not an option, there are a few more [DNS providers compatible with Certbot](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438). Adjust the following actions according to the DNS provider of your choice.
 
-> WARNING: If the selected DNS provider is not compatible with Certbot, the **Network** section is deemed incompatible. The certificate acquisition process and renewal setup must be conducted independently.
+<a name="cloudflare-account-setup"></a> Create a [Cloudflare account](https://dash.cloudflare.com/sign-up), the basic plan is free of charge. Add your domain name as a website and complete the verification process for proving the domain name ownership.
 
-1. <a name="cloudflare-account-setup"></a> Create a [Cloudflare account](https://dash.cloudflare.com/sign-up), the basic plan is free of charge. Add your domain name as a website and complete the verification process for proving the domain name ownership.
-
-2. <a name="cloudflare-name-servers"></a> Change the name servers in the control panel of your domain name provider to the Cloudflare's name servers. To get the name servers, navigate to `DNS -> Cloudflare nameservers`. Depending on the TTL set in the DNS control panel it may take some time for the change to take effect, keep `ping`-ing the domain name periodically.
-
-3. <a name="disable-http-proxy"></a> Disable the HTTP proxy for main and subdomain names. click the cloud icon ![Alt text](/resources/img/http_proxy_on.png?raw=true "HTTP proxy - ON") next to each domain/subdomain name to gray it out ![Alt text](/resources/img/http_proxy_off.png?raw=true "HTTP proxy - OFF").
-
-   > WARNING: If the http proxy is not disabled, it causes an obscure error response such as _ERR_TOO_MANY_REDIRECTS_.
-
-4. <a name="cloudflare-dns-api-client"></a> Cloudflare API credentials are used by Certbot for proving the domain name ownership when acquiring an HTTPS certificate from [Let’s Encrypt](https://letsencrypt.org/).
-
-   > INFO: Adjust the actions accordingly if the DNS provider is not Cloudflare.
-
-   Get the DNS API key: In the Cloudflare panel browse to `Overview -> Get your API token -> API Tokens -> Global API Key [View]`.
-
-   Export the following environment variables with matching values:
-  
-    ```
-    $ export CLOUDFLARE_EMAIL=[cloudflare-email] # Cloudflare email (login)
-    $ export CLOUDFLARE_API_KEY=[cloudflare-api-key] # Cloudflare Global API key
-    $ export LETSENCRYPT_EMAIL=[letsencrypt-email] # Email for Let's Encrypt
-    ```
-
-    Create an ini file for the Cloudflare DNS API client.
-
-    ```
-    $ sudo mkdir -p /etc/cloudflare
-    $ export CLOUDFLARE_API_INI=/etc/cloudflare/cloudflare-api.ini
-    $ sudo touch $CLOUDFLARE_API_INI
-    ```
-
-    Execute the following commands to update the ini file with the Cloudflare credentials and Let's Encrypt email.
-
-    ```
-    $ echo "CLOUDFLARE_EMAIL=$CLOUDFLARE_EMAIL" >> $CLOUDFLARE_API_INI
-    $ echo "CLOUDFLARE_API_KEY=$CLOUDFLARE_API_KEY" >> $CLOUDFLARE_API_INI
-    $ echo "LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL" >> $CLOUDFLARE_API_INI
-    ```
-
-    Run `$ sudo cat $CLOUDFLARE_API_INI` to verify the result.
+<a name="cloudflare-name-servers"></a> Change the name servers in the control panel of your domain name provider to the Cloudflare's name servers, the name servers can be found at `DNS -> Cloudflare nameservers`. Depending on the TTL set in the DNS control panel it may take some time for the change to take effect, keep `ping`-ing the domain name periodically.
 
 
-### Subdomain Records
+### Subdomain records
 
 > IMPORTANT: Adjust the actions accordingly if the DNS provider is not Cloudflare.
 
-Login to [Cloudflare](https://dash.cloudflare.com/login), click on your domain name and then navigate to the `DNS` menu. Click the [+Add record] button to open the record input form.
+Navigate to the `DNS` menu, Click the [+Add record] button to open the record input form.
 
-Create _CNAME_ aliases (bolded) for the following subdomains:
+  Create _CNAME_ aliases (bolded) for the following subdomains:
 
-- **proxy**.yourdomain.com (Proxy dashboard)
-- **git**.yourdomain.com (Git server)
-- **registry**.yourdomain.com (Docker registry)
-- **registryui**.yourdomain.com (Docker registry ui)
-- **packages**.yourdomain.com (packages registry)
-- **vault**.yourdomain.com (secret/key vault server)
-- **ci**.yourdomain.com (continues integration/build server)
-- **project**.yourdomain.com (project management tool)
+  - **proxy**.yourdomain.com (Proxy dashboard)
+  - **git**.yourdomain.com (Git server)
+  - **registry**.yourdomain.com (Docker registry)
+  - **registryui**.yourdomain.com (Docker registry ui)
+  - **packages**.yourdomain.com (packages registry)
+  - **vault**.yourdomain.com (secret/key vault server)
+  - **ci**.yourdomain.com (continues integration/build server)
+  - **project**.yourdomain.com (project management tool)
 
-> WARNING: Do not forget to disable the http proxy for all of the subdomains as described [here](#disable-http-proxy)
+Disable the HTTP proxy for main and subdomain names. Click the cloud icon ![Alt text](/resources/img/http_proxy_on.png?raw=true "HTTP proxy - ON") next to each domain/subdomain name to gray it out ![Alt text](/resources/img/http_proxy_off.png?raw=true "HTTP proxy - OFF").
+
+  > WARNING: If the http proxy is not disabled it causes an obscure error response such as _ERR_TOO_MANY_REDIRECTS_.
 
 Depending on the TTL value, it may take some time for the change to take effect, keep `ping`-ing the subdomains periodically to verify the result.
+
+
+### DNS API configuration
+
+<a name="cloudflare-dns-api-client"></a> Cloudflare API credentials are used by Certbot for proving the domain name ownership when acquiring an HTTPS certificate from [Let’s Encrypt](https://letsencrypt.org/).
+
+ Get the DNS API key. In the Cloudflare panel browse to `Overview -> Get your API token -> API Tokens -> Global API Key [View]`.
+
+  Export the following environment variables with matching values of Cloudflare email (login) and API key, and Let's Encrypt email.
+
+  ```
+  $ export CLOUDFLARE_EMAIL=[cloudflare-email]
+  $ export CLOUDFLARE_API_KEY=[cloudflare-api-key]
+  $ export LETSENCRYPT_EMAIL=[letsencrypt-email]
+  ```
+
+Create an ini file for the Cloudflare DNS API client.
+
+  ```
+  $ sudo mkdir -p /etc/cloudflare
+  $ export CLOUDFLARE_API_INI=/etc/cloudflare/cloudflare-api.ini
+  $ sudo touch $CLOUDFLARE_API_INI
+  ```
+
+Execute the following commands to update the ini file with the Cloudflare credentials and Let's Encrypt email.
+
+  ```
+  $ echo "CLOUDFLARE_EMAIL=$CLOUDFLARE_EMAIL" >> $CLOUDFLARE_API_INI
+  $ echo "CLOUDFLARE_API_KEY=$CLOUDFLARE_API_KEY" >> $CLOUDFLARE_API_INI
+  $ echo "LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL" >> $CLOUDFLARE_API_INI
+  ```
+
+  Run `$ sudo cat $CLOUDFLARE_API_INI` to verify the result.
 
 
 ## Services
@@ -431,14 +428,15 @@ $ sudo find $REPO_ROOT -type f -name "*.sh" -exec chmod +x {} \;
   $ sudo ./proxy_containers_setup.sh $SHOEBOX_ROOT $YOUR_DOMAIN $CLOUDFLARE_API_INI
   $ sudo docker-compose up -d
   ```
-  Run `$ sudo docker ps | grep proxy`to verify if the container is up and running.
 
-The credentials for accessing the proxy dashboard at `proxy`.yourdomain.com can be found in `$SHOEBOX_ROOT/proxy-traefik/secrets.ini`.
+  Run `$ sudo docker ps | grep proxy`to verify if the `proxy` container is up and running.
+
+The credentials for accessing the proxy dashboard at `proxy`.yourdomain.com are printed to the console and can be found in `$SHOEBOX_ROOT/proxy-traefik/secrets.ini`.
 
 
 ### Containers infrastructure
 
-The `setup_containers.sh` scripts creates directories for container volume mounts, generates `.evn` files and copies configuration files (i.e. Vault and Consul) to service working directories if necessary. It also generates secrets for certain service components (i.e. databases) and users if required, and stores them in the `secretes.ini` files in services working directories.
+The `setup_containers.sh` script creates directories for container volume mounts, generates `.evn` files, and copies configuration files (i.e. Vault and Consul) to service working directories if necessary. In addition, it generates secrets for service or database users and stores them in `secretes.ini` files in service working directories.
 
 > IMPORTANT: Once the secrets are created, they remain intact, therefore  `setup_containers.sh` can be run multiple times without modifying credentials.
 
@@ -481,7 +479,7 @@ If needed to rerun the script for a specific service, it can be done by running 
 $ sudo $REPO_ROOT/src/[service-name]/[service-name]_containers_setup.sh $SHOEBOX_ROOT $YOUR_DOMAIN
 ```
 
-where _[service-name]_ is one of `ci`, `git`, `packages`, `project`, `registry`, `vault`.
+where _[service-name]_ is one of the following: `ci`, `git`, `packages`, `project`, `registry`, `vault`.
 
 ### Service setup
 
