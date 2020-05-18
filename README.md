@@ -1,5 +1,7 @@
 # Shoebox
 
+![Alt text](/resources/img/shoebox_logo.png?raw=true "Shoebox")
+
 ### What is it?
 
 Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose) for setting up a simple collaborative software development environment. It can be hosted on a VPS or dedicated server as an inexpensive alternative for subscription-based cloud services. Software components used in this setup are either open source or have free versions (some with limitations, please check).
@@ -295,7 +297,7 @@ Certain services in this setup require an SMTP relay for sending email notificat
 
 <a name="cloudflare-account-setup"></a> Create a [Cloudflare account](https://dash.cloudflare.com/sign-up), the basic plan is free of charge. Add your domain name as a website and complete the verification process for proving the domain name ownership.
 
-<a name="cloudflare-name-servers"></a> Change the name servers in the control panel of your domain name provider to the Cloudflare's name servers, the name servers can be found at `DNS -> Cloudflare nameservers`. Depending on the TTL set in the DNS control panel it may take some time for the change to take effect, keep `ping`-ing the domain name periodically.
+<a name="cloudflare-name-servers"></a> Change the name servers in the control panel of your domain name provider to the Cloudflare name servers, the name servers can be found at `DNS -> Cloudflare nameservers`. Depending on the TTL set in the DNS control panel it may take some time for the change to take effect, keep `ping`-ing the domain name periodically.
 
 
 ### Subdomain records
