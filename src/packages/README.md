@@ -34,7 +34,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
     $ sudo docker-compose up -d
     ```
 
-    Run `$ sudo docker ps | grep packages` to verify if the listed containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
+    Run `$ sudo docker ps | grep packages` to verify if the containers listed above are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
 
 
 2. Configure ProGet

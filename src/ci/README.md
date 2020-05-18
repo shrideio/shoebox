@@ -31,7 +31,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
 ### Setup
 
-1. Drone Vault plugin requires a Vault client token for accessing secrets stored in the Vault service. Check if the `$VAULT_TOKEN` environment variable is assigned by running the following command `$ echo $VAULT_TOKEN`. If not, fetch the Vault client token and set the variable before continuing as described [here](/src/vault/README.md#issue-a-client-token). Replace the placeholder in the `.env` file by running the following command.
+1. Drone Vault plugin requires a Vault client token for accessing secrets stored in the Vault service. Check if the `$VAULT_TOKEN` environment variable is assigned by running the following command `$ echo $VAULT_TOKEN`. If not, fetch the Vault client token and set the variable as described [here](/src/vault/README.md#issue-a-client-token) before continuing. Replace the placeholder in the `.env` file by running the following command.
 
     > WARNING: Do not forget to replace [vault-token] with the actual value
 
@@ -48,11 +48,11 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
       $ sudo docker-compose up -d
       ```
 
-    Run `$ sudo docker ps | grep ci` to verify if the listed containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
+    Run `$ sudo docker ps | grep ci` to verify if the containers listed above are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
 
 3. Prepare and run a test build. The purpose of the test build is to very if secrets can be fetched from Vault, and the container produced by the build pipeline can be pushed to a private Docker registry.
 
-    -  Create a git user for the CI service for enabling access to repositories. Use the values of `DRONE_GIT_USERNAME` and `DRONE_GIT_PASSWORD` from the `secrets.ini` file as username and password accordingly. After the user is created, make sure that the user has the setting: "This account has permissions to create Git Hooks" enabled. Log in to the Git service and create a repository named `ci.build.sample`.
+    -  Create a git user for the CI service for enabling access to repositories. Use the values of `DRONE_GIT_USERNAME` and `DRONE_GIT_PASSWORD` from the `secrets.ini` file as username and password accordingly. After the user is created, make sure that the user has the setting: "This account has permissions to create Git Hooks" enabled. Log into the Git service and create a repository named `ci.build.sample`.
 
         > IMPORTANT: For repositories not created under `DRONE_GIT_USERNAME`, adding that user as an admin collaborator should enable access for the CI service.
 
@@ -60,7 +60,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
       - Navigate to ci._yourdomain.com_ and log in using the CI git user create earlier. If the repository is not listed, click the [SYNC] button in the top right corner and wait.
 
-        > WARNING: If the repository is still not shown after syncing, use the CI git user credentials (`DRONE_GIT_USERNAME` and `DRONE_GIT_PASSWORD`) to login to the Git service and check if the repository is accessible.
+        > WARNING: If the repository is still not shown after syncing, use the CI git user credentials (`DRONE_GIT_USERNAME` and `DRONE_GIT_PASSWORD`) to log into the Git service and check if the repository is accessible.
 
       - For activating the repository, click the repository name or [ACTIVATE], which should open the _SETTINGS_ tab. Then, click [ACTIVATE REPOSITORY] for activation.
 
@@ -97,7 +97,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
       - If the build is successful (green (✓) check icon) it should create a _ci.build.sample_ Docker image in the Docker registry (check `registryiu`_.yourdomain.com_). Verify the build result as follows.
 
-        Log in to the private registry by running the following commands.
+        Log into the private registry by running the following commands.
 
           ```
           $ source $SHOEBOX_ROOT/registry-docker/secrets.ini # loads $REGISTRY_USERNAME and $REGISTRY_PASSWORD variables

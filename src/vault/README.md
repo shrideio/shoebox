@@ -34,7 +34,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
     $ sudo docker-compose up -d
     ```
 
-    Run `$ sudo docker ps | grep vault` to verify if the listed containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
+    Run `$ sudo docker ps | grep vault` to verify if the containers listed above are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
 
 2. <a id="unseal-vault"></a>Unseal Vault
 
@@ -152,7 +152,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
     - <a name="read-secret"></a> Verifying if the access token is correct and the associated role can access the secret using the issue client token.
 
-        - Log in to Vault using the client token and open the UI shell (![Alt text](/resources/img/vault_shell.png?raw=true "Vault shell")).
+        - Log into Vault using the client token and open the UI shell (![Alt text](/resources/img/vault_shell.png?raw=true "Vault shell")).
 
         - Execute the following command to read the content of `ci.build.sample` secret.
 
