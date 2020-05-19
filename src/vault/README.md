@@ -38,15 +38,15 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
 2. <a id="unseal-vault"></a>Unseal Vault
 
-    - Navigate to vault._yourdomain.com_ to start the initial setup. It is recommended to have at least `5` _Key shares_ and `3` _Key threshold_ for the [key rotation](https://www.vaultproject.io/docs/internals/rotation.html). Set the values and click [Initialize]. 
+    - Navigate to vault._yourdomain.com_ to start the initial setup. It is recommended to have at least `5` **Key shares** and `3` **Key threshold** for the [key rotation](https://www.vaultproject.io/docs/internals/rotation.html). Set the values and click [Initialize]. 
 
-    - After the root token and key shares are generated click the _Download keys_ link and download a json file containing the aforementioned tokens. Click [Continue to Unseal] to proceed with the setup.
+    - After the root token and key shares are generated click the _Download keys_ link and download the json file containing the aforementioned tokens. Click [Continue to Unseal] to proceed with the setup.
 
       > IMPORTANT: Secure the file with tokens as the tokens will be used for accessing and managing the vault service.
 
     - Enter 3 out of 5 master key portions from the json file one by one to unseal the vault and click [Unseal] to proceed.
 
-    - Choose _Token_ as the authentication method and enter the root token from the downloaded json file, then click [Sign in] to log in.
+    - Choose **Token** as the authentication method and enter the root token from the downloaded json file, then click [Sign in] to log in.
 
 3. Enable KVv2 secrets engine
 
@@ -58,7 +58,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
         > INFO: Check the [KV engine documentation](https://www.vaultproject.io/docs/secrets/kv/kv-v2) for more information.
 
-    - Set _Path_ to `secrets` and _Version_ to `2` (default KV engine version), then click [Enable Engine] to finish the secrets engine setup.
+    - Set **Path** to `secrets` and **Version** to `2` (default KV engine version), then click [Enable Engine] to finish the secrets engine setup.
 
         > INFO: Ignore the following error if shown: _Upgrading from non-versioned to versioned data. This backend will be unavailable for a brief period and will resume service shortly_, and continue the setup.
 
@@ -66,7 +66,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
     - Navigate to `Secrets -> secrets` to open the secret management console, then click [Create secret +].
 
-    - Set _Path for this secret_ to `ci.build.sample` and create a single entry version data with the following key/value pair `hello_world`/`Hello world!`, then click [Save] to save changes.
+    - Set **Path for this secret** to `ci.build.sample` and create a single entry version data with the following key/value pair `hello_world`/`Hello world!`, then click [Save] to save changes.
 
         > IMPORTANT: The secret is used by the continuous integration server for a test build.
 
@@ -76,15 +76,13 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
     - Enable the AppRole authentication method.
 
-        - Navigate to the `Access` menu and then click [Enable new method +], then choose the _AppRole_ option from the list and click [Next] to continue.
+        - Navigate to the `Access` menu and then click [Enable new method +], then choose the **AppRole** option from the list and click [Next] to continue.
 
-        - Click the `Method Options` link to expand the options section and set  _Default Lease TTL_ and  _Max Lease TTL_ to `0` (zero), _Token Type_ to `service`. Click [Enable Method] to finish the authentication method setup.
+        - Click the `Method Options` link to expand the options section and set:  **Default Lease TTL** and **Max Lease TTL** to `0` (zero), **Token Type** to `service`. Click [Enable Method] to finish the authentication method setup.
 
     - Create a policy for authenticating and accessing secrets.
     
-        Navigate to the `Policies` menu and click [Create ACL policy +]. Set _Name_ to `ciagent` and copy-paste the configuration bellow into the _Policy_ field.
-    
-        > IMPORTANT: `approle` is the alias for the _AppRole_ authentication method enabled earlier. If a different alias is chosen make sure to correct the `path` value for the login policy.
+        Navigate to the `Policies` menu and click [Create ACL policy +]. Then, the  opened form set **Name** to `ciagent` and copy-paste the configuration bellow into the **Policy** field.
     
         ```
         # Login with AppRole
@@ -97,6 +95,9 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
             capabilities = [ "read" ]
         }
         ```
+
+        > IMPORTANT: `approle` is the alias for the _AppRole_ authentication method enabled earlier. If a different alias is chosen make sure to correct the `path` value for the login policy.
+    
 
         Click [Create policy] to finish the policy setup.
     
@@ -148,7 +149,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
         - Next, type `api` in the UI shell and press the `Enter` key to open _Vault API explorer_. Find `POST /auth/approle/login/` and click on the section to expand it, then click [Try it out] to enable editing.
         
-        - Fill in the `role_id` and `secret_id` request body parameters with matching values captured earlier. Then, click [Execute - send a request with your token to Vault] to send an authentication request and receive a response containing the client token. Capture the values of `client_token`, it needs to be verified before actual use.
+        - Fill in the `role_id` and `secret_id` request body parameters with matching values captured earlier. Then, click [Execute - send a request with your token to Vault] to send an authentication request and receive a response containing the client token. Capture the value of `client_token` from the response body, as it needs to be verified before actual use.
 
     - <a name="read-secret"></a> Verifying if the access token is correct and the associated role can access the secret using the issue client token.
 
@@ -169,4 +170,4 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
         echo $VAULT_TOKEN
         ```
 
-        The environment value is used further for configuring the integration between ci and vault servers.
+        The environment variable is used further for configuring the integration between ci and vault servers.

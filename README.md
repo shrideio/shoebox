@@ -107,7 +107,7 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
 
 - Shoebox - why the name?
 
-  ...cus' it has something in it to getcha runnin'! :checkered_flag: :running: :boom:
+  ...cus' it has something in it to getcha runnin'! :boom: :running: :checkered_flag:
 
 ### TL;DR
 
@@ -129,11 +129,8 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
     - [SMTP relay](#smtp-relay)
 - [Network](#network)
   - [DNS Provider](#dns-provider)
-    - [Account setup](#cloudflare-account-setup)
-    - [Name servers](#cloudflare-name-servers)
-    - [Disable HTTP proxy](#disable-http-proxy)
-    - [DNS API client](#cloudflare-dns-api-client)
   - [Subdomain Records](#subdomain-records)
+  - [DNS API client](#dns-api-client)
 - [Services](#services)
   - [Environment variables](#environment-variables)
   - [Setup scripts](#setup-scripts)
@@ -295,9 +292,9 @@ Certain services in this setup require an SMTP relay for sending email notificat
 
 > IMPORTANT: If Cloudflare is not an option, there are a few more [DNS providers compatible with Certbot](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438). Adjust the following actions according to the DNS provider of your choice.
 
-<a name="cloudflare-account-setup"></a> Create a [Cloudflare account](https://dash.cloudflare.com/sign-up), the basic plan is free of charge. Add your domain name as a website and complete the verification process for proving the domain name ownership.
+Create a [Cloudflare account](https://dash.cloudflare.com/sign-up), the basic plan is free of charge. Add your domain name as a website and complete the verification process for proving the domain name ownership.
 
-<a name="cloudflare-name-servers"></a> Change the name servers in the control panel of your domain name provider to the Cloudflare name servers, the name servers can be found at `DNS -> Cloudflare nameservers`. Depending on the TTL set in the DNS control panel it may take some time for the change to take effect, keep `ping`-ing the domain name periodically.
+Change the name servers in the control panel of your domain name provider to the Cloudflare name servers, the name servers can be found at `DNS -> Cloudflare nameservers`. Depending on the TTL set in the DNS control panel it may take some time for the change to take effect, keep `ping`-ing the domain name periodically.
 
 
 ### Subdomain records
@@ -324,9 +321,9 @@ Disable the HTTP proxy for main and subdomain names. Click the cloud icon ![Alt 
 Depending on the TTL value, it may take some time for the change to take effect, keep `ping`-ing the subdomains periodically to verify the result.
 
 
-### DNS API configuration
+### DNS API client
 
-<a name="cloudflare-dns-api-client"></a> Cloudflare API credentials are used by Certbot for proving the domain name ownership when acquiring an HTTPS certificate from [Let’s Encrypt](https://letsencrypt.org/).
+Cloudflare API credentials are used by Certbot for proving the domain name ownership when acquiring an HTTPS certificate from [Let’s Encrypt](https://letsencrypt.org/).
 
  Get the DNS API key. In the Cloudflare panel browse to `Overview -> Get your API token -> API Tokens -> Global API Key [View]`.
 

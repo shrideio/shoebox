@@ -38,15 +38,14 @@ Proceed if all of the checks pass, otherwise, check the [landing page](/src/READ
 
     - Navigate to git._yourdomain.com_ to open the Gogs installer page.
 
-    - Set the configuration option as follows
-      > IMPORTANT: Despite creating an admin user is optional, it is recommended to create one as a failover in case the SMTP relay is unreachable.
+    - Set the configuration option as follows:
 
       > INFO: Do not forget to replace `yourdomain.com` with the actual domain name and use real email addresses.
 
       | Database Settings |                                                                                           |
       | :---------------- | :---------------------------------------------------------------------------------------- |
       | Database Type     | **PostgreSQL**                                                                            |
-      | Host              | `git-db:5432` (as defined in `git_docker_compose.yml`),                                   |
+      | Host              | `git-db:5432` (as defined in `git-docker-compose.yml`),                                   |
       | User              | `GOGS_POSTGRESQL_USER` from `secrets.ini`                                                 |
       | Password          | `GOGS_POSTGRESQL_PASSWORD` from `secrets.ini`                                             |
       | Database Name     | `GOGS_POSTGRESQL_DATABASE` from `secrets.ini`                                             |
@@ -54,6 +53,9 @@ Proceed if all of the checks pass, otherwise, check the [landing page](/src/READ
       | Application General Settings |                              |
       | :--------------------------- | :--------------------------- |
       | Application URL              | https://git._yourdomain.com_ |
+
+
+      > IMPORTANT: Despite _Admin Account Settings_ being listed under the _Optional Settings_ section it is highly recommended to create the administrator account on setup.
 
       | Optional Settings                        |                                      |
       | :--------------------------------------- | :----------------------------------- |
@@ -71,9 +73,9 @@ Proceed if all of the checks pass, otherwise, check the [landing page](/src/READ
       | Username                                 | i.e. gitadmin                        |
       | Admin Email                              | i.e. gitadmin@_yourdomain.com_       |
 
-3. Click [Install Gogs], after the installation is completed very if Gogs created the `app.ini` file at `$SHOEBOX_ROOT/git-gogs/data/gogs/conf`. Check [Googs Configuration Cheat Sheet](https://gogs.io/docs/advanced/configuration_cheat_sheet) for post-installation configuration.
+3. Click [Install Gogs], after the installation is completed very if the `app.ini` file is created at `$SHOEBOX_ROOT/git-gogs/data/gogs/conf`. Check [Googs Configuration Cheat Sheet](https://gogs.io/docs/advanced/configuration_cheat_sheet) for post-installation configuration.
 
-    > INFO: Do not forget to restart the `git` container after modifying `app.ini`. Otherwise, new configuration settings are not applied.
+    > INFO: Do not forget to restart the `git` container after modifying `app.ini`,otherwise, new configuration settings are not applied.
 
 4. Sign in with the admin user and follow the checklist:
     - [x] A new user can be created and receives an email notification upon registration

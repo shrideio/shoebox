@@ -41,7 +41,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
     Navigate to packages._yourdomain.com_ and login as _Admin/Admin_ as described on the login screen. If an error reported check the container logs as mentioned above.
 
-    - Activate ProGet with a free licence key.
+    - Activate ProGet with a free licence key
 
         - Open the administration console using the cog icon ![Alt text](/resources/img/proget_cog.png?raw=true "ProGet administration console") in the top right corner.
 
@@ -51,9 +51,9 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
         If the desired result was not achieved and ProGet remains inactive, check the [license documentation](https://docs.inedo.com/docs/proget/administration/license).
 
-    - Change the administrator password.
+    - Change the administrator password
     
-        Hover with the mouse cursor onto the user icon ![Alt text](/resources/img/proget_user.png?raw=true "ProGet user") in the top right corner to open a context menu and then click _Change Password_ to open the change password dialog. After the password is changed, the welcome message should disappear from the login screen.        
+        Hover with the mouse cursor onto the user icon ![Alt text](/resources/img/proget_user.png?raw=true "ProGet user") in the top right corner to open a context menu and then click _Change Password_ to open the change password dialog. After the password is changed, the welcome message should disappear from the login screen.
 
     - Change the packages registry url.
 
@@ -81,9 +81,9 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
     - Open the administration console ![Alt text](/resources/img/proget_cog.png?raw=true "ProGet administration console"), then navigate to `Security & Authentication -> API Keys & Access Logs`. 
 
-    - Create API keys for `PackagePublisher` user. Click [Create API Key] to open the _Create API Key_ dialog. 
+    - Create API keys for `PackagePublisher` user.
     
-        Fill in the _Feed API user_ with matching user names, and enable access to _Feed API_ by checking _Grant access to Feed API_ checkbox. Click [Save API Key] to save changes and proceed.
+        Click [Create API Key] to open the _Create API Key_ dialog. Fill in the _Feed API user_ with matching user names, and enable access to _Feed API_ by checking _Grant access to Feed API_ checkbox. Click [Save API Key] to save changes and proceed.
 
     - Create the `ci.packages` secret in Vault as described [here](/src/vault/README.md#create-a-secret) for storing credentials for pulling packages from by the CI service. The secret must contain the following key/value pairs:
 
@@ -124,6 +124,6 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
         $ sudo dotnet nuget push $PACKAGE_PATH --api-key $PUBLISHER_API_KEY --source https://packages.$YOUR_DOMAIN/nuget/v2/
         ```
 
-        Navigate to the feed `Feed -> v2` and verify if the packages is successfully uploaded.
+        Navigate to the feed `Feed -> v2` and verify if the package is successfully uploaded.
 
 > IMPORTANT: Despite Proget advertising the Docker registry feature, it does not work correctly when the service is hosted in a Linux container due to the following issue [Docker Push to Proget Container Registry fails](https://forums.inedo.com/topic/2788/docker-push-to-proget-container-registry-fails).
