@@ -494,7 +494,7 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
 
   Each service is provided with a tutorial describing steps required for initial setup and usage examples for executing routine tasks in the future. The key outcome of this setup is enabling the CI/CD service to run automated builds by utilizing the features of the rest of the services in this setup.
 
-  > IMPORTANT: Order matters
+  > IMPORTANT: Order matters.
 
   1. [Git (Gogs)](/src/git/README.md)
   2. [Key/Secret Vault (Vault)](/src/vault/README.md)
