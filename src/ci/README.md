@@ -86,7 +86,9 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
         $ sudo git add .
         $ sudo git commit -m "Adding ci.build.sample"
         $ source $SHOEBOX_ROOT/ci-drone/secrets.ini # load $DRONE_GIT_USERNAME and $DRONE_GIT_PASSWORD variables
-        $ sudo git push https://$DRONE_GIT_USERNAME:$DRONE_GIT_PASSWORD@git.$YOUR_DOMAIN/$DRONE_GIT_USERNAME/ci.build.sample.git master
+        $ sudo git remote add origin https://$DRONE_GIT_USERNAME:$DRONE_GIT_PASSWORD@git.$YOUR_DOMAIN/$DRONE_GIT_USERNAME/ci.build.sample.git
+        $ sudo git remote -v # check remote
+        $ sudo git push origin master
         ```
 
         > IMPORTANT: `git push` should trigger a build, otherwise, modify the `.trigger` file in the project directory and commit and push the change for triggering a build.
