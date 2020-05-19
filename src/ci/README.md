@@ -85,10 +85,8 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
         $ sudo git init
         $ sudo git add .
         $ sudo git commit -m "Adding ci.build.sample"
-        $ export DRONE_GIT_USERNAME=[drone-git-username]
-        $ sudo git remote add origin https://git.$YOUR_DOMAIN/$DRONE_GIT_USERNAME/ci.build.sample
-        $ sudo git remote -v
-        $ sudo git push origin master
+        $ source $SHOEBOX_ROOT/ci-drone/secrets.ini # load $DRONE_GIT_USERNAME and $DRONE_GIT_PASSWORD variables
+        $ sudo git push https://$DRONE_GIT_USERNAME:$DRONE_GIT_PASSWORD@git.$YOUR_DOMAIN/$DRONE_GIT_USERNAME/ci.build.sample.git master
         ```
 
         > IMPORTANT: `git push` should trigger a build, otherwise, modify the `.trigger` file in the project directory and commit and push the change for triggering a build.
@@ -100,7 +98,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
         Log into the private registry by running the following commands.
 
           ```
-          $ source $SHOEBOX_ROOT/registry-docker/secrets.ini # loads $REGISTRY_USERNAME and $REGISTRY_PASSWORD variables
+          $ source $SHOEBOX_ROOT/registry-docker/secrets.ini # load $REGISTRY_USERNAME and $REGISTRY_PASSWORD variables
           $ sudo docker login registry.$YOUR_DOMAIN --username $REGISTRY_USERNAME --password $REGISTRY_PASSWORD
           ```
 
