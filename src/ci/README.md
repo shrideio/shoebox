@@ -64,7 +64,6 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
       - For activating the repository, click the repository name or [ACTIVATE], which should open the _SETTINGS_ tab. Then, click [ACTIVATE REPOSITORY] for activation.
 
-
     - Add the sample project to the repository and trigger a build.
 
         - Run the following commands to replace the `@YOUR_DOMAIN` placeholder in `.drone.yml` file with the actual value to set correct links to external services.
@@ -152,7 +151,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
   The most fragile step of the build pipeline is `containerize` as it depends on external services - Vault and Docker Registry.
 
-    - Check if the secret values can be fetched by the Drone Vault plugin
+    - Check if secrets can be fetched by the Drone Vault plugin
 
         Replace the placeholders with matching values from `$REPO_ROOT/src/ci/.env` an set the environment values as follows.
 
@@ -167,18 +166,18 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
         $ drone plugins secret get secrets/data/ci.build.sample hello_world --repo ciagent/ci.build.sample
         ```
 
-        Check if Docker registry credentials are accessible.
+        Check if the Docker Registry credentials are accessible.
 
         ```
         $ drone plugins secret get secrets/data/ci.registry registry_username --repo ciagent/ci.build.sample
         $ drone plugins secret get secrets/data/ci.registry registry_password --repo ciagent/ci.build.sample
         ```
 
-        > WARNING: Be aware not to confuse the CLI to secret plugin communication or configurations errors with the real secret access issues reported as via _secret key not found_ or _secret not found_ error messages.
+        > WARNING: Be aware not to confuse the CLI to secret plugin communication or configurations errors. Secret access issues reported as the _secret key not found_ or _secret not found_ error messages.
 
         If the secret values cannot check if the secrets are accessible by the generated token (`VAULT_TOKEN`) as described [here](/src/vault/README.md#read-secret).
 
-    - Check Docker Registry configuration
+    - Check the Docker Registry configuration
 
       - Check if the registry can be accessed by the using the provided username and password values ([here](/src/registry/README.md#docker-registry-username-and-password))
 

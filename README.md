@@ -2,11 +2,11 @@
 
 ![Alt text](/resources/img/shoebox_logo.png?raw=true "Shoebox")
 
-### What is it?
+## What is it?
 
 Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose) for setting up a simple collaborative software development environment. It can be hosted on a VPS or dedicated server as an inexpensive alternative for subscription-based cloud services. Software components used in this setup are either open source or have free versions (some with limitations, please check).
 
-#### Tools
+### Tools
 
 | Name                                | Vendor                                                            | License                                                                          |
 | :---------------------------------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------------- |
@@ -20,7 +20,7 @@ Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose
 
 goto: [TL;DR](#tldr)
 
-### Why does this exist?
+## Why does this exist?
 
 The short answer is because of [“Those goddamn AWS charges!”](https://www.youtube.com/watch?v=982wFqC03v8).
 
@@ -30,7 +30,7 @@ On a serious note, we believe that even small teams can benefit from using a ful
 
 And lastly, this setup is a result of our ([mich4xD](https://github.com/mich4xD) and [bahram-aliyev](https://github.com/bahram-aliyev])) "valor" attempt to document and automate the deployment of essential services for a development environment when working on a personal project.
 
-### How does it work?
+## How does it work?
 
 This setup requires a Linux machine with root access and system requirements matching the following:
 
@@ -85,7 +85,10 @@ When it comes to choosing a physical host, there are three options for considera
 
 Either way, be mindful of the law of diminishing returns. For example, the premium paid for the extra storage on a VPS may equalize the VPS rental cost with the dedicated server monthly fee. Long story short, do back-of-the-napkin-math.
 
-### Q/A
+> INFO: Check https://serverbench.net/ for open source benchmark tools
+
+
+## Q/A
 
 - How to help or contribute?
 
@@ -95,7 +98,7 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
 
   Firstly, it is a single machine configuration incapable of running on a cluster. That potentially may become a problem when simultaneously running several build pipelines would degrade the performance of the other services. This deficiency should be resolved once the services are made deployable to a Kubernetes cluster.
 
-  Secondly, the technology of your choice must support Docker containerization for using the Drone build pipeline. If it does not, consider using alternatives such as [Jenkins CI](https://jenkins.io/) or [Concourse](https://concourse-ci.org/). No setup script or documentation is provided for the alternative CI services currently, however it might be added in the future, and you are more than welcome to contribute.
+  Secondly, the technology of your choice must support Docker containerization for using the Drone build pipeline. If it does not, consider using alternatives such as [Jenkins CI](https://jenkins.io/) or [Concourse](https://concourse-ci.org/). No setup script or documentation is provided for the alternative CI services currently.
 
   And lastly, the current build pipeline is .NET Core biased. Please feel free to contribute and add pipeline configurations for other technologies.
 
@@ -103,18 +106,20 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
 
   As it is mentioned earlier, adding Kubernetes support is a high priory task on the list. However, we need to acquaint ourselves with the technology first.
 
-  We will do our best to maintain the documentation and keep the scripts up-to-date, and continue adding new CI configurations for different technologies as the need arises (you are more than welcome to contribute).
+  We will do our best to maintain the documentation and keep the scripts up-to-date, and continue adding new CI configurations for different technologies as needed.
 
 - Shoebox - why the name?
 
   ...cus' it has something in it to getcha runnin'! :boom: :running: :checkered_flag:
 
-### TL;DR
+
+## TL;DR
 
 - Components: Git; CI/CD; Docker Registry; Package Management; Secrets Management; Project Management
 - Minimum requirements: CentOS/RHEL 7.0; 2 vCPUs; 2 GB RAM; 20 GB storage; 1 IPv4 address
 - Cons: Single machine configuration; Docker support is a MUST for the build pipeline
 - Future plans: Add more build configurations; Move to K8s
+
 
 ## Setup Outline
 
@@ -140,365 +145,365 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
 
 ## Tools
 
- ### Nano
+### Nano
 
-  > INFO: Simple console-based text editor
+> INFO: Simple console-based text editor
 
-  ```
-  $ sudo yum install -y nano
-  ```
+```
+$ sudo yum install -y nano
+```
 
-  Shortcuts:
+Shortcuts:
 
-  - Save changes: `ctrl` + `x`, `y`
-  - Discard changes: `ctrl` + `x`, `n`
-  - Cancel: `ctrl` + `x`, `ctrl` + `c`
+- Save changes: `ctrl` + `x`, `y`
+- Discard changes: `ctrl` + `x`, `n`
+- Cancel: `ctrl` + `x`, `ctrl` + `c`
 
- ### Git client
+### Git client
 
-  ```
-  $ sudo yum install -y git
-  $ sudo git --version # to confirm `git` is successfully installed
-  ```
+```
+$ sudo yum install -y git
+$ sudo git --version # to confirm `git` is successfully installed
+```
 
 ### Httpd tools
 
-  > INFO: Includes the `htpasswd` util required for generating hashed passwords.
+> INFO: Includes the `htpasswd` util required for generating hashed passwords.
 
-  ```
-  $ sudo yum install -y httpd-tools
-  ```
+```
+$ sudo yum install -y httpd-tools
+```
 
 
 ## Infrastructure
 
- ### Disable SELinux
+### Disable SELinux
 
-  > IMPORTANT: It is highly recommended to disable SELinux for avoiding issues with infrastructure services and Docker containers.
+> IMPORTANT: It is highly recommended to disable SELinux for avoiding issues with infrastructure services and Docker containers.
 
-  Check SELinux status.
+Check SELinux status.
+
+```
+$ sudo sestatus
+```
+
+Output:
+
+```
+SELinux status:                 enabled
+...
+...
+Current mode:                   enforcing
+```
+
+If SELinux is `enabled` follow the instruction to disable it, otherwise, continue to the next section.
+
+Edit the SELinux configuration file
+
+```
+$ sudo nano /etc/selinux/config
+```
+
+Set the `SELINUX` setting to `disabled` and save the file
+
+```
+SELINUX=disabled
+```
+
+Reboot.
+
+```
+$ sudo shutdown -r now
+```
+
+Check SELinux status, it is expected to be `disabled`.
+
+```
+$ sudo sestatus
+```
+
+Output:
+
+```
+SELinux status:                 disabled
+```
+
+### Docker infrastructure
+
+- Install Docker
 
   ```
-  $ sudo sestatus
+  $ sudo yum remove \
+      docker \
+      docker-client \
+      docker-client-latest \
+      docker-common \
+      docker-latest \
+      docker-latest-logrotate \
+      docker-logrotate \
+      docker-engine
+
+  $ sudo yum install -y \
+      yum-utils \
+      device-mapper-persistent-data \
+      lvm2
+
+  $ sudo yum-config-manager --add-repo \
+      https://download.docker.com/linux/centos/docker-ce.repo
+
+  $ sudo yum install -y docker-ce docker-ce-cli containerd.io
+
+  $ sudo systemctl enable docker
+  $ sudo systemctl start docker
   ```
-
-  Output:
-
-  ```
-  SELinux status:                 enabled
-  ...
-  ...
-  Current mode:                   enforcing
-  ```
-
-  If SELinux is `enabled` follow the instruction to disable it, otherwise, continue to the next section.
-
-  Edit the SELinux configuration file
-
-  ```
-  $ sudo nano /etc/selinux/config
-  ```
-
-  Set the `SELINUX` setting to `disabled` and save the file
-
-  ```
-  SELINUX=disabled
-  ```
-
-  Reboot.
+  Run the following command create and run a test container. The output should contain _Hello from Docker!_.
 
   ```
-  $ sudo shutdown -r now
+  $ sudo docker run hello-world # confirm Docker CE is successfully installed
   ```
 
-  Check SELinux status, it is expected to be `disabled`.
+- Install Docker Compose
+
+  > INFO: Check the latest stable Docker Compose version at https://github.com/docker/compose/releases
 
   ```
-  $ sudo sestatus
+  $ export DOCKER_COMPOSE_VERSION=1.25.5
+
+  $ sudo curl -L "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+  $ sudo curl -L https://raw.githubusercontent.com/docker/compose/$DOCKER_COMPOSE_VERSION/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
+
+  $ sudo chmod +x /usr/local/bin/docker-compose
+
+  $ sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+  $ sudo docker-compose --version # confirm Docker Compose is successfully installed
   ```
 
-  Output:
+### SMTP relay
 
-  ```
-  SELinux status:                 disabled
-  ```
+Certain services in this setup require an SMTP relay for sending email notifications. If your DNS provider includes a free email address, you may want to use the provider's SMTP server; otherwise, there are a few free emailing services with a limited number of messages sent per day/month (at least 100 emails a day).
 
- ### Docker infrastructure
-
-  - Install Docker
-
-    ```
-    $ sudo yum remove \
-        docker \
-        docker-client \
-        docker-client-latest \
-        docker-common \
-        docker-latest \
-        docker-latest-logrotate \
-        docker-logrotate \
-        docker-engine
-
-    $ sudo yum install -y \
-        yum-utils \
-        device-mapper-persistent-data \
-        lvm2
-
-    $ sudo yum-config-manager --add-repo \
-        https://download.docker.com/linux/centos/docker-ce.repo
-
-    $ sudo yum install -y docker-ce docker-ce-cli containerd.io
-
-    $ sudo systemctl enable docker
-    $ sudo systemctl start docker
-    ```
-    Run the following command create and run a test container. The output should contain _Hello from Docker!_.
-
-    ```
-    $ sudo docker run hello-world # confirm Docker CE is successfully installed
-    ```
-
-  - Install Docker Compose
-
-    > INFO: Check the latest stable Docker Compose version at https://github.com/docker/compose/releases
-
-    ```
-    $ export DOCKER_COMPOSE_VERSION=1.25.5
-
-    $ sudo curl -L "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-
-    $ sudo curl -L https://raw.githubusercontent.com/docker/compose/$DOCKER_COMPOSE_VERSION/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
-
-    $ sudo chmod +x /usr/local/bin/docker-compose
-
-    $ sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-    $ sudo docker-compose --version # confirm Docker Compose is successfully installed
-    ```
-
- ### SMTP relay
-
-  Certain services in this setup require an SMTP relay for sending email notifications. If your DNS provider includes a free email address, you may want to use the provider's SMTP server; otherwise, there are a few free emailing services with a limited number of messages sent per day/month (at least 100 emails a day).
-
-  - [SendPulse](https://sendpulse.com/prices/smtp) (12,000/month)
-  - [Mailgun](https://www.mailgun.com/pricing-options) (10,000/month)
-  - [Mailjet](https://www.mailjet.com/pricing/) (6,000/month, 200/day)
-  - [SendGrid](https://sendgrid.com/marketing/sendgrid-services-cro/#pricing-app) (100/day)
+- [SendPulse](https://sendpulse.com/prices/smtp) (12,000/month)
+- [Mailgun](https://www.mailgun.com/pricing-options) (10,000/month)
+- [Mailjet](https://www.mailjet.com/pricing/) (6,000/month, 200/day)
+- [SendGrid](https://sendgrid.com/marketing/sendgrid-services-cro/#pricing-app) (100/day)
 
 
 ## Network
 
- ### DNS provider
+### DNS provider
 
-  [Cloudflare](https://www.cloudflare.com/) is used as the default DNS provider for this setup. It provides a DNS API that is used by Certbot for proofing the domain name ownership when acquiring an SSL/TLS certificate.
+[Cloudflare](https://www.cloudflare.com/) is used as the default DNS provider for this setup. It provides a DNS API that is used by Certbot for proofing the domain name ownership when acquiring an SSL/TLS certificate.
 
-  > IMPORTANT: If Cloudflare is not an option, there are a few more [DNS providers compatible with Certbot](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438). Adjust the following actions according to the DNS provider of your choice.
+> IMPORTANT: If Cloudflare is not an option, there are a few more [DNS providers compatible with Certbot](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438). Adjust the following actions according to the DNS provider of your choice.
 
-  Create a [Cloudflare account](https://dash.cloudflare.com/sign-up), the basic plan is free of charge. Add your domain name as a website and complete the verification process for proving the domain name ownership.
+Create a [Cloudflare account](https://dash.cloudflare.com/sign-up), the basic plan is free of charge. Add your domain name as a website and complete the verification process for proving the domain name ownership.
 
-  Change the name servers in the control panel of your domain name provider to the Cloudflare name servers, the name servers can be found at `DNS -> Cloudflare nameservers`. Depending on the TTL set in the DNS control panel it may take some time for the change to take effect, keep `ping`-ing the domain name periodically.
-
-
- ### Subdomain records
-
-  > IMPORTANT: Adjust the actions accordingly if the DNS provider is not Cloudflare.
-
-  Navigate to the `DNS` menu, Click the [+Add record] button to open the record input form.
-
-  Create _CNAME_ aliases (bolded) for the following subdomains:
-
-  - **proxy**.yourdomain.com (Proxy dashboard)
-  - **git**.yourdomain.com (Git server)
-  - **registry**.yourdomain.com (Docker registry)
-  - **registryui**.yourdomain.com (Docker registry ui)
-  - **packages**.yourdomain.com (packages registry)
-  - **vault**.yourdomain.com (secret/key vault server)
-  - **ci**.yourdomain.com (continues integration/build server)
-  - **project**.yourdomain.com (project management tool)
-
-  Disable the HTTP proxy for main and subdomain names. Click the cloud icon ![Alt text](/resources/img/http_proxy_on.png?raw=true "HTTP proxy - ON") next to each domain/subdomain name to gray it out ![Alt text](/resources/img/http_proxy_off.png?raw=true "HTTP proxy - OFF").
-
-  > WARNING: If the http proxy is not disabled it causes an obscure error response such as _ERR_TOO_MANY_REDIRECTS_.
-
-  Depending on the TTL value, it may take some time for the change to take effect, keep `ping`-ing the subdomains periodically to verify the result.
+Change the name servers in the control panel of your domain name provider to the Cloudflare name servers, the name servers can be found at `DNS -> Cloudflare nameservers`. Depending on the TTL set in the DNS control panel it may take some time for the change to take effect, keep `ping`-ing the domain name periodically.
 
 
- ### DNS API client
+### Subdomain records
 
-  Cloudflare API credentials are used by Certbot for proving the domain name ownership when acquiring an HTTPS certificate from [Let’s Encrypt](https://letsencrypt.org/).
+> IMPORTANT: Adjust the actions accordingly if the DNS provider is not Cloudflare.
 
-  Get the DNS API key. In the Cloudflare panel browse to `Overview -> Get your API token -> API Tokens -> Global API Key [View]`.
+Navigate to the `DNS` menu, Click the [+Add record] button to open the record input form.
 
-  Export the following environment variables with matching values of Cloudflare email (login) and API key, and Let's Encrypt email.
+Create _CNAME_ aliases (bolded) for the following subdomains:
 
-  ```
-  $ export CLOUDFLARE_EMAIL=[cloudflare-email]
-  $ export CLOUDFLARE_API_KEY=[cloudflare-api-key]
-  $ export LETSENCRYPT_EMAIL=[letsencrypt-email]
-  ```
+- **proxy**.yourdomain.com (Proxy dashboard)
+- **git**.yourdomain.com (Git server)
+- **registry**.yourdomain.com (Docker registry)
+- **registryui**.yourdomain.com (Docker registry ui)
+- **packages**.yourdomain.com (packages registry)
+- **vault**.yourdomain.com (secret/key vault server)
+- **ci**.yourdomain.com (continues integration/build server)
+- **project**.yourdomain.com (project management tool)
 
-  Create an ini file for the Cloudflare DNS API client.
+Disable the HTTP proxy for main and subdomain names. Click the cloud icon ![Alt text](/resources/img/http_proxy_on.png?raw=true "HTTP proxy - ON") next to each domain/subdomain name to gray it out ![Alt text](/resources/img/http_proxy_off.png?raw=true "HTTP proxy - OFF").
 
-  ```
-  $ sudo mkdir -p /etc/cloudflare
-  $ export CLOUDFLARE_API_INI=/etc/cloudflare/cloudflare-api.ini
-  $ sudo touch $CLOUDFLARE_API_INI
-  ```
+> WARNING: If the http proxy is not disabled it causes an obscure error response such as _ERR_TOO_MANY_REDIRECTS_.
 
-  Execute the following commands to update the ini file with the Cloudflare credentials and Let's Encrypt email.
+Depending on the TTL value, it may take some time for the change to take effect, keep `ping`-ing the subdomains periodically to verify the result.
 
-  ```
-  $ echo "CLOUDFLARE_EMAIL=$CLOUDFLARE_EMAIL" >> $CLOUDFLARE_API_INI
-  $ echo "CLOUDFLARE_API_KEY=$CLOUDFLARE_API_KEY" >> $CLOUDFLARE_API_INI
-  $ echo "LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL" >> $CLOUDFLARE_API_INI
-  ```
 
-  Run `$ sudo cat $CLOUDFLARE_API_INI` to verify the result.
+### DNS API client
+
+Cloudflare API credentials are used by Certbot for proving the domain name ownership when acquiring an HTTPS certificate from [Let’s Encrypt](https://letsencrypt.org/).
+
+Get the DNS API key. In the Cloudflare panel browse to `Overview -> Get your API token -> API Tokens -> Global API Key [View]`.
+
+Export the following environment variables with matching values of Cloudflare email (login) and API key, and Let's Encrypt email.
+
+```
+$ export CLOUDFLARE_EMAIL=[cloudflare-email]
+$ export CLOUDFLARE_API_KEY=[cloudflare-api-key]
+$ export LETSENCRYPT_EMAIL=[letsencrypt-email]
+```
+
+Create an ini file for the Cloudflare DNS API client.
+
+```
+$ sudo mkdir -p /etc/cloudflare
+$ export CLOUDFLARE_API_INI=/etc/cloudflare/cloudflare-api.ini
+$ sudo touch $CLOUDFLARE_API_INI
+```
+
+Execute the following commands to update the ini file with the Cloudflare credentials and Let's Encrypt email.
+
+```
+$ echo "CLOUDFLARE_EMAIL=$CLOUDFLARE_EMAIL" >> $CLOUDFLARE_API_INI
+$ echo "CLOUDFLARE_API_KEY=$CLOUDFLARE_API_KEY" >> $CLOUDFLARE_API_INI
+$ echo "LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL" >> $CLOUDFLARE_API_INI
+```
+
+Run `$ sudo cat $CLOUDFLARE_API_INI` to verify the result.
 
 
 ## Services
 
 
- ### Environment variables
+### Environment variables
 
-  Set the following environment variables:
+Set the following environment variables:
 
-  > INFO: Review and modify if necessary.
+> INFO: Review and modify if necessary.
 
-  - `REPO_ROOT`
+- `REPO_ROOT`
 
-      The destination path for cloning this repository.
+    The destination path for cloning this repository.
 
-      ```
-      $ export REPO_ROOT=/tmp/shoebox
-      $ echo $REPO_ROOT
-      ```
+    ```
+    $ export REPO_ROOT=/tmp/shoebox
+    $ echo $REPO_ROOT
+    ```
 
-  - `YOUR_DOMAIN`
+- `YOUR_DOMAIN`
 
-      The domain name for the server with hosted services.
+    The domain name for the server with hosted services.
 
-      > IMPORTANT: Do not forget to replace `yourdomain.com` with the actual domain name.
+    > IMPORTANT: Do not forget to replace `yourdomain.com` with the actual domain name.
 
-      ```
-      $ export YOUR_DOMAIN=yourdomain.com
-      $ echo $YOUR_DOMAIN
-      ```
+    ```
+    $ export YOUR_DOMAIN=yourdomain.com
+    $ echo $YOUR_DOMAIN
+    ```
 
-  - `SHOEBOX_ROOT`
+- `SHOEBOX_ROOT`
 
-      The root directory where the data and configuration files of the services are stored.
+    The root directory where the data and configuration files of the services are stored.
 
-      ```
-      $ export SHOEBOX_ROOT=/var/shoebox
-      $ echo $SHOEBOX_ROOT
-      ```
-
-
- ### Setup scripts
-
-  Shallow clone this repository:
-
-  ```
-  $ sudo git clone --depth=1 https://github.com/shrideio/shoebox $REPO_ROOT
-  ```
-
-  Change the `*.sh` scripts file mode to `execute`:
-
-  ```
-  $ sudo find $REPO_ROOT -type f -name "*.sh" -exec chmod +x {} \;
-  ```
+    ```
+    $ export SHOEBOX_ROOT=/var/shoebox
+    $ echo $SHOEBOX_ROOT
+    ```
 
 
- ### Reverse proxy
+### Setup scripts
 
-  [Traefik](https://docs.traefik.io/) is used as a reverse proxy for routing http traffic in and out of the services. Besides, it automates acquiring an SSL/TLS certificate from Let's Encrypt.
+Shallow clone this repository:
 
-  Check if `$SHOEBOX_ROOT`, `$YOUR_DOMAIN`, and `$CLOUDFLARE_API_INI` are set before running the script.
+```
+$ sudo git clone --depth=1 https://github.com/shrideio/shoebox $REPO_ROOT
+```
 
-  ```
-  $ echo $SHOEBOX_ROOT
-  $ echo $YOUR_DOMAIN
-  $ echo $CLOUDFLARE_API_INI
-  ```
+Change the `*.sh` scripts file mode to `execute`:
 
-  Run the following script to create the `proxy` container.
-
-  ```
-  $ cd $REPO_ROOT/src/proxy/
-  $ sudo ./proxy_containers_setup.sh $SHOEBOX_ROOT $YOUR_DOMAIN $CLOUDFLARE_API_INI
-  $ sudo docker-compose up -d
-  ```
-
-  Run `$ sudo docker ps | grep proxy`to verify if the `proxy` container is up and running.
-
-  The credentials for accessing the proxy dashboard at `proxy`.yourdomain.com are printed to the console and can be found in `$SHOEBOX_ROOT/proxy-traefik/secrets.ini`.
-
-  Enable `http` and `https` traffic on the firewall.
-
-  ```
-  $ sudo firewall-cmd --zone=public --permanent --add-service=http
-  $ sudo firewall-cmd --zone=public --permanent --add-service=https
-  $ sudo firewall-cmd --reload
-  ```
-
-  Navigate to `http://proxy.`_yourdomain.com_ to verify if the request is automatically redirected from `http` to `https` and the TLS certificate is valid. If the certificate is invalid run `$ sudo docker logs proxy` to check the container logs for troubleshooting.
+```
+$ sudo find $REPO_ROOT -type f -name "*.sh" -exec chmod +x {} \;
+```
 
 
- ### Containers infrastructure
+### Reverse proxy
 
-  The `setup_containers.sh` script creates directories for container volume mounts, generates `.evn` files, and copies configuration files (i.e. Vault and Consul) to service working directories if necessary. In addition, it generates secrets for service or database users and stores them in `secretes.ini` files in service working directories.
+[Traefik](https://docs.traefik.io/) is used as a reverse proxy for routing http traffic in and out of the services. Besides, it automates acquiring an SSL/TLS certificate from Let's Encrypt.
 
-  > IMPORTANT: Once the secrets are created, they remain intact, therefore  `setup_containers.sh` can be run multiple times without modifying credentials.
+Check if `$SHOEBOX_ROOT`, `$YOUR_DOMAIN`, and `$CLOUDFLARE_API_INI` are set before running the script.
 
-  The `ports_prefix.ini` file at the repository root (`$REPO_ROOT`) defines the prefixes for ports assigned to containers. The port definitions are hard-coded in the [service]-docker-compose.yml files, however, the port prefixes can be modified in the mentioned file before running `setup_containers.sh`.
+```
+$ echo $SHOEBOX_ROOT
+$ echo $YOUR_DOMAIN
+$ echo $CLOUDFLARE_API_INI
+```
 
-  `setup_containers.sh` requires two input parameters, first for the services root directory and second for a domain name. Check if `$SHOEBOX_ROOT` and `$YOUR_DOMAIN` are set before running the script.
+Run the following script to create the `proxy` container.
 
-  ```
-  $ echo $SHOEBOX_ROOT
-  $ echo $YOUR_DOMAIN
-  ```
+```
+$ cd $REPO_ROOT/src/proxy/
+$ sudo ./proxy_containers_setup.sh $SHOEBOX_ROOT $YOUR_DOMAIN $CLOUDFLARE_API_INI
+$ sudo docker-compose up -d
+```
 
-  Run the following command to prepare the necessary infrastructure for docker containers.
+Run `$ sudo docker ps | grep proxy`to verify if the `proxy` container is up and running.
 
-  ```
-  $ sudo $REPO_ROOT/src/setup_containers.sh $SHOEBOX_ROOT $YOUR_DOMAIN
-  ```
+The credentials for accessing the proxy dashboard at `proxy`.yourdomain.com are printed to the console and can be found in `$SHOEBOX_ROOT/proxy-traefik/secrets.ini`.
 
-  Verify the directories are created.
+Enable `http` and `https` traffic on the firewall.
 
-  ```
-  $ sudo ls $SHOEBOX_ROOT
-  ```
+```
+$ sudo firewall-cmd --zone=public --permanent --add-service=http
+$ sudo firewall-cmd --zone=public --permanent --add-service=https
+$ sudo firewall-cmd --reload
+```
 
-  The output should contain the following list with service working directories:
+Navigate to `http://proxy.`_yourdomain.com_ to verify if the request is automatically redirected from `http` to `https` and the TLS certificate is valid. If the certificate is invalid run `$ sudo docker logs proxy` to check the container logs for troubleshooting.
 
-  ```
-  ci-drone git-gogs packages-proget project-taiga prox-traefik registry-docker vault-hashicorp 
-  ```
 
-  Verify if the placeholders are replaced by viewing the content of a sample `.env` file (i.e. git/.env).
+### Containers infrastructure
 
-  ```
-  $ sudo cat $REPO_ROOT/src/git/.env
-  ```
+The `setup_containers.sh` script creates directories for container volume mounts, generates `.evn` files, and copies configuration files (i.e. Vault and Consul) to service working directories if necessary. In addition, it generates secrets for service or database users and stores them in `secretes.ini` files in service working directories.
 
-  If needed to rerun the script for a specific service, it can be done by running the associated bash script in the service source subdirectory as follows,
+> IMPORTANT: Once the secrets are created, they remain intact, therefore  `setup_containers.sh` can be run multiple times without modifying credentials.
 
-  ```
-  $ sudo $REPO_ROOT/src/[service-name]/[service-name]_containers_setup.sh $SHOEBOX_ROOT $YOUR_DOMAIN
-  ```
+The `ports_prefix.ini` file at the repository root (`$REPO_ROOT`) defines the prefixes for ports assigned to containers. The port definitions are hard-coded in the [service]-docker-compose.yml files, however, the port prefixes can be modified in the mentioned file before running `setup_containers.sh`.
 
-  where _[service-name]_ is one of the following: `ci`, `git`, `packages`, `project`, `registry`, `vault`.
+`setup_containers.sh` requires two input parameters, first for the services root directory and second for a domain name. Check if `$SHOEBOX_ROOT` and `$YOUR_DOMAIN` are set before running the script.
+
+```
+$ echo $SHOEBOX_ROOT
+$ echo $YOUR_DOMAIN
+```
+
+Run the following command to prepare the necessary infrastructure for docker containers.
+
+```
+$ sudo $REPO_ROOT/src/setup_containers.sh $SHOEBOX_ROOT $YOUR_DOMAIN
+```
+
+Verify the directories are created.
+
+```
+$ sudo ls $SHOEBOX_ROOT
+```
+
+The output should contain the following list with service working directories:
+
+```
+ci-drone git-gogs packages-proget project-taiga prox-traefik registry-docker vault-hashicorp 
+```
+
+Verify if the placeholders are replaced by viewing the content of a sample `.env` file (i.e. git/.env).
+
+```
+$ sudo cat $REPO_ROOT/src/git/.env
+```
+
+If needed to rerun the script for a specific service, it can be done by running the associated bash script in the service source subdirectory as follows,
+
+```
+$ sudo $REPO_ROOT/src/[service-name]/[service-name]_containers_setup.sh $SHOEBOX_ROOT $YOUR_DOMAIN
+```
+
+where _[service-name]_ is one of the following: `ci`, `git`, `packages`, `project`, `registry`, `vault`.
 
 ### Service setup
 
-  Each service is provided with a tutorial describing steps required for initial setup and usage examples for executing routine tasks in the future. The key outcome of this setup is enabling the CI/CD service to run automated builds by utilizing the features of the rest of the services in this setup.
+Each service is provided with a tutorial describing steps required for initial setup and usage examples for executing routine tasks in the future. The key outcome of this setup is enabling the CI/CD service to run automated builds by utilizing the features of the rest of the services in this setup.
 
-  > IMPORTANT: Order matters.
+> IMPORTANT: Order matters.
 
-  1. [Git (Gogs)](/src/git/README.md)
-  2. [Key/Secret Vault (Vault)](/src/vault/README.md)
-  3. [Packages (ProGet)](/src/packages/README.md)
-  4. [Docker Registry](/src/registry/README.md)
-  5. [Continuous Integration and Continuous Delivery (Drone)](/src/ci/README.md)
-  6. [Project Management (Taiga)](/src/project/README.md)
+1. [Git (Gogs)](/src/git/README.md)
+2. [Key/Secret Vault (Vault)](/src/vault/README.md)
+3. [Packages (ProGet)](/src/packages/README.md)
+4. [Docker Registry](/src/registry/README.md)
+5. [Continuous Integration and Continuous Delivery (Drone)](/src/ci/README.md)
+6. [Project Management (Taiga)](/src/project/README.md)
