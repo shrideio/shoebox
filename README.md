@@ -401,7 +401,7 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
   $ sudo git clone --depth=1 https://github.com/shrideio/shoebox $REPO_ROOT
   ```
 
-  Change the the `*.sh` scripts file mode to `execute`:
+  Change the `*.sh` scripts file mode to `execute`:
 
   ```
   $ sudo find $REPO_ROOT -type f -name "*.sh" -exec chmod +x {} \;
