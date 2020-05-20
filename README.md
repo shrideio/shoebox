@@ -125,7 +125,7 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
 - [Infrastructure](#infrastructure)
   - [Disable SELinux](#disable-selinux)
   - [Docker infrastructure](#docker-infrastructure)
-  - [SMTP relay](#smpt-relay)
+  - [SMTP relay](#smtp-relay)
 - [Network](#network)
   - [DNS provider](#dns-provider)
   - [Subdomain Records](#subdomain-records)
