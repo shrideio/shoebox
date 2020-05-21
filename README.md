@@ -2,11 +2,20 @@
 
 ![Alt text](/resources/img/shoebox_logo.png?raw=true "Shoebox")
 
+## TL;DR
+
+- Components: Git; CI/CD; Docker Registry; Package Management; Secrets Management; Project Management
+- Minimal requirements: CentOS/RHEL 7.0; 2 vCPUs; 2 GB RAM; 20 GB storage; 1 IPv4 address
+- Cons: Single machine configuration; Docker support is a MUST for the build pipeline
+- Future plans: Add more build configurations; Move to K8s
+
+goto: [Setup outline](#setup-outline)
+
 ## What is it?
 
-Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose) for setting up a simple collaborative software development environment. It can be hosted on a VPS or dedicated server as an inexpensive alternative for subscription-based cloud services. Software components used in this setup are either open source or have free versions (some with limitations, please check).
+Shoebox is an all-in-one bundle of tutorials and scripts (shell and docker-compose) for setting up a simple collaborative software development environment. It can be hosted on a VPS or dedicated server as an inexpensive alternative for subscription-based cloud services. Software components used in this setup are either open source or have free versions (some with limitations, please check).
 
-### Tools
+### Components
 
 | Name                                | Vendor                                                            | License                                                                          |
 | :---------------------------------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------------- |
@@ -18,23 +27,22 @@ Shoebox is an all-in-one bundle of tutorials and scripts (shell & docker-compose
 | Continuous Integration and Delivery | [Drone CI](https://drone.io/)                                     | [Drone Non-Commercial License](https://github.com/drone/drone/blob/master/LICENSE) <br /> [Waiver: Individual and Small Business](https://github.com/drone/drone/blob/master/LICENSE#L62) |
 | Project Management                  | [Taiga](https://taiga.io/)                                        | [Taiga Backend - AGPL-3.0](https://github.com/taigaio/taiga-back/blob/master/LICENSE) <br /> [Taiga Front - AGPL-3.0](https://github.com/taigaio/taiga-front/blob/master/LICENSE) |
 
-goto: [TL;DR](#tldr)
 
 ## Why does this exist?
 
-The short answer is because of [“Those goddamn AWS charges!”](https://www.youtube.com/watch?v=982wFqC03v8).
+The short answer is [“Those goddamn AWS charges!”](https://www.youtube.com/watch?v=982wFqC03v8).
 
-On a serious note, we believe that even small teams can benefit from using a fully equipped development environment without paying a premium for infrastructural services from cloud service providers.
+On a serious note, we believe that even small teams can benefit from using a fully equipped development environment without paying a premium for infrastructural services purchased from cloud service providers.
 
 > INFO: The latter is less actual for open source projects. Usually, most of the tools mentioned in this setup are provided free of charge by major vendors.
 
-And lastly, this setup is a result of our ([mich4xD](https://github.com/mich4xD) and [bahram-aliyev](https://github.com/bahram-aliyev])) "valor" attempt to document and automate the deployment of essential services for a development environment when working on a personal project.
+And lastly, this setup is an attempt to document and automate the deployment of essential services used when working on a personal project.
 
 ## How does it work?
 
 This setup requires a Linux machine with root access and system requirements matching the following:
 
-- Minimum:
+- Minimal:
 
   - OS: Linux CentOS/RHEL 7.0
   - CPU: 2 vCPU
@@ -50,7 +58,7 @@ This setup requires a Linux machine with root access and system requirements mat
   - Storage: 20 GB
   - Network: 1 IPv4 address
 
-> INFO: This setup was tested and staged on CentOS 7.0, that is why this OS mention as a requirement. However, with minor adjustments (if any) it should work on any other popular Linux distributive.
+> INFO: This setup was tested and staged on CentOS 7.0, that is why this OS mentioned as a requirement. However, with minor adjustments, it should work on any other popular Linux distributive.
 
 When it comes to choosing a physical host, there are three options for consideration.
 
@@ -58,7 +66,7 @@ When it comes to choosing a physical host, there are three options for considera
 
 1. Rent a Linux VPS.
 
-   There are a few affordable options in a price range of 7 to 15 USD per month. The vendors listed below offer solutions matching or comparable to the desired system requirements and price range.
+   There are a few affordable options in a price range of 7 to 15 USD per month. The vendors listed below offer solutions matching or comparable to the system requirements mentioned above and price range.
 
    - [VPSDime](https://vpsdime.com/)
    - [OVHCloud](https://www.ovh.com/)
@@ -72,7 +80,7 @@ When it comes to choosing a physical host, there are three options for considera
 
 2. Rent a dedicated server.
 
-   This option is usually more costly than renting a VPS. However, it provides extra computation power and storage capacity for the premium. There is a limited number of affordable options in a price range of 20 to 30 USD per month. Usually, the price range starts at a 50 USD per month threshold. The dedicated server option can be considered as an expansion path for future growth.
+   This option is more costly than renting a VPS, however, it provides extra computing power and storage capacity for the premium. Therefore, the dedicated server option can be considered as an expansion path for future growth. There is a limited number of affordable options in a price range of 20 to 30 USD per month (typically the price starts from 50 USD per month). 
    
    > WARNING: When choosing a dedicated server it is recommended to avoid renting significantly outdated hardware. Old hardware can potentially yield less performance than a VPS with lesser cost.
 
@@ -83,45 +91,52 @@ When it comes to choosing a physical host, there are three options for considera
 
 3. Run a server on-premises.
 
-Either way, be mindful of the law of diminishing returns. For example, the premium paid for the extra storage on a VPS may equalize the VPS rental cost with the dedicated server monthly fee. Long story short, do back-of-the-napkin-math.
+Either way, be mindful of the law of diminishing returns. For example, the premium paid for extra storage on a VPS may equalize the VPS rental cost with the dedicated server monthly fee. Long story short, do back-of-the-napkin-math.
 
 > INFO: Check https://serverbench.net/ for open source benchmark tools
 
+
+## People
+
+### Special thanks [A -> Z]
+
+  - [Melissa Kendall](https://github.com/melissakendall)
+  - [Valentyna Akulova](https://github.com/Valentynaa)
+
+### Authors [A -> Z]
+
+  - [Bahram Aliyev](https://github.com/bahram-aliyev)
+  - [Michael Roizman](https://github.com/mich4xD)
+
+## Support
+
+We will do our best to maintain the documentation and keep the scripts up-to-date, and continue adding new CI configurations for different technologies as needed. If you have a question or have found an issue feel free to create a ticket [here](https://github.com/shrideio/shoebox/issues), we will respond as soon as possible.
+  
 
 ## Q/A
 
 - How to help or contribute?
 
-  We are no Linux gurus, Docker experts, or technical writing virtuosos, so you are more than welcome to contribute! File an issue ticket or even better open a pull request, we will do our best to respond as soon as possible. Constructive criticism is highly appreciated.
+  We are no Linux gurus, Docker experts, or professional technical writers, so you are more than welcome to contribute! File an issue ticket or even better open a pull request, we will do our best to respond as soon as possible. Constructive criticism is highly appreciated.
 
 - Any caveats?
 
-  Firstly, it is a single machine configuration incapable of running on a cluster. That potentially may become a problem when simultaneously running several build pipelines would degrade the performance of the other services. This deficiency should be resolved once the services are made deployable to a Kubernetes cluster.
+  Firstly, it is a single machine configuration incapable of running on a cluster. That potentially may become a problem when simultaneously running build pipelines can potentially degrade the performance of the other services. This deficiency should be resolved once this setup is made deployable to a Kubernetes cluster.
 
-  Secondly, the technology of your choice must support Docker containerization for using the Drone build pipeline. If it does not, consider using alternatives such as [Jenkins CI](https://jenkins.io/) or [Concourse](https://concourse-ci.org/). No setup script or documentation is provided for the alternative CI services currently.
+  Secondly, the technology of your choice must support Docker containerization for using the Drone build pipeline. If it does not, consider using alternatives such as [Jenkins CI](https://jenkins.io/) or [Concourse](https://concourse-ci.org/). No setup scripts or documentation are provided for the alternative CI services currently.
 
-  And lastly, the current build pipeline is .NET Core biased. Please feel free to contribute and add pipeline configurations for other technologies.
+  And lastly, the build pipeline is biased toward .NET Core. Please feel free to contribute and add pipeline configurations for other technologies.
 
 - What is next?
 
   As it is mentioned earlier, adding Kubernetes support is a high priory task on the list. However, we need to acquaint ourselves with the technology first.
-
-  We will do our best to maintain the documentation and keep the scripts up-to-date, and continue adding new CI configurations for different technologies as needed.
 
 - Shoebox - why the name?
 
   ...cus' it has something in it to getcha runnin'! :boom: :running: :checkered_flag:
 
 
-## TL;DR
-
-- Components: Git; CI/CD; Docker Registry; Package Management; Secrets Management; Project Management
-- Minimum requirements: CentOS/RHEL 7.0; 2 vCPUs; 2 GB RAM; 20 GB storage; 1 IPv4 address
-- Cons: Single machine configuration; Docker support is a MUST for the build pipeline
-- Future plans: Add more build configurations; Move to K8s
-
-
-## Setup Outline
+## Setup outline
 
 - [Tools](#tools)
   - [Nano](#nano)
@@ -281,7 +296,7 @@ SELinux status:                 disabled
 
 ### SMTP relay
 
-Certain services in this setup require an SMTP relay for sending email notifications. If your DNS provider includes a free email address, you may want to use the provider's SMTP server; otherwise, there are a few free emailing services with a limited number of messages sent per day/month (at least 100 emails a day).
+Certain services in this setup require an SMTP relay for sending email notifications. If your DNS provider includes a free email address, you may want to use the provider's SMTP server. Otherwise, there are a few free emailing services with a limited number of messages sent per day/month (at least 100 emails a day).
 
 - [SendPulse](https://sendpulse.com/prices/smtp) (12,000/month)
 - [Mailgun](https://www.mailgun.com/pricing-options) (10,000/month)
@@ -293,7 +308,7 @@ Certain services in this setup require an SMTP relay for sending email notificat
 
 ### DNS provider
 
-[Cloudflare](https://www.cloudflare.com/) is used as the default DNS provider for this setup. It provides a DNS API that is used by Certbot for proofing the domain name ownership when acquiring an SSL/TLS certificate.
+[Cloudflare](https://www.cloudflare.com/) is used as the default DNS provider for this setup. It provides a DNS API that is used by Certbot for proving the domain name ownership when acquiring an SSL/TLS certificate.
 
 > IMPORTANT: If Cloudflare is not an option, there are a few more [DNS providers compatible with Certbot](https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438). Adjust the following actions according to the DNS provider of your choice.
 
@@ -303,8 +318,6 @@ Change the name servers in the control panel of your domain name provider to the
 
 
 ### Subdomain records
-
-> IMPORTANT: Adjust the actions accordingly if the DNS provider is not Cloudflare.
 
 Navigate to the `DNS` menu, Click the [+Add record] button to open the record input form.
 
@@ -400,13 +413,13 @@ Set the following environment variables:
 
 ### Setup scripts
 
-Shallow clone this repository:
+Shallow clone this repository.
 
 ```
 $ sudo git clone --depth=1 https://github.com/shrideio/shoebox $REPO_ROOT
 ```
 
-Change the `*.sh` scripts file mode to `execute`:
+Change the `*.sh` scripts file mode to `execute`.
 
 ```
 $ sudo find $REPO_ROOT -type f -name "*.sh" -exec chmod +x {} \;
@@ -415,7 +428,7 @@ $ sudo find $REPO_ROOT -type f -name "*.sh" -exec chmod +x {} \;
 
 ### Reverse proxy
 
-[Traefik](https://docs.traefik.io/) is used as a reverse proxy for routing http traffic in and out of the services. Besides, it automates acquiring an SSL/TLS certificate from Let's Encrypt.
+[Traefik](https://docs.traefik.io/) is used as a reverse proxy for routing http traffic in and out of the service containers. Besides, it automates acquiring an SSL/TLS certificate from Let's Encrypt.
 
 Check if `$SHOEBOX_ROOT`, `$YOUR_DOMAIN`, and `$CLOUDFLARE_API_INI` are set before running the script.
 
@@ -433,7 +446,7 @@ $ sudo ./proxy_containers_setup.sh $SHOEBOX_ROOT $YOUR_DOMAIN $CLOUDFLARE_API_IN
 $ sudo docker-compose up -d
 ```
 
-Run `$ sudo docker ps | grep proxy`to verify if the `proxy` container is up and running.
+Run `$ sudo docker ps | grep proxy` to verify if the `proxy` container is up and running.
 
 The credentials for accessing the proxy dashboard at `proxy`.yourdomain.com are printed to the console and can be found in `$SHOEBOX_ROOT/proxy-traefik/secrets.ini`.
 
@@ -450,11 +463,11 @@ Navigate to `http://proxy.`_yourdomain.com_ to verify if the request is automati
 
 ### Containers infrastructure
 
-The `setup_containers.sh` script creates directories for container volume mounts, generates `.evn` files, and copies configuration files (i.e. Vault and Consul) to service working directories if necessary. In addition, it generates secrets for service or database users and stores them in `secretes.ini` files in service working directories.
+The `setup_containers.sh` script creates directories for container volume mounts, generates `.evn` files, and copies configuration files (i.e. for Vault and Consul) to service working directories if necessary. In addition, it generates secrets for service or database users and stores them in the `secretes.ini` files in service working directories.
 
-> IMPORTANT: Once the secrets are created, they remain intact, therefore  `setup_containers.sh` can be run multiple times without modifying credentials.
+> IMPORTANT: Once the secrets are created, they remain intact, therefore `setup_containers.sh` can be run multiple times without modifying credentials.
 
-The `ports_prefix.ini` file at the repository root (`$REPO_ROOT`) defines the prefixes for ports assigned to containers. The port definitions are hard-coded in the [service]-docker-compose.yml files, however, the port prefixes can be modified in the mentioned file before running `setup_containers.sh`.
+The `ports_prefix.ini` file at the repository root (`$REPO_ROOT`) defines the prefixes for ports assigned to containers. The port definitions are hard-coded in the [service]-docker-compose.yml files, however, the port prefixes can be modified in `ports_prefix.ini` before running `setup_containers.sh`.
 
 `setup_containers.sh` requires two input parameters, first for the services root directory and second for a domain name. Check if `$SHOEBOX_ROOT` and `$YOUR_DOMAIN` are set before running the script.
 
@@ -487,7 +500,7 @@ Verify if the placeholders are replaced by viewing the content of a sample `.env
 $ sudo cat $REPO_ROOT/src/git/.env
 ```
 
-If needed to rerun the script for a specific service, it can be done by running the associated bash script in the service source subdirectory as follows,
+If needed to rerun the script for the specific service, run the associated bash script in the service source subdirectory as follows:
 
 ```
 $ sudo $REPO_ROOT/src/[service-name]/[service-name]_containers_setup.sh $SHOEBOX_ROOT $YOUR_DOMAIN
@@ -497,7 +510,7 @@ where _[service-name]_ is one of the following: `ci`, `git`, `packages`, `projec
 
 ### Service setup
 
-Each service is provided with a tutorial describing steps required for initial setup and usage examples for executing routine tasks in the future. The key outcome of this setup is enabling the CI/CD service to run automated builds by utilizing the features of the rest of the services in this setup.
+Each service is provided with a tutorial describing the steps required for initial setup and usage examples for executing routine tasks in the future. The key outcome of this setup is enabling the CI/CD service to run automated builds by utilizing the rest of the components of this setup.
 
 > IMPORTANT: Order matters.
 
