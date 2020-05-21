@@ -104,7 +104,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
     - ProGet supports feed connectors allowing to unify package feeds from different sources. For adding a NuGet connector for `nuget.org` click on the feed name `Feed -> v2`, and follow the path `[Manage Feed] -> add connector -> [Create Connector]` to open the _Create Connector_ dialog. Select `NuGet` as _Feed type_, leaving the rest of the inputs intact, then click [Save] to save changes and close the dialog. In the emerged _Select Connector_ dialog select _www.nuget.org_ as _Connector_ (should be preselected), then click [Save] to save changes.
 
-5. Push a sample NuGet package to the feed. The sample package is used for testing the integration between the ci and package services.
+5. Push a sample NuGet package to the feed. The sample package is used for testing the integration between the CI and package services.
 
     - Install .NET Core SDK
 

@@ -18,7 +18,7 @@ Check [Docker Registry](https://docs.docker.com/registry/) and [Joxit Docker Reg
     $ sudo cat $REPO_ROOT/src/registry/.env
     ```
 
-- [x] [Vault](/src/vault/README.md) service is up and running and the vault is configured and [unsealed](/src/vault/README.md#unseal-vault) (vault._yourdomain.com_)
+- [x] [Vault](/src/vault/README.md) service is up and running, and the vault is configured and [unsealed](/src/vault/README.md#unseal-vault) (vault._yourdomain.com_)
 
 - [x] registryui._yourdomain.com_ and registry._yourdomain.com_ subdomains are configured and serve https traffic
 

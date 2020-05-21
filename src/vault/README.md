@@ -119,7 +119,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
             The output of the command should contain the `secret_id` value which is used as a password and MUST BE capture for later use.
 
-    - Reissue new Role Secret ID
+    - Reissue Role Secret ID
 
         If the Secret ID value was not captured or lost the only way to restore it is to create a new one. 
         
@@ -170,4 +170,4 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
         echo $VAULT_TOKEN
         ```
 
-        The environment variable is used further for configuring the integration between ci and vault servers.
+        The environment variable is used further for configuring the integration between CI and vault servers.
