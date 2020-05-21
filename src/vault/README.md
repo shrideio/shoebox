@@ -161,7 +161,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
             > vault read secrets/data/ci.build.sample
             ```
 
-            If an access error is displayed, check the correctness of role access policies configuration as described [here](#acl-policy).
+            If an access error is displayed, check the correctness of role access policies configuration as described above in the _Configure machine identity access_ section.
 
     - Capture the access token value as an environment value by running the following command:
 
