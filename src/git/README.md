@@ -55,7 +55,7 @@ Proceed if all of the checks pass, otherwise, check the [landing page](/src/READ
       | Application URL              | https://git._yourdomain.com_ |
 
 
-      > IMPORTANT: Despite _Admin Account Settings_ being listed under the _Optional Settings_ section it is highly recommended to create the administrator account on setup.
+      > IMPORTANT: Despite _Admin Account Settings_ being listed under the _Optional Settings_ section, it is highly recommended to create the administrator account on setup.
 
       | Optional Settings                        |                                      |
       | :--------------------------------------- | :----------------------------------- |

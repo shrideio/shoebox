@@ -18,7 +18,7 @@ Check [ProGet Documentation](https://docs.inedo.com/docs/proget/overview) and [P
     $ sudo cat $REPO_ROOT/src/packages/.env
     ```
 
-- [x] [Vault](/src/vault/README.md) service is up and running and the vault is configured and [unsealed](/src/vault/README.md#unseal-vault) (vault._yourdomain.com_)
+- [x] [Vault](/src/vault/README.md) service is up and running, and the vault is configured and [unsealed](/src/vault/README.md#unseal-vault) (vault._yourdomain.com_)
 
 - [x] packages._yourdomain.com_ subdomain is configured and serves https traffic.
 
@@ -57,7 +57,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
     - Change the packages registry url.
 
-      Open the administration console ![Alt text](/resources/img/proget_cog.png?raw=true "ProGet administration console"), then navigate to `System -> Advanced Settings`. Set the `Web.BaseUrl` parameter to https://packages._yourdomain.com_ and click [Save Changes]. The ProGet service will restart automatically, causing a `502 Bad Gateway` response temporarily.
+      Open the administration console ![Alt text](/resources/img/proget_cog.png?raw=true "ProGet administration console"), then navigate to `System -> Advanced Settings`. Set the `Web.BaseUrl` parameter to https://packages._yourdomain.com_ and click [Save Changes], the ProGet service will restart automatically.
 
     - Configure authentication and access policies.
         
@@ -75,15 +75,17 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
             | View & Download Packages | all feeds | FeedConsumer                   |
 
 
-3. Create API keys
+3. Create API key for PackagePublisher
 
     API keys are used for accessing ProGet feeds without exposing user credentials.
 
     - Open the administration console ![Alt text](/resources/img/proget_cog.png?raw=true "ProGet administration console"), then navigate to `Security & Authentication -> API Keys & Access Logs`. 
 
-    - Create API keys for `PackagePublisher` user.
+    - Create an API key for `PackagePublisher` user.
     
         Click [Create API Key] to open the _Create API Key_ dialog. Fill in the _Feed API user_ with matching user names, and enable access to _Feed API_ by checking _Grant access to Feed API_ checkbox. Click [Save API Key] to save changes and proceed.
+
+4. Create secret for FeedConsumer
 
     - Create the `ci.packages` secret in Vault as described [here](/src/vault/README.md#create-a-secret) for storing credentials for pulling packages from by the CI service. The secret must contain the following key/value pairs:
 
@@ -92,7 +94,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
       - `packages_username`/_FeedConsumer_
       - `packages_password`/[FeedConsumer-password]
 
-4. Create NuGet feed
+5. Create NuGet feed
 
     > INFO: NuGet feed is required for testing the continuous integration setup.
 
@@ -100,8 +102,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
         > INFO: There is no need for prefixing the feed name with _nuget_ as the NuGet feeds uri root already contains that literal. _v2_ stands for the NuGet protocol version.
 
-    - ProGet supports feed connectors allowing to unify package feeds from different sources.
-    For adding a NuGet connector for `nuget.org` click on the feed name `Feed -> v2`, and follow the path `[Manage Feed] -> add connector -> [Create Connector]` to open the _Create Connector_ dialog. Select `NuGet` as _Feed type_, leaving the rest of the inputs intact, then click [Save] to save changes and close the dialog. In the emerged _Select Connector_ dialog select _www.nuget.org_ as _Connector_ (should be preselected), then click [Save] to save changes.
+    - ProGet supports feed connectors allowing to unify package feeds from different sources. For adding a NuGet connector for `nuget.org` click on the feed name `Feed -> v2`, and follow the path `[Manage Feed] -> add connector -> [Create Connector]` to open the _Create Connector_ dialog. Select `NuGet` as _Feed type_, leaving the rest of the inputs intact, then click [Save] to save changes and close the dialog. In the emerged _Select Connector_ dialog select _www.nuget.org_ as _Connector_ (should be preselected), then click [Save] to save changes.
 
 5. Push a sample NuGet package to the feed. The sample package is used for testing the integration between the ci and package services.
 
@@ -126,4 +127,10 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
         Navigate to the feed `Feed -> v2` and verify if the package is successfully uploaded.
 
-> IMPORTANT: Despite Proget advertising the Docker registry feature, it does not work correctly when the service is hosted in a Linux container due to the following issue [Docker Push to Proget Container Registry fails](https://forums.inedo.com/topic/2788/docker-push-to-proget-container-registry-fails).
+### Known issues
+
+- The ProGet container may occasionally stall when pulling packages causing build failures due to unreachable packages. The more or less stable version is `5.1.23` with `Postgres 11`, both pinned in the Docker Compose script. Be advised to restart the `packages` container if it becomes unresponsive, as there is no known solution for that issue currently. Unfortunately, reviewing the container logs and searching the Internet for answers did not yield any success in finding the root cause of the issue. The most reasonable answer could be found [here](https://forums.inedo.com/topic/2670/service-unavailable-timeout), however the suggested solution did not make much difference.
+
+- Postgres support for ProGet Docker is deprecated, and will no longer be supported by v6.0 (due out in 2020), check [here](https://inedo.com/support/kb/1166/upgrade-notes-for-proget-5-2#postgres) for more information. The alternative is to use Microsoft SQL Server Express edition hosted in a [linux container](https://hub.docker.com/_/microsoft-mssql-server). Unfortunately, Microsoft SQL Server is quite demanding to hardware, especially RAM (at least 2G), and will affect the minimal system requirements of Shoebox. The current decision is to continue with the ProGet version supporting Postgres. However, migration to Microsoft SQL Server in the future is not entirely excluded.
+
+- Despite ProGet advertising the Docker registry feature, it does not work correctly when the service is hosted in a Linux container due to the following issue [Docker Push to Proget Container Registry fails](https://forums.inedo.com/topic/2788/docker-push-to-proget-container-registry-fails).

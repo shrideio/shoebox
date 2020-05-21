@@ -26,7 +26,7 @@ services:
       hostname: packages
       restart: always
       environment:
-        - PROGET_DATABASE=Host=packages-db; Database=${PROGET_POSTGRESQL_DATABASE}; Username=${PROGET_POSTGRESQL_USER}; Password=${PROGET_POSTGRESQL_PASSWORD};
+        - PROGET_DATABASE=Host=packages-db; Database=${PROGET_POSTGRESQL_DATABASE}; Username=${PROGET_POSTGRESQL_USER}; Password=${PROGET_POSTGRESQL_PASSWORD}; Maximum Pool Size=200;
       volumes:
         - packages-packages:/var/proget/packages
         - packages-extensions:/var/proget/extensions
