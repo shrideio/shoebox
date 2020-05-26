@@ -175,3 +175,10 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
         ```
 
     - Generate a new Secret ID as described [above](#generate-role-secret-id).
+
+### Sources
+
+ - [How to use HashiCorp Vault to store secrets and read them from Jenkins](https://github.com/bruj0/vault_jenkins)
+ - [Managing Secrets with Vault and Consul](https://testdriven.io/blog/managing-secrets-with-vault-and-consul/)
+ - [Docker + Consul + Vault: A Practical Guide](https://www.marcolancini.it/2017/blog-vault/)
+ - [Vault extension configuration for Drone v1.1](https://discourse.drone.io/t/vault-extension-configuration-for-drone-v1-1/4466)
