@@ -73,12 +73,6 @@ Proceed if all of the checks pass, otherwise, check the [landing page](/src/READ
       | Username                                 | i.e. gitadmin                        |
       | Admin Email                              | i.e. gitadmin@_yourdomain.com_       |
 
-3. Click [Install Gogs], after the installation is completed very if the `app.ini` file is created at `$SHOEBOX_ROOT/git-gogs/data/gogs/conf`. Check [Googs Configuration Cheat Sheet](https://gogs.io/docs/advanced/configuration_cheat_sheet) for post-installation configuration.
+3. Click [Install Gogs], after the installation is completed verify the `app.ini` file is created at `$SHOEBOX_ROOT/git-gogs/data/gogs/conf`. Check [Googs Configuration Cheat Sheet](https://gogs.io/docs/advanced/configuration_cheat_sheet) for post-installation configuration.
 
     > INFO: Do not forget to restart the `git` container after modifying `app.ini`,otherwise, new configuration settings are not applied.
-
-4. Sign in with the admin user and follow the checklist:
-    - [x] A new user can be created and receives an email notification upon registration
-    - [x] A new repository can be created
-    
-    If the checks pass Gogs is successfully configured and ready for use. Otherwise, check the container logs or Gogs logs at `$SHOEBOX_ROOT/git-gogs/data/gogs/log`.

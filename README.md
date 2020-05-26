@@ -397,7 +397,7 @@ Set the following environment variables:
     > IMPORTANT: Do not forget to replace `yourdomain.com` with the actual domain name.
 
     ```
-    $ export YOUR_DOMAIN=yourdomain.com
+    $ export YOUR_DOMAIN=[yourdomain.com]
     $ echo $YOUR_DOMAIN
     ```
 

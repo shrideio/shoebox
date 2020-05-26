@@ -111,31 +111,16 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
             > vault write auth/approle/role/ciagent policies="ciagent, default"
             ```
 
-        - <a id="generate-secret-id"></a> Generate Secret ID for the `ciagent` role.
+        - <a id="generate-role-secret-id"></a> Generate Role Secret ID for the `ciagent` role.
 
             ```
             > vault write -force auth/approle/role/ciagent/secret-id
             ```
 
-            The output of the command should contain the `secret_id` value which is used as a password and MUST BE capture for later use.
+            The output of the command should contain the `secret_id` value which is used as a password and MUST be capture for later use.
 
-    - Reissue Role Secret ID
-
-        If the Secret ID value was not captured or lost the only way to restore it is to create a new one. 
-        
-        - Run the following command to list available secret-id keys.
-
-            ```
-            > vault list auth/approle/role/ciagent/secret-id
-            ```
-
-        - Use the Secret ID key from the output to replace the `[secret_id_accessor]` placeholder and run the following command to remove the current Secret ID.
-
-            ```
-            > vault write /auth/approle/role/ciagent/secret-id-accessor/destroy secret_id_accessor="[secret_id_accessor]"
-            ```
-
-        - Generate a new Secret ID as described in the [previous](#generate-secret-id) step.
+            > IMPORTANT: If the Role Secret ID value was not captured or lost, it cannot be restored and must be reissued as described [here](#reissue-role-secret-id).
+    
 
     - <a name="issue-a-client-token"></a> Issue a client token
 
@@ -171,3 +156,22 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
         ```
 
         The environment variable is used further for configuring the integration between CI and vault servers.
+
+
+### Appendix
+
+- <a name="reissue-role-secret-id"></a> Reissue Role Secret ID
+
+    - Run the following command to list available secret-id keys.
+
+        ```
+        > vault list auth/approle/role/ciagent/secret-id
+        ```
+
+    - Use the Secret ID key from the output to replace the `[secret_id_accessor]` placeholder and run the following command to remove the current Secret ID.
+
+        ```
+        > vault write /auth/approle/role/ciagent/secret-id-accessor/destroy secret_id_accessor="[secret_id_accessor]"
+        ```
+
+    - Generate a new Secret ID as described [above](#generate-role-secret-id).
