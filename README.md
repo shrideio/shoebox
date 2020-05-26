@@ -300,7 +300,6 @@ SELinux status:                 disabled
 Certain services in this setup require an SMTP relay for sending email notifications. If your DNS provider includes a free email address, you may want to use the provider's SMTP server. Otherwise, there are a few free emailing services with a limited number of messages sent per day/month (at least 100 emails a day).
 
 - [SendPulse](https://sendpulse.com/prices/smtp) (12,000/month)
-- [Mailgun](https://www.mailgun.com/pricing-options) (10,000/month)
 - [Mailjet](https://www.mailjet.com/pricing/) (6,000/month, 200/day)
 - [SendGrid](https://sendgrid.com/marketing/sendgrid-services-cro/#pricing-app) (100/day)
 
