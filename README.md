@@ -100,6 +100,7 @@ Either way, be mindful of the law of diminishing returns. For example, the premi
 
 ### Special thanks [A -> Z]
 
+  - [Alex Muradov](https://github.com/alik116)
   - [Melissa Kendall](https://github.com/melissakendall)
   - [Valentyna Akulova](https://github.com/Valentynaa)
 
@@ -133,7 +134,7 @@ We will do our best to maintain the documentation and keep the scripts up-to-dat
 
 - Shoebox - why the name?
 
-  ...cus' it has something in it to getcha runnin'! :boom: :running: :checkered_flag:
+  ...cus' it has something in it to getcha runnin'! :checkered_flag: :running: :boom:
 
 
 ## Setup outline
