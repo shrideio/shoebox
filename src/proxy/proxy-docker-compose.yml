@@ -6,6 +6,7 @@ services:
   proxy:
     image: "traefik:v2.2"
     container_name: "proxy"
+    restart: always
     command:
       # Uncomment two commands below for debugging information inside the proxy container logs(docker logs proxy):
       #- "--log.level=DEBUG"
@@ -25,10 +26,9 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080"
     environment:
-      - "CLOUDFLARE_EMAIL=${DNS_CLOUDFLARE_EMAIL}"
-      - "CLOUDFLARE_API_KEY=${DNS_CLOUDFLARE_API_KEY}"
+      - "CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}"
+      - "CLOUDFLARE_API_KEY=${CLOUDFLARE_API_KEY}"
     volumes:
       - letsencrypt:/letsencrypt
       - traefik-conf:/etc/traefik/conf
@@ -67,5 +67,5 @@ volumes:
     letsencrypt:
       driver_opts:
         type: none
-        device: ${LETSENCRYPT_ROOT}
+        device: ${TRAEFIK_LETSENCRYPT}
         o: bind

@@ -16,8 +16,6 @@ Check [Taiga Documentation](https://taigaio.github.io/taiga-doc/dist/) and [Taig
 
 - [x] Taiga `secrets.ini` and `.env` files are generated
 
-    > WARNING: DO NOT modify assigned values in the `.env` file. If necessary, modify the `secrets.ini` file and run `project_containers_setup.sh` to override the current values.
-
     ```
     $ sudo cat $SHOEBOX_ROOT/project-taiga/secrets.ini
     $ sudo cat $REPO_ROOT/src/project/.env
@@ -31,10 +29,10 @@ Check [Taiga Documentation](https://taigaio.github.io/taiga-doc/dist/) and [Taig
  1. Start Taiga backend (`project-backend`), Taiga frontend (`project-frontend`), RabbitMQ server (`project-messaging`), Taiga events (`project-events`), Nginx reverse proxy (`project-proxy`), PostgreSQL (`project-db`) and Redis (`project-cache`) containers.
 
     ```
-    $ sudo cd $REPO_ROOT/src/project
+    $ cd $REPO_ROOT/src/project
     $ sudo docker-compose up -d
     ```
 
-    Run `$ sudo docker ps` to verify if the listed containers are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
+    Run `$ sudo docker ps | grep project` to verify if the containers listed above are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
 
-2. Change the default Taiga administrator password after first login. Use the following user name and password: _admin_ and _123123_.
+2. Change the default Taiga administrator password after the first login. Use the following user name and password: _admin_ and _123123_ for the initial login.

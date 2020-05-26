@@ -4,7 +4,7 @@ version: "3.5"
 services:
 
     packages-db:
-      image: postgres:12-alpine
+      image: postgres:11-alpine
       container_name: packages-db
       hostname: packages-db
       restart: always
@@ -16,23 +16,23 @@ services:
         - POSTGRES_PASSWORD=${PROGET_POSTGRESQL_PASSWORD}
       command: postgres -c shared_buffers=256MB -c max_connections=200
       ports:
-        - ${PROGET_POSTGRESQL_PORT}:5432
+        - ${PROGET_POSTGRESQL_PORT_BINDING}:5432
       networks: 
         - packages-network
 
     packages:
-      image: inedo/proget:5.2.29
+      image: inedo/proget:5.1.23
       container_name: packages
       hostname: packages
       restart: always
       environment:
-        - PROGET_DATABASE=Host=packages-db; Database=${PROGET_POSTGRESQL_DATABASE}; Username=${PROGET_POSTGRESQL_USER}; Password=${PROGET_POSTGRESQL_PASSWORD}; MinPoolSize=1; MaxPoolSize=20;
+        - PROGET_DATABASE=Host=packages-db; Database=${PROGET_POSTGRESQL_DATABASE}; Username=${PROGET_POSTGRESQL_USER}; Password=${PROGET_POSTGRESQL_PASSWORD}; Maximum Pool Size=200;
       volumes:
         - packages-packages:/var/proget/packages
         - packages-extensions:/var/proget/extensions
         - packages-config:/usr/share/Inedo/SharedConfig
       ports:
-        - ${PROGET_HTTP_PORT}:80
+        - ${PROGET_HTTP_PORT_BINDING}:80
       networks:
         - packages-network
         - proxy-network
