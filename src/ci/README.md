@@ -33,8 +33,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
 1. Drone Vault plugin requires a Vault client token for accessing secrets stored in the Vault service. Check if the `$VAULT_TOKEN` environment variable is assigned by running the following command `$ echo $VAULT_TOKEN`. If not, fetch the Vault client token and set the variable as described [here](/src/vault/README.md#issue-a-client-token) before continuing. Replace the placeholder in the `.env` file by running the following command.
 
-    ```
-    
+    ```    
     $ sudo sed -i 's|@VAULT_TOKEN$|'"$VAULT_TOKEN"'|g' $REPO_ROOT/src/ci/.env
     $ cat $REPO_ROOT/src/ci/.env # verify the result
     ```
