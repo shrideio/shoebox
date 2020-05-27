@@ -84,9 +84,9 @@ services:
       - RABBIT_USER=${TAIGA_RABBIT_USER}
       - RABBIT_PASSWORD=${TAIGA_RABBIT_PASSWORD}
       - RABBIT_VHOST=project
-      - REDIS_DB=project
       - REDIS_PORT=6379
       - REDIS_HOST=project-cache
+      - REDIS_DB=0
       - REDIS_PASSWORD=${TAIGA_REDIS_PASSWORD}
       - STARTUP_TIMEOUT=${TAIGA_STARTUP_TIMEOUT}
 
