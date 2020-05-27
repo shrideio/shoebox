@@ -482,7 +482,7 @@ Run the following command to prepare the necessary infrastructure for docker con
 $ sudo $REPO_ROOT/src/setup_containers.sh $SHOEBOX_ROOT $YOUR_DOMAIN
 ```
 
-Verify the directories are created.
+Verify is the directories are created.
 
 ```
 $ sudo ls $SHOEBOX_ROOT
