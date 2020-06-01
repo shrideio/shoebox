@@ -36,3 +36,29 @@ Check [Taiga Documentation](https://taigaio.github.io/taiga-doc/dist/) and [Taig
     Run `$ sudo docker ps | grep project` to verify if the containers listed above are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
 
 2. Change the default Taiga administrator password after the first login. Use the following user name and password: _admin_ and _123123_ for the initial login.
+
+3. Updated SMTP settings with the information from the SMTP provider in order to be able to add new users to projects:
+
+    ```
+    $ nano $SHOEBOX_ROOT/project-taiga/config/config.py
+    ```
+    ```
+    Remove the '#' and add the correct values in the following parameters at the bottom of the file:
+    DEFAULT_FROM_EMAIL - the email alias for sent emails
+    EMAIL_BACKEND - leave the value as 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_USE_SSL - should be TRUE
+    EMAIL_HOST - host of the smtp provider
+    EMAIL_PORT - port of the smtp provider, should be the SSL port.
+    EMAIL_HOST_USER - user from the smtp provider
+    EMAIL_HOST_PASSWORD - password of the smtp provider
+    ```
+    
+
+    After setting up these values, restart the container using the following command:
+    ```
+    $ sudo docker restart project-backend
+    ```
+    
+    Now, when adding users to a project, they will receive an email notification with the invite.
+    
+
