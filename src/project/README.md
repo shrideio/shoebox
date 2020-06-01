@@ -40,7 +40,7 @@ Check [Taiga Documentation](https://taigaio.github.io/taiga-doc/dist/) and [Taig
 3. Updated SMTP settings with the information from the SMTP provider in order to be able to add new users to projects:
 
     ```
-    $ nano $SHOEBOX_ROOT/project-taiga/config/config.py
+    $ nano $SHOEBOX_ROOT/project-taiga/backend/conf/config.py
     ```
     ```
     Remove the '#' and add the correct values in the following parameters at the bottom of the file:
@@ -53,8 +53,8 @@ Check [Taiga Documentation](https://taigaio.github.io/taiga-doc/dist/) and [Taig
     EMAIL_HOST_PASSWORD - password user from the smtp provider
     ```
     
-
     After setting up these values, restart the container using the following command:
+   
     ```
     $ sudo docker restart project-backend
     ```
