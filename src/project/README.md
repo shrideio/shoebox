@@ -46,13 +46,13 @@ Check [Taiga Documentation](https://taigaio.github.io/taiga-doc/dist/) and [Taig
     Remove the '#' and add the correct values in the following parameters at the bottom of the file:
     DEFAULT_FROM_EMAIL - the email alias for sent emails
     EMAIL_BACKEND - leave the value as 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_USE_SSL - should be TRUE
+    EMAIL_USE_SSL - should be True
     EMAIL_HOST - host of the smtp provider
     EMAIL_PORT - SSL port of the smtp provider
     EMAIL_HOST_USER - user from the smtp provider
     EMAIL_HOST_PASSWORD - password user from the smtp provider
     ```
-    
+
     After setting up these values, restart the container using the following command:
    
     ```
