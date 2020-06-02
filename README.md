@@ -509,7 +509,7 @@ where _[service-name]_ is one of the following: `ci`, `git`, `packages`, `projec
 
 ### Service setup
 
-Each service is provided with a tutorial describing the steps required for initial setup and usage examples for executing routine tasks in the future. The key outcome of this setup is enabling the CI/CD service to run automated builds by utilizing the rest of the components of this setup.
+Each service is provided with a tutorial describing the steps required for initial setup and usage examples for executing routine tasks in the future. The key outcome is to enable the CI/CD service to run automated builds by utilizing the rest of the setup components.
 
 > IMPORTANT: Order matters.
 

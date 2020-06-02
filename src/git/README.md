@@ -19,7 +19,7 @@ Check [Gogs Documentation](https://gogs.io/docs) and  [Gogs on Docker Hub](https
 
 - [x] git._yourdomain.com_ subdomain is configured and serves https traffic
 
-- [x] SMTP relay is configured
+- [x] [SMTP relay](/src/vault/README.md##smtp-relay) is configured
 
 Proceed if all of the checks pass, otherwise, check the [landing page](/src/README.md#setup-outline) and continue when ready.
 
