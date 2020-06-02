@@ -35,22 +35,20 @@ Check [Taiga Documentation](https://taigaio.github.io/taiga-doc/dist/) and [Taig
 
     Run `$ sudo docker ps | grep project` to verify if the containers listed above are up and running. Proceed if no error detected, otherwise run `$ sudo docker logs [container name]` to check the container logs for troubleshooting.
 
-2. Change the default Taiga administrator password after the first login. Use the following user name and password: _admin_ and _123123_ for the initial login.
-
-3. Updated SMTP settings with the information from the SMTP provider in order to be able to add new users to projects:
+2. Updated SMTP settings with the information from the SMTP provider in order to be able to add new users to projects:
 
     ```
     $ nano $SHOEBOX_ROOT/project-taiga/backend/conf/config.py
     ```
     ```
-    Remove the '#' and add the correct values in the following parameters at the bottom of the file:
-    DEFAULT_FROM_EMAIL - the email alias for sent emails
-    EMAIL_BACKEND - leave the value as 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_USE_SSL - should be True
-    EMAIL_HOST - host of the smtp provider
-    EMAIL_PORT - SSL port of the smtp provider
-    EMAIL_HOST_USER - user from the smtp provider
-    EMAIL_HOST_PASSWORD - password user from the smtp provider
+    Remove the '#' and set the following values(Replace the values inside square brackets with your values):
+    DEFAULT_FROM_EMAIL = [FROM_EMAIL]
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_USE_SSL = True
+    EMAIL_HOST = [SMTP_ADDRESS]
+    EMAIL_PORT = [SMTP_PORT]
+    EMAIL_HOST_USER = [SMTP_USER]
+    EMAIL_HOST_PASSWORD = [SMTP_PASSWORD]
     ```
 
     After setting up these values, restart the container using the following command:
@@ -58,7 +56,7 @@ Check [Taiga Documentation](https://taigaio.github.io/taiga-doc/dist/) and [Taig
     ```
     $ sudo docker restart project-backend
     ```
-    
-    Now, when adding users to a project, they will receive an email notification with the invite.
-    
 
+3. Change the default Taiga administrator password after the first login. Use the following user name and password: _admin_ and _123123_ for the initial login.
+
+4. Try setting a new project and adding a new user with a valid email in order to verify that emails are being sent via the SMTP server.
