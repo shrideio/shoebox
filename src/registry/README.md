@@ -22,7 +22,6 @@ Check [Docker Registry](https://docs.docker.com/registry/) and [Joxit Docker Reg
 
 - [x] registryui._yourdomain.com_ and registry._yourdomain.com_ subdomains are configured and serve https traffic
 
-
 Proceed if all of the checks pass, otherwise, review the [landing page](/src/README.md#setup-outline) and continue when ready.
 
 
