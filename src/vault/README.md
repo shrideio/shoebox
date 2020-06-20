@@ -132,7 +132,7 @@ Proceed if all of the checks pass, otherwise, review the [landing page](/src/REA
 
             Capture the `role_id` value, it is used further for issuing an access token for accessing secrets via the Vault API.
 
-        - Next, type `api` in the UI shell and press the `Enter` key to open _Vault API explorer_. Find `POST /auth/approle/login/` and click on the section to expand it, then click [Try it out] to enable editing.
+        - Next, type `api` in the UI shell and press the `Enter` key to open _Vault API explorer_. Find `POST /auth/approle/login` and click on the section to expand it, then click [Try it out] to enable editing.
         
         - Fill in the `role_id` and `secret_id` request body parameters with matching values captured earlier. Then, click [Execute - send a request with your token to Vault] to send an authentication request and receive a response containing the client token. Capture the value of `client_token` from the response body, as it needs to be verified before actual use.
 
