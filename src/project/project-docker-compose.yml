@@ -72,8 +72,8 @@ services:
       - project-backend-media:/taiga-media
       - project-backend-conf:/taiga-conf
     environment:
-      - RABBIT_PORT=5672
       - TAIGA_HOST=${TAIGA_HOST}
+      - TAIGA_PORT=443
       - TAIGA_SECRET=${TAIGA_SECRET}
       - TAIGA_SCHEME=${TAIGA_SCHEME}
       - POSTGRES_HOST=project-db
@@ -81,6 +81,7 @@ services:
       - POSTGRES_USER=${TAIGA_POSTGRESQL_USER}
       - POSTGRES_PASSWORD=${TAIGA_POSTGRESQL_PASSWORD}
       - RABBIT_HOST=project-messaging
+      - RABBIT_PORT=5672
       - RABBIT_USER=${TAIGA_RABBIT_USER}
       - RABBIT_PASSWORD=${TAIGA_RABBIT_PASSWORD}
       - RABBIT_VHOST=project
@@ -103,6 +104,7 @@ services:
       - project-frontend-conf:/taiga-conf
     environment:
       - TAIGA_HOST=${TAIGA_HOST}
+      - TAIGA_PORT=443
       - TAIGA_SCHEME=${TAIGA_SCHEME}
 
   project-proxy:
