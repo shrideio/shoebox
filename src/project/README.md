@@ -23,7 +23,7 @@ Check [Taiga Documentation](https://taigaio.github.io/taiga-doc/dist/) and [Taig
 
 - [x] project._yourdomain.com_ subdomain is configured and serves https traffic.
 
-- [x] [SMTP relay](/src/vault/README.md##smtp-relay) is configured
+- [x] [SMTP relay](https://github.com/shrideio/shoebox#smtp-relay) is configured
 
 
 ### Setup
